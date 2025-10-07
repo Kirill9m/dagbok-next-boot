@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8080";
 
+/**
+ * Proxies the incoming request (stripping a leading `/api` prefix) to the configured backend and returns the backend's response.
+ *
+ * @param req - The incoming Next.js request to forward to the backend.
+ * @returns A response that mirrors the backend's body and status: JSON responses are returned as JSON, other responses as plain text. On proxy failure returns a 502 response with the body "Backend unreachable".
+ */
 export async function handler(req: NextRequest) {
   const originalPath = req.nextUrl.pathname;
   const backendPath = originalPath.replace(/^\/api/, "");
