@@ -1,2 +1,5 @@
-# dagbok-next-boot
-Time reporting system for small businesses built with a Next.js frontend and a Spring Boot (Java) REST API backend
+# ⌛ Dagbok Time Reporting System
+
+**A Full-Stack Project for Small Business Time Reporting (Next.js & Spring Boot)**
+
+![dev.png](public/dev.png)
