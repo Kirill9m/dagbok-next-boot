@@ -3,6 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8080";
 const FETCH_TIMEOUT_MS = 30000;
 
+/**
+ * Proxies the incoming request (stripping a leading `/api` prefix) to the configured backend and returns the backend's response.
+ *
+ * @param req - The incoming Next.js request to forward to the backend.
+ * @returns A response that mirrors the backend's body and status: JSON responses are returned as JSON, other responses as plain text. On proxy failure returns a 502 response with the body "Backend unreachable".
+ */
 export async function handler(req: NextRequest) {
   const originalPath = req.nextUrl.pathname;
   const backendPath = originalPath.replace(/^\/api/, "");
@@ -11,17 +17,20 @@ export async function handler(req: NextRequest) {
   console.log("Proxy →", req.method, url);
 
   const headersToFilter = new Set([
-    'host', 'connection', 'content-length',
-    'transfer-encoding', 'content-encoding'
-    ]);
+    "host",
+    "connection",
+    "content-length",
+    "transfer-encoding",
+    "content-encoding",
+  ]);
 
   const fetchOptions: RequestInit = {
     method: req.method,
     headers: Object.fromEntries(
       Array.from(req.headers.entries()).filter(
-        ([key]) => !headersToFilter.has(key.toLowerCase())
-  )
-  ),
+        ([key]) => !headersToFilter.has(key.toLowerCase()),
+      ),
+    ),
   };
 
   if (req.method !== "GET" && req.body) {
@@ -32,10 +41,10 @@ export async function handler(req: NextRequest) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-      const backendRes = await fetch(url, {
+    const backendRes = await fetch(url, {
       ...fetchOptions,
       signal: controller.signal,
-      });
+    });
     clearTimeout(timeoutId);
 
     const contentType = backendRes.headers.get("content-type") || "";
