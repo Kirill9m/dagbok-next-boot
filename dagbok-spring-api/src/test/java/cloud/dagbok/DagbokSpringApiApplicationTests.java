@@ -1,4 +1,4 @@
-package clound.dagbok.dagbok_spring_api;
+package cloud.dagbok;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
