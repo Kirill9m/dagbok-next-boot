@@ -35,8 +35,8 @@ const Header = () => {
                 href={link.href}
                 className={`px-3 py-1 rounded-md transition-colors duration-300 ${
                   isActive
-                    ? "bg-[#FF7518]/60 border-[#FF7518]"
-                    : "hover:bg-[#FF7518]/60 hover:border-[#FF7518]"
+                    ? "bg-[#FF7518]/60"
+                    : "hover:bg-[#FF7518]/60"
                 }`}
               >
                 {link.name}

@@ -1,5 +1,5 @@
 const Calender = () => {
-  <div>Test</div>;
+  return <div>Calendar</div>;
 };
 
 export default Calender;
