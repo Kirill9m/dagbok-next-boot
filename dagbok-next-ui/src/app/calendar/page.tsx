@@ -1,6 +1,6 @@
 "use client";
 
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import MonthlyPlanner from "@/app/components/MonthlyPlanner";
 
 const Calendar = () => {
@@ -8,6 +8,16 @@ const Calendar = () => {
     "Klicka på en dag för att navigera.",
   );
   const [saveStatus, setSaveStatus] = useState<String>("");
+
+  const saveTimeRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceDelay = 1000;
+
+  const showSaveStatus = (message:String) => {
+    setSaveStatus(message);
+    setTimeout(() => {
+      setSaveStatus("");
+    }, 1000)
+  }
 
   const handleNavigateToDagbok = useCallback(
     (year: number, month: number, day: number, text: String) => {
@@ -26,13 +36,20 @@ const Calendar = () => {
 
   const handleSaveNote = useCallback(
     (year: number, month: number, day: number, text: string) => {
-      console.log(`Note saved for ${year}-${month + 1}-${day}: ${text}`);
-      setSaveStatus(text ? `Sparat` : ``);
-      if (text) {
-        setTimeout(() => {
-          setSaveStatus("");
-        }, 1000);
+
+      if(saveTimeRef.current) {
+        clearTimeout(saveTimeRef.current);
+        saveTimeRef.current = null;
       }
+
+      setSaveStatus("Skriver...");
+
+      saveTimeRef.current = setTimeout(() => {
+        console.log(`Note saved for ${year}-${month + 1}-${day}: ${text}`);
+        showSaveStatus(text.trim() ? "Sparat ✅" : "Rensat 🗑️");
+
+        saveTimeRef.current = null;
+      }, debounceDelay);
     },
     [],
   );
