@@ -170,7 +170,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                   )}
                 </div>
                 <textarea
-                  placeholder=""
+                  aria-label={`Anteckningar för ${day} ${monthName} ${year}`}
                   value={notes[day] || ""}
                   onChange={(event) =>
                     handleTextChange(day, event.target.value)
