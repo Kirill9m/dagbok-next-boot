@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -129,9 +129,9 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                 classes += " cursor-not-allowed opacity-50";
               } else if (chosen) {
                 classes +=
-                  " border border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
+                  " border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
               } else if (isToday) {
-                classes += " border border-[#FF7518] shadow-lg shadow-white/50";
+                classes += " border-[#FF7518] shadow-lg shadow-white/50";
               }
 
               return classes;
