@@ -7,8 +7,10 @@ const Calendar = () => {
   const [statusMessage, setStatusMessage] = useState<string>(
     "Klicka på en dag för att navigera.",
   );
+  const [saveStatus, setSaveStatus] = useState<String>("");
+
   const handleNavigateToDagbok = useCallback(
-    (year: number, month: number, day: number) => {
+    (year: number, month: number, day: number, text: String) => {
       const date = new Date(year, month, day);
       const formattedDate = date.toLocaleDateString("sv-SE", {
         year: "numeric",
@@ -17,7 +19,15 @@ const Calendar = () => {
         weekday: "short",
       });
 
-      setStatusMessage(`${formattedDate}`);
+      setStatusMessage(`${formattedDate} + ${text}`);
+    },
+    [],
+  );
+
+  const handleSaveNote = useCallback(
+    (year: number, month: number, day: number, text: string) => {
+      console.log(`Note saved for ${year}-${month + 1}-${day}: ${text}`);
+      setSaveStatus(text ? `Sparat` : ``);
     },
     [],
   );
@@ -29,7 +39,24 @@ const Calendar = () => {
           {statusMessage}
         </div>
       </div>
-      <MonthlyPlanner onNavigateToDagbok={handleNavigateToDagbok} />
+      <MonthlyPlanner
+        onNavigateToDagbok={handleNavigateToDagbok}
+        onSaveNote={handleSaveNote}
+      />
+      {saveStatus && (
+        <div
+          className="
+            fixed bottom-4 right-4
+            bg-[#FF7518] text-white
+            p-3 rounded-lg shadow-xl
+            transition-opacity duration-500
+            z-50 max-w-[200px] text-sm
+          "
+          role="status"
+        >
+          {saveStatus}
+        </div>
+      )}
     </div>
   );
 };

@@ -3,16 +3,24 @@
 import React, { useState } from "react";
 
 interface MonthlyPlannerProps {
-  onNavigateToDagbok: (year: number, month: number, day: number) => void;
+  onNavigateToDagbok: (
+    year: number,
+    month: number,
+    day: number,
+    text: String,
+  ) => void;
+  onSaveNote: (year: number, month: number, day: number, text: string) => void;
 }
 
 const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
+  onSaveNote,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
   const [chosenDay, setChosenDay] = useState<number | null>(null);
+  const [notes, setNotes] = useState<Record<number, string>>({});
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -50,6 +58,15 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   });
 
   const currentMonthIsLocked = false;
+
+  const handleTextChange = (day: number, newText: string) => {
+    setNotes((prevNotes) => ({
+      ...prevNotes,
+      [day]: newText,
+    }));
+
+    onSaveNote(year, month, day, newText);
+  };
 
   const dateStyles =
     "border-2 border-gray-700 bg-[#4A4A4A] text-white rounded-lg p-4 transform transition-all duration-300 ease-in-out hover:scale-[1.03] cursor-pointer shadow-md";
@@ -102,7 +119,6 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
             const isToday = date.toDateString() === today.toDateString();
             const locked = currentMonthIsLocked;
             const hasDagbokEntry = false;
-            const weekend = date.getDay() === 6 || date.getDay() === 0;
             const chosen = day === chosenDay;
 
             const getDayClass = () => {
@@ -120,6 +136,8 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
               return classes;
             };
 
+            const dayText = notes[day] || "";
+
             return (
               <div
                 key={day}
@@ -129,7 +147,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                     ? undefined
                     : () => {
                         setChosenDay(day);
-                        onNavigateToDagbok(year, month, day);
+                        onNavigateToDagbok(year, month, day, dayText);
                       }
                 }
               >
@@ -153,6 +171,11 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                 </div>
                 <textarea
                   placeholder=""
+                  value={notes[day] || ""}
+                  onChange={(event) =>
+                    handleTextChange(day, event.target.value)
+                  }
+                  onClick={(e) => e.stopPropagation()}
                   className="w-full h-10 p-2 text-sm bg-transparent backdrop-blur-md text-gray-100 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#FF7518]/20 focus:border-transparent transition-all duration-300 shadow-inner placeholder-gray-500 resize-none"
                 />
               </div>
