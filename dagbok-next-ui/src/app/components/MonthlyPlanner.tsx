@@ -20,7 +20,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
   const [chosenDay, setChosenDay] = useState<number | null>(null);
-  const [notes, setNotes] = useState<Record<number, string>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -60,9 +60,10 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   const currentMonthIsLocked = false;
 
   const handleTextChange = (day: number, newText: string) => {
+    const noteKey = `${year}-${month + 1}-${day}`;
     setNotes((prevNotes) => ({
       ...prevNotes,
-      [day]: newText,
+      [noteKey]: newText,
     }));
 
     onSaveNote(year, month, day, newText);
@@ -128,15 +129,16 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                 classes += " cursor-not-allowed opacity-50";
               } else if (chosen) {
                 classes +=
-                  "border border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
+                  " border border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
               } else if (isToday) {
-                classes += "border border-[#FF7518] shadow-lg shadow-white/50";
+                classes += " border border-[#FF7518] shadow-lg shadow-white/50";
               }
 
               return classes;
             };
 
-            const dayText = notes[day] || "";
+            const noteKey = `${year}-${month + 1}-${day}`;
+            const dayText = notes[noteKey] || "";
 
             return (
               <div
@@ -171,7 +173,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                 </div>
                 <textarea
                   aria-label={`Anteckningar för ${day} ${monthName} ${year}`}
-                  value={notes[day] || ""}
+                  value={dayText}
                   onChange={(event) =>
                     handleTextChange(day, event.target.value)
                   }
