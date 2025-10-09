@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import MonthlyPlanner from "@/app/components/MonthlyPlanner";
 
 const Calendar = () => {
@@ -12,7 +12,7 @@ const Calendar = () => {
   const statusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const debounceDelay = 1000;
 
-  const showSaveStatus = (message: string) => {
+  const showSaveStatus = useCallback((message: string) => {
     if (statusTimeoutRef.current) {
       clearTimeout(statusTimeoutRef.current);
     }
@@ -21,7 +21,7 @@ const Calendar = () => {
       setSaveStatus("");
       statusTimeoutRef.current = null;
     }, 1000);
-  };
+  }, []);
 
   const handleNavigateToDagbok = useCallback(
     (year: number, month: number, day: number, text: string) => {
@@ -54,8 +54,19 @@ const Calendar = () => {
         saveTimeRef.current = null;
       }, debounceDelay);
     },
-    [],
+    [showSaveStatus],
   );
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeRef.current) {
+        clearTimeout(saveTimeRef.current);
+        }
+      if (statusTimeoutRef.current) {
+        clearTimeout(statusTimeoutRef.current);
+        }
+      };
+    }, []);
 
   return (
     <div className="min-h-screen font-inter p-4">

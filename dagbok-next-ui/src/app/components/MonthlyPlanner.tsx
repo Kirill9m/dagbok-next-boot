@@ -144,6 +144,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
               <div
                 key={day}
                 className={getDayClass()}
+                tabIndex={0}
                 onClick={
                   locked
                     ? undefined
@@ -151,6 +152,17 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                         setChosenDay(day);
                         onNavigateToDagbok(year, month, day, dayText);
                       }
+                }
+                onKeyDown={
+                  locked
+                    ? undefined
+                    : (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setChosenDay(day);
+                        onNavigateToDagbok(year, month, day, dayText);
+                      }
+                    }
                 }
               >
                 <div className="flex justify-between items-start mb-1">
