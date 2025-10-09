@@ -7,7 +7,7 @@ interface MonthlyPlannerProps {
     year: number,
     month: number,
     day: number,
-    text: String,
+    text: string,
   ) => void;
   onSaveNote: (year: number, month: number, day: number, text: string) => void;
 }
