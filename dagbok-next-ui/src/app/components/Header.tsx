@@ -34,9 +34,7 @@ const Header = () => {
                 key={link.name}
                 href={link.href}
                 className={`px-3 py-1 rounded-md transition-colors duration-300 ${
-                  isActive
-                    ? "bg-[#FF7518]/60"
-                    : "hover:bg-[#FF7518]/60"
+                  isActive ? "bg-[#FF7518]/60" : "hover:bg-[#FF7518]/60"
                 }`}
               >
                 {link.name}
