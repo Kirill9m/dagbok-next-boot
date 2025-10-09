@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import MonthlyPlanner from "@/app/components/MonthlyPlanner";
 
 const Calendar = () => {
@@ -28,6 +28,11 @@ const Calendar = () => {
     (year: number, month: number, day: number, text: string) => {
       console.log(`Note saved for ${year}-${month + 1}-${day}: ${text}`);
       setSaveStatus(text ? `Sparat` : ``);
+      if (text) {
+        setTimeout(() => {
+          setSaveStatus("");
+        }, 1000);
+      }
     },
     [],
   );
