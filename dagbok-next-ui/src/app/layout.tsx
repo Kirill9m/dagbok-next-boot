@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import { Roboto } from "next/font/google";
+import { redirect } from "next/navigation";
+import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={roboto.className}>
-      <body>
+      <body className={"bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A]"}>
         <Header />
         {children}
       </body>
