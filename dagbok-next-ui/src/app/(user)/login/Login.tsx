@@ -26,18 +26,6 @@ const Login = () => {
     }
   };
 
-  const user = CheckAuthStatus();
-
-  useEffect(() => {
-    if(user){
-      router.push("/login");
-    }
-  }, [user, router]);
-
-  if(user) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-[#2A2A2A] backdrop-blur-xl rounded-2xl p-8 w-full max-w-md shadow-2xl border border-white/10">
