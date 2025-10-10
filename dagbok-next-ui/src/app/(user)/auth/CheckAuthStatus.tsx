@@ -4,6 +4,13 @@ interface User {
   email: string;
 }
 
+/**
+ + * Temporary stub implementation for auth checking.
+ + * TODO: Replace with real authentication logic that:
+ + * - Validates JWT tokens or session cookies
+ + * - Fetches actual user data from auth provider
+ + * - Handles token expiry and errors
+ + */
 const CheckAuthStatus = (): User | null => {
   const isAuthenticated = false;
 
