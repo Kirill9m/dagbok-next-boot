@@ -1,10 +1,11 @@
 interface User {
+  id: string;
   name: string;
   email: string;
 }
 
 const CheckAuthStatus = (): User | null => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   if (isAuthenticated) {
     return {

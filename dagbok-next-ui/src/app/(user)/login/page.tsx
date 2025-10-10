@@ -6,8 +6,8 @@ export const metadata: Metadata = {
 
 import Login from "@/app/(user)/login/Login";
 
-const RegisterPage = () => {
+const LoginPage = () => {
   return <Login />;
 };
 
-export default RegisterPage;
+export default LoginPage;

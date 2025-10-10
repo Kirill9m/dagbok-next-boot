@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useState, useEffect } from "react";
 import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,8 +28,14 @@ const Login = () => {
 
   const user = CheckAuthStatus();
 
-  if (user) {
-    redirect("/profile");
+  useEffect(() => {
+    if(user){
+      router.push("/login");
+    }
+  }, [user, router]);
+
+  if(user) {
+    return null;
   }
 
   return (

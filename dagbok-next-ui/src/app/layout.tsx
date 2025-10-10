@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import { Roboto } from "next/font/google";
-import { redirect } from "next/navigation";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
 
 const roboto = Roboto({
   subsets: ["latin"],

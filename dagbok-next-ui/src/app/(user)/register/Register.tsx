@@ -15,13 +15,15 @@ const Register = () => {
     setMessage("");
     if (password !== passwordRepeat) {
       setMessage("Lösenord stämmer inte");
+      setLoading(false);
+      return;
     }
 
     try {
       await new Promise((r) => setTimeout(r, 1000));
-      setMessage("Inloggning lyckades");
+      setMessage("Registrering lyckades");
     } catch (err) {
-      setMessage("Fel användarnamn eller lösenord");
+      setMessage("Registrering misslyckades");
     } finally {
       setLoading(false);
     }
@@ -63,11 +65,11 @@ const Register = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm mb-2">
+            <label htmlFor="repeatPassword" className="block text-sm mb-2">
               Bekräfta
             </label>
             <input
-              id="repeat password"
+              id="repeatPassword"
               type="password"
               placeholder="••••••••"
               value={passwordRepeat}
@@ -82,7 +84,7 @@ const Register = () => {
             disabled={loading}
             className="w-full p-3 rounded-xl bg-[#FF7518] hover:bg-[#ff8833] text-white font-medium transition-all duration-300 disabled:opacity-60"
           >
-            {loading ? "Loggar in..." : "Logga in"}
+            {loading ? "Registrerar..." : "Registrera"}
           </button>
         </form>
 
