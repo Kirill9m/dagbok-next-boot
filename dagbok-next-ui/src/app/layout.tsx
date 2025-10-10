@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={roboto.className}>
-      <body>
+      <body className={"bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A]"}>
         <Header />
         {children}
       </body>

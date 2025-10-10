@@ -12,7 +12,7 @@ interface MonthlyPlannerProps {
   onSaveNote: (year: number, month: number, day: number, text: string) => void;
 }
 
-const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
+const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
   onSaveNote,
 }) => {
@@ -128,8 +128,7 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
               if (locked) {
                 classes += " cursor-not-allowed opacity-50";
               } else if (chosen) {
-                classes +=
-                  " border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
+                classes += " border-[#FF7518] shadow-lg shadow-[#FF7518]/50";
               } else if (isToday) {
                 classes += " border-[#FF7518] shadow-lg shadow-white/50";
               }
@@ -157,12 +156,12 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
                   locked
                     ? undefined
                     : (e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setChosenDay(day);
-                        onNavigateToDagbok(year, month, day, dayText);
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setChosenDay(day);
+                          onNavigateToDagbok(year, month, day, dayText);
+                        }
                       }
-                    }
                 }
               >
                 <div className="flex justify-between items-start mb-1">
@@ -201,4 +200,4 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   );
 };
 
-export default MonthlyPlanner;
+export default CalendarUI;

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
 
 const navLinks = [
   { name: "Calender", href: "/calendar" },
@@ -13,6 +14,9 @@ const navLinks = [
 
 const Header = () => {
   const pathname = usePathname();
+
+  const user = CheckAuthStatus();
+
   return (
     <header className="flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
       <div className={"flex items-center gap-10"}>
@@ -43,7 +47,7 @@ const Header = () => {
           })}
         </nav>
       </div>
-      <Link href="/">Login</Link>
+      {user === null ? <Link href="/login">Login</Link> : null}
     </header>
   );
 };

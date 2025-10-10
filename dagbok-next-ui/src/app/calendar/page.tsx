@@ -3,8 +3,10 @@ export const metadata = {
   description: "Planera din månad och skriv anteckningar per dag.",
 };
 
-import Calendar from "./Calendar";
+import CalendarHandler from "./CalendarHandler";
 
-export default function CalendarPage() {
-  return <Calendar />;
+const CalendarPage = () => {
+  return <CalendarHandler />;
 }
+
+export default CalendarPage;
