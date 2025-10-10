@@ -5,7 +5,7 @@ interface User {
 }
 
 const CheckAuthStatus = (): User | null => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   if (isAuthenticated) {
     return {
