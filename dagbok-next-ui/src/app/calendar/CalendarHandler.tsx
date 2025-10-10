@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import MonthlyPlanner from "@/app/calendar/MonthlyPlanner";
+import CalendarUI from "@/app/calendar/CalendarUI";
 
-const Calendar = () => {
+const CalendarHandler = () => {
   const [statusMessage, setStatusMessage] = useState<string>(
     "Klicka på en dag för att navigera.",
   );
@@ -75,7 +75,7 @@ const Calendar = () => {
           {statusMessage}
         </div>
       </div>
-      <MonthlyPlanner
+      <CalendarUI
         onNavigateToDagbok={handleNavigateToDagbok}
         onSaveNote={handleSaveNote}
       />
@@ -97,4 +97,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default CalendarHandler;

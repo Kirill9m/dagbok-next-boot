@@ -12,7 +12,7 @@ interface MonthlyPlannerProps {
   onSaveNote: (year: number, month: number, day: number, text: string) => void;
 }
 
-const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
+const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
   onSaveNote,
 }) => {
@@ -200,4 +200,4 @@ const MonthlyPlanner: React.FC<MonthlyPlannerProps> = ({
   );
 };
 
-export default MonthlyPlanner;
+export default CalendarUI;
