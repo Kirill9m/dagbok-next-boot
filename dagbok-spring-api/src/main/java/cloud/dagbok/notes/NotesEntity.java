@@ -10,7 +10,7 @@ import java.util.UUID;
 public class NotesEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.UUID)
   @Column(updatable = false, nullable = false)
   private UUID id;
 

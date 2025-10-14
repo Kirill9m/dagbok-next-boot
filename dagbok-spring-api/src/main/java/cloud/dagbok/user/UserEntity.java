@@ -11,14 +11,14 @@ import java.util.UUID;
 public class UserEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @Column(name = "username", nullable = false)
   private String userName;
 
   @Column(name = "password_hash", nullable = false)
-  private String password;
+  private String passwordHash;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<NotesEntity> notes;
@@ -26,10 +26,10 @@ public class UserEntity {
   public UserEntity() {
   }
 
-  public UserEntity(UUID id, String userName, String password, List<NotesEntity> notes) {
+  public UserEntity(UUID id, String userName, String passwordHash, List<NotesEntity> notes) {
     this.id = id;
     this.userName = userName;
-    this.password = password;
+    this.passwordHash = passwordHash;
     this.notes = notes;
   }
 
@@ -50,11 +50,11 @@ public class UserEntity {
   }
 
   public String getPassword() {
-    return password;
+    return passwordHash;
   }
 
   public void setPassword(String password) {
-    this.password = password;
+    this.passwordHash = password;
   }
 
   public List<NotesEntity> getNotes() {
