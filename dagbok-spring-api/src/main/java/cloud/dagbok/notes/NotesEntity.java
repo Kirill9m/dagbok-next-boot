@@ -1,36 +1,48 @@
 package cloud.dagbok.notes;
 
+import cloud.dagbok.user.UserEntity;
 import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Table(name = "notes")
 @Entity
 public class NotesEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+  @GeneratedValue
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-  @Column(name = "notes")
+  @Column(name = "notes", nullable = false)
   private String notes;
-  @Column(name = "user_id")
-  private String userId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private UserEntity user;
 
   public NotesEntity() {
   }
 
-  public NotesEntity(Long id, String notes, String userId) {
-    this.id = id;
+  public NotesEntity(String notes, UserEntity user) {
     this.notes = notes;
-    this.userId = userId;
+    this.user = user;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
+  }
+
+  public UserEntity getUser() {
+    return user;
+  }
+
+  public void setUser(UserEntity user) {
+    this.user = user;
   }
 
   public String getNotes() {
@@ -39,13 +51,5 @@ public class NotesEntity {
 
   public void setNotes(String notes) {
     this.notes = notes;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
   }
 }

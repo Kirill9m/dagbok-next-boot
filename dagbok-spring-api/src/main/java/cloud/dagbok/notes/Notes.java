@@ -1,8 +1,10 @@
 package cloud.dagbok.notes;
 
+import java.util.UUID;
+
 public record Notes(
-        Long id,
+        UUID id,
         String notes,
-        String userId
+        UUID userId
 ) {
 }
