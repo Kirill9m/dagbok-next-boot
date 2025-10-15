@@ -2,12 +2,20 @@ package cloud.dagbok.user;
 
 import cloud.dagbok.notes.NotesEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class UserEntity {
 
   @Id
@@ -22,46 +30,4 @@ public class UserEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<NotesEntity> notes;
-
-  public UserEntity() {
-  }
-
-  public UserEntity(UUID id, String userName, String passwordHash, List<NotesEntity> notes) {
-    this.id = id;
-    this.userName = userName;
-    this.passwordHash = passwordHash;
-    this.notes = notes;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getPassword() {
-    return passwordHash;
-  }
-
-  public void setPassword(String password) {
-    this.passwordHash = password;
-  }
-
-  public List<NotesEntity> getNotes() {
-    return notes;
-  }
-
-  public void setNotes(List<NotesEntity> notes) {
-    this.notes = notes;
-  }
 }

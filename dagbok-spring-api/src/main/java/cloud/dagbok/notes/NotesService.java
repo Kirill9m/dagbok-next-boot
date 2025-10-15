@@ -28,10 +28,6 @@ public class NotesService {
 
   @Transactional
   public Notes addNoteToUser(Notes userNotes) {
-    if (userNotes.id() != null) {
-      throw new IllegalArgumentException("id must be null for new notes");
-    }
-
     UserEntity user = userRepository.findById(userNotes.userId())
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

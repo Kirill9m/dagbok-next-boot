@@ -20,8 +20,7 @@ public class NotesController {
   @PostMapping("/notes")
   public ResponseEntity<Notes> addUserNote(@RequestBody Notes userNotes) {
     log.info("New user note {}", userNotes);
-    return ResponseEntity.status(200).
-            body(notesService.addNoteToUser(userNotes));
+    return ResponseEntity.ok(notesService.addNoteToUser(userNotes));
   }
 
   @GetMapping("/notes/{userId}")
