@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record Notes(
-        UUID id,
+        @NotNull UUID id,
         @NotBlank String notes,
         @NotNull UUID userId
 ) {

@@ -1,7 +1,7 @@
 package cloud.dagbok.notes;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 public class NotesController {
-  private static final Logger log = LoggerFactory.getLogger(NotesController.class);
   private final NotesService notesService;
 
   public NotesController(NotesService notesService) {
@@ -18,9 +18,10 @@ public class NotesController {
   }
 
   @PostMapping("/notes")
-  public ResponseEntity<Notes> addUserNote(@RequestBody Notes userNotes) {
+  public ResponseEntity<Notes> addUserNote(@Valid @RequestBody Notes userNotes) {
     log.info("New user note {}", userNotes);
-    return ResponseEntity.ok(notesService.addNoteToUser(userNotes));
+    return ResponseEntity.status(201)
+            .body(notesService.addNoteToUser(userNotes));
   }
 
   @GetMapping("/notes/{userId}")
@@ -30,7 +31,9 @@ public class NotesController {
     try {
       userUuid = UUID.fromString(userId);
     } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().build();
+      log.warn("Invalid UUID format for userId: {}", userId);
+      return ResponseEntity.badRequest()
+              .body(List.of());
     }
 
     return ResponseEntity.ok(notesService.getNotesByUser(userUuid));
