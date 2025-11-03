@@ -1,0 +1,76 @@
+<mxfile host="65bd71144e">
+    <diagram id="lPP1v94lBypfYE4IummB" name="User Flows">
+        <mxGraphModel dx="788" dy="818" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="Dagbok - login&amp;amp;register" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" parent="1" vertex="1">
+                    <mxGeometry x="154" y="60" width="266" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="register" style="ellipse;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry x="68" y="40" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="login" style="ellipse;whiteSpace=wrap;html=1;" parent="3" vertex="1">
+                    <mxGeometry x="68" y="140" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="3" target="29" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="128" y="220" as="sourcePoint"/>
+                        <mxPoint x="286" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="14" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="26" target="12" edge="1">
+                    <mxGeometry width="100" relative="1" as="geometry">
+                        <mxPoint x="100" y="150" as="sourcePoint"/>
+                        <mxPoint x="204" y="110" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="26" value="unauthenticated&lt;div&gt;user&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="155" width="37" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="Dagbok monthly planner" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="154" y="370" width="436" height="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="View&lt;div&gt;Monthly Planner&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="27" vertex="1">
+                    <mxGeometry x="68" y="50" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="Select Day for dagbok entry" style="ellipse;whiteSpace=wrap;html=1;" parent="27" vertex="1">
+                    <mxGeometry x="286" y="60" width="134" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="27" target="42" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="186" y="90" as="sourcePoint"/>
+                        <mxPoint x="236" y="110" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="51" value="Navigate calendar" style="ellipse;whiteSpace=wrap;html=1;" parent="27" vertex="1">
+                    <mxGeometry x="226" y="177" width="130" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;exitX=1;exitY=1;exitDx=0;exitDy=0;" parent="27" source="29" edge="1">
+                    <mxGeometry x="0.2204" y="5" width="160" relative="1" as="geometry">
+                        <mxPoint x="156" y="130" as="sourcePoint"/>
+                        <mxPoint x="226" y="210" as="targetPoint"/>
+                        <mxPoint y="1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="28" value="authenticated&lt;div&gt;user&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="450" width="37" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="endArrow=classic;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="28" target="29" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="110" y="450" as="sourcePoint"/>
+                        <mxPoint x="220" y="420" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="26" target="13" edge="1">
+                    <mxGeometry width="100" relative="1" as="geometry">
+                        <mxPoint x="120" y="160" as="sourcePoint"/>
+                        <mxPoint x="190" y="170" as="targetPoint"/>
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
