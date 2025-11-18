@@ -1,0 +1,43 @@
+package cloud.dagbok.service;
+
+import cloud.dagbok.dto.token.UpdatedToken;
+import cloud.dagbok.exceptionHandler.ConflictException;
+import cloud.dagbok.repository.TokenRepository;
+import cloud.dagbok.utils.JwtUtil;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+@Service
+public class TokenService {
+  private final TokenRepository tokenRepository;
+  private final JwtUtil jwtUtil;
+
+  public TokenService(TokenRepository tokenRepository, JwtUtil jwtUtil) {
+    this.tokenRepository = tokenRepository;
+    this.jwtUtil = jwtUtil;
+  }
+
+  @Transactional
+  public UpdatedToken updateToken(String token, String refreshToken) {
+    var tokenEntity = tokenRepository.findByRefreshToken(refreshToken)
+            .orElseThrow(() -> new ConflictException("Refresh token not found"));
+
+    if(!tokenEntity.getToken().equals(token)){
+      throw new ConflictException("The token does not match the refresh token");
+    }
+
+    if (!jwtUtil.validateJwtToken(refreshToken)) {
+      throw new SecurityException("Invalid or expired refresh token");
+    }
+
+    String newAccessToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);
+
+    tokenEntity.setToken(newAccessToken);
+    tokenEntity.setLastUsedAt(LocalDateTime.now());
+    tokenRepository.save(tokenEntity);
+
+    return new UpdatedToken(newAccessToken);
+  }
+}
