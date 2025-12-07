@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/dagbok_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: dagbok_user
-    password: dagbok_pass
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -35,8 +35,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://mysql:3306/dagbok_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-    username: dagbok_user
-    password: dagbok_pass
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:

@@ -11,10 +11,11 @@ const Register = () => {
 
   const validatePassword = (pwd: string): string | null => {
     if (pwd.length < 8) return "Lösenordet måste vara minst 8 tecken";
-    if (!/[A-Z]/.test(pwd)) return "Lösenordet måste innehålla minst en stor bokstav";
+    if (!/[A-Z]/.test(pwd))
+      return "Lösenordet måste innehålla minst en stor bokstav";
     if (!/[0-9]/.test(pwd)) return "Lösenordet måste innehålla minst en siffra";
     return null;
-    };
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ const Register = () => {
       setMessage(passwordError);
       setLoading(false);
       return;
-      }
+    }
 
     try {
       await new Promise((r) => setTimeout(r, 1000));

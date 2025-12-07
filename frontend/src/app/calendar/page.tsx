@@ -7,6 +7,6 @@ import CalendarHandler from "./CalendarHandler";
 
 const CalendarPage = () => {
   return <CalendarHandler />;
-}
+};
 
 export default CalendarPage;
