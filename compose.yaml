@@ -1,9 +1,15 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  mysql:
+    image: mysql:latest
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: dagbok_db
+      MYSQL_USER: dagbok_user
+      MYSQL_PASSWORD: dagbok_pass
     ports:
-      - '5432'
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
