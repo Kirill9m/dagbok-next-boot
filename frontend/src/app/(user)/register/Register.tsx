@@ -36,7 +36,7 @@ const Register = () => {
     try {
       await new Promise((r) => setTimeout(r, 1000));
       setMessage("Registrering lyckades");
-    } catch (err) {
+    } catch {
       setMessage("Registrering misslyckades");
     } finally {
       setLoading(false);

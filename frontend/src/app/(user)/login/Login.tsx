@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Login = () => {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +16,7 @@ const Login = () => {
     try {
       await new Promise((r) => setTimeout(r, 1000));
       setMessage("Inloggning lyckades");
-    } catch (err) {
+    } catch {
       setMessage("Fel användarnamn eller lösenord");
     } finally {
       setLoading(false);

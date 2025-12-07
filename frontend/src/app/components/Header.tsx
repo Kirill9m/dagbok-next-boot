@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
-import HealthBanner from "@/app/components/HealthBanner";
 
 const navLinks = [
   { name: "Calender", href: "/calendar" },
@@ -30,7 +29,7 @@ const Header = () => {
           />
         </Link>
         <nav className="flex items-center gap-6 lg:px-6">
-          {navLinks.map((link, key) => {
+          {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
               (pathname.startsWith(link.href) && link.href !== "/");
