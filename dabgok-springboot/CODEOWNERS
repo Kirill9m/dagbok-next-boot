@@ -1,0 +1,3 @@
+# Require admin approval for changes to pom.xml and .github directory
+pom.xml @fungover/admin-team
+.github/ @fungover/admin-team

@@ -1,0 +1,31 @@
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Get Java Version
+        run: |
+          Java_Version=$(mvn help:evaluate "-Dexpression=maven.compiler.release" -q -DforceStdout | sed -e 's/^1\./1.0./')
+          echo "Java_Version=$Java_Version" >> $GITHUB_ENV
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'oracle'
+          java-version: ${{ env.Java_Version }}
+          cache: maven
+
+      - name: Compile with Maven
+        run: mvn -B --no-transfer-progress compile
+
+      - name: Run tests with Maven
+        run: mvn -B --no-transfer-progress test
