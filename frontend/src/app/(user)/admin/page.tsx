@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const AdminPage = () => {
   const user = CheckAuthStatus();
 
-  if (!user) {
+  if (user) {
     redirect("/login");
   }
 
