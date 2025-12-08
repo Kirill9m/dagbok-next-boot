@@ -1,0 +1,17 @@
+package cloud.dagbok.backend.repository;
+
+import cloud.dagbok.backend.entity.NoteEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
+  List<NoteEntity> findByUserIdAndDeletedAtIsNull(Long userId);
+
+  Optional<NoteEntity> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
+
+  @Query(value = "SELECT * FROM note WHERE value LIKE CONCAT('%', :value, '%')", nativeQuery = true)
+  Optional<NoteEntity> findNote(String value);
+}
