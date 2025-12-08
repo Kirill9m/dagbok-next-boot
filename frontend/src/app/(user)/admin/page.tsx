@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 const AdminPage = () => {
   const user = CheckAuthStatus();
 
-  if (user) {
-    redirect("/profile");
+  if (!user) {
+    redirect("/login");
   }
 
   return (
     <div className="w-full min-h-screen pt-5">
-      <div className="flex justify-left items-start w-[256px]">
+      <div className="flex justify-start items-start w-[256px]">
         <div className="max-w-screen-lg w-full px-4 h-full">
           <HealthBanner />
         </div>

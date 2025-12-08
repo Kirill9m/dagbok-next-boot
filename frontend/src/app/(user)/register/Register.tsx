@@ -13,7 +13,7 @@ const Register = () => {
     if (pwd.length < 8) return "Lösenordet måste vara minst 8 tecken";
     if (!/[A-Z]/.test(pwd))
       return "Lösenordet måste innehålla minst en stor bokstav";
-    if (!/[0-9]/.test(pwd)) return "Lösenordet måste innehålla minst en siffra";
+    if (!/\d/.test(pwd)) return "Lösenordet måste innehålla minst en siffra";
     return null;
   };
 
