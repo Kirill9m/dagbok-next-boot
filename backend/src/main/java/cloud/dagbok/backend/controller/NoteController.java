@@ -23,8 +23,8 @@ public class NoteController {
   }
 
   @PostMapping("/notes")
-  public ResponseEntity<NoteNew> createNote(@Valid @RequestBody Note note,
-                                            Authentication authentication) {
+  public ResponseEntity<NoteNew> createNote(
+      @Valid @RequestBody Note note, Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
 
@@ -35,14 +35,16 @@ public class NoteController {
   }
 
   @DeleteMapping("/notes/{noteId}")
-  public ResponseEntity<Note> deleteNote(@PathVariable Long noteId,
-                                         Authentication authentication) {
+  public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
 
-    log.info("Received request to delete note with id: {} for user with id: {}", noteId, apiPrincipal.userId());
+    log.info(
+        "Received request to delete note with id: {} for user with id: {}",
+        noteId,
+        apiPrincipal.userId());
     var deleteNote = noteService.deleteNote(noteId, apiPrincipal.userId());
-    log.info("Deleted note: {}", deleteNote);
+    log.info("Deleted note with id: {}", deleteNote.id());
     return ResponseEntity.ok(deleteNote);
   }
 

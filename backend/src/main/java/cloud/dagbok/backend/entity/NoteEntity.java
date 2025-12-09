@@ -1,9 +1,8 @@
 package cloud.dagbok.backend.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "notes")
@@ -13,11 +12,11 @@ public class NoteEntity {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
+
   private String value;
-  @CreationTimestamp
-  private LocalDateTime createdAt;
+  @CreationTimestamp private LocalDateTime createdAt;
   private LocalDateTime deletedAt;
 
   public LocalDateTime getDeletedAt() {
@@ -28,10 +27,10 @@ public class NoteEntity {
     this.deletedAt = deletedAt;
   }
 
-  public NoteEntity() {
-  }
+  public NoteEntity() {}
 
-  public NoteEntity(Long id, UserEntity user, String value, LocalDateTime createdAt, LocalDateTime deletedAt) {
+  public NoteEntity(
+      Long id, UserEntity user, String value, LocalDateTime createdAt, LocalDateTime deletedAt) {
     this.id = id;
     this.user = user;
     this.value = value;

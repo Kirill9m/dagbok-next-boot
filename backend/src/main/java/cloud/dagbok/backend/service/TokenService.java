@@ -4,10 +4,9 @@ import cloud.dagbok.backend.dto.token.UpdatedToken;
 import cloud.dagbok.backend.exceptionHandler.ConflictException;
 import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class TokenService {
@@ -21,10 +20,12 @@ public class TokenService {
 
   @Transactional
   public UpdatedToken updateToken(String token, String refreshToken) {
-    var tokenEntity = tokenRepository.findByRefreshToken(refreshToken)
+    var tokenEntity =
+        tokenRepository
+            .findByRefreshToken(refreshToken)
             .orElseThrow(() -> new ConflictException("Refresh token not found"));
 
-    if(!tokenEntity.getToken().equals(token)){
+    if (!tokenEntity.getToken().equals(token)) {
       throw new ConflictException("The token does not match the refresh token");
     }
 

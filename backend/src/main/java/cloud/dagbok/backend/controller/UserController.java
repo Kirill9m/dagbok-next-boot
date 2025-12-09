@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
-  public final UserService userService;
-  public final TokenService tokenService;
+  private final UserService userService;
+  private final TokenService tokenService;
   private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
   public UserController(UserService userService, TokenService tokenService) {
@@ -42,5 +42,4 @@ public class UserController {
     log.info("Token update request received");
     return ResponseEntity.ok(tokenService.updateToken(request.token(), request.refreshToken()));
   }
-
 }

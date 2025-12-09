@@ -5,12 +5,12 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import javax.crypto.SecretKey;
-import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -32,26 +32,21 @@ public class JwtUtil {
     Date expirationDate = new Date(nowMillis + jwtExpirationMs);
 
     return Jwts.builder()
-            .subject(email)
-            .issuedAt(now)
-            .expiration(expirationDate)
-            .signWith(key)
-            .compact();
+        .subject(email)
+        .issuedAt(now)
+        .expiration(expirationDate)
+        .signWith(key)
+        .compact();
   }
 
   public String getUsernameFromToken(String token) {
-    return Jwts.parser()
-            .verifyWith(key)
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getSubject();
+    return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
   }
 
   public boolean validateJwtToken(String token) {
     try {
       Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-      return false;
+      return true;
     } catch (SignatureException e) {
       logger.warn("Invalid JWT signature: {}", e.getMessage());
     } catch (io.jsonwebtoken.MalformedJwtException e) {
@@ -63,6 +58,6 @@ public class JwtUtil {
     } catch (IllegalArgumentException e) {
       logger.warn("JWT claims string is empty: {}", e.getMessage());
     }
-    return true;
+    return false;
   }
 }

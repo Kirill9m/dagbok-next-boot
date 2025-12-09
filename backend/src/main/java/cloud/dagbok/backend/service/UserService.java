@@ -1,5 +1,8 @@
 package cloud.dagbok.backend.service;
 
+import static cloud.dagbok.backend.utils.BCryptUtil.checkPassword;
+import static cloud.dagbok.backend.utils.BCryptUtil.hashPassword;
+
 import cloud.dagbok.backend.dto.token.TokenRequest;
 import cloud.dagbok.backend.dto.user.User;
 import cloud.dagbok.backend.dto.user.UserNew;
@@ -10,13 +13,9 @@ import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static cloud.dagbok.backend.utils.BCryptUtil.checkPassword;
-import static cloud.dagbok.backend.utils.BCryptUtil.hashPassword;
 
 @Service
 public class UserService {
@@ -24,7 +23,8 @@ public class UserService {
   private final TokenRepository tokenRepository;
   private final JwtUtil jwtUtil;
 
-  public UserService(UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
+  public UserService(
+      UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
     this.userRepository = userRepository;
     this.tokenRepository = tokenRepository;
     this.jwtUtil = jwtUtil;
@@ -36,42 +36,52 @@ public class UserService {
       throw new ConflictException(user.email());
     }
 
-    var newUser = userRepository.save(new UserEntity(
-            null,
-            user.name(),
-            hashPassword(user.password()),
-            user.email(),
-            null));
+    var newUser =
+        userRepository.save(
+            new UserEntity(null, user.name(), hashPassword(user.password()), user.email(), null));
 
-    var api = tokenRepository.save(new TokenEntity(null, newUser, jwtUtil.generateToken(newUser.getEmail(), 1000*60*5L), jwtUtil.generateToken(newUser.getEmail(), 1000*60*60*7*24L),  0L ,  LocalDateTime.now()));
+    var api =
+        tokenRepository.save(
+            new TokenEntity(
+                null,
+                newUser,
+                jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 5L),
+                jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 60 * 7 * 24L),
+                0L,
+                LocalDateTime.now()));
 
     return new UserNew(
-            newUser.getId(),
-            newUser.getName(),
-            newUser.getEmail(),
-            api.getToken(),
-            api.getRefreshToken()
-    );
+        newUser.getId(),
+        newUser.getName(),
+        newUser.getEmail(),
+        api.getToken(),
+        api.getRefreshToken());
   }
 
+  @Transactional
   public TokenRequest loginUser(String email, String password) {
-    UserEntity user = userRepository
+    UserEntity user =
+        userRepository
             .findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+            .orElseThrow(() -> new EntityNotFoundException("Invalid credentials"));
 
-    if(checkPassword(password, user.getPassword())){
-      var tokenEntity = tokenRepository.findByToken(user.getToken().getToken())
+    if (checkPassword(password, user.getPassword())) {
+      var tokenEntity =
+          tokenRepository
+              .findByToken(user.getToken().getToken())
               .orElseThrow(() -> new EntityNotFoundException("Token not found"));
 
-      String newAccessToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);
-      String newRefreshToken = jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 60 * 7 * 24L);
+      String newAccessToken =
+          jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 5L);
+      String newRefreshToken =
+          jwtUtil.generateToken(tokenEntity.getUser().getEmail(), 1000 * 60 * 60 * 7 * 24L);
       tokenEntity.setToken(newAccessToken);
       tokenEntity.setRefreshToken(newRefreshToken);
       tokenEntity.setLastUsedAt(LocalDateTime.now());
       tokenRepository.save(tokenEntity);
 
       return new TokenRequest(newAccessToken, newRefreshToken);
-    }else{
+    } else {
       throw new EntityNotFoundException("Invalid credentials");
     }
   }

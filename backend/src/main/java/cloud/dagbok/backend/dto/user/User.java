@@ -2,7 +2,4 @@ package cloud.dagbok.backend.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record User(@NotBlank String name,
-                   @NotBlank String password,
-                   @NotBlank String email) {
-}
+public record User(@NotBlank String name, @NotBlank String password, @NotBlank String email) {}

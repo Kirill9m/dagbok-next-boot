@@ -26,10 +26,15 @@ public class TokenEntity {
 
   private LocalDateTime lastUsedAt;
 
-  public TokenEntity() {
-  }
+  public TokenEntity() {}
 
-  public TokenEntity(Long id, UserEntity user, String token, String refreshToken, Long counter, LocalDateTime lastUsedAt) {
+  public TokenEntity(
+      Long id,
+      UserEntity user,
+      String token,
+      String refreshToken,
+      Long counter,
+      LocalDateTime lastUsedAt) {
     this.id = id;
     this.user = user;
     this.token = token;
@@ -68,7 +73,6 @@ public class TokenEntity {
 
   public void setToken(String token) {
     this.token = token;
-
   }
 
   public Long getCounter() {
