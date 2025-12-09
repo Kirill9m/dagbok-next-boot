@@ -63,7 +63,13 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       return;
     }
 
-    String email = jwtUtil.getUsernameFromToken(token);
+      String email;
+      try {
+          email = jwtUtil.getUsernameFromToken(token);
+          } catch (io.jsonwebtoken.JwtException e) {
+          response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+          return;
+          }
 
     if (email == null) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not contain user info");
