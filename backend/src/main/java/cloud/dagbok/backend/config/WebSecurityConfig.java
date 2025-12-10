@@ -29,23 +29,20 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     this.apiKeyFilter = apiKeyFilter;
   }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(AbstractHttpConfigurer::disable)
-        .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
-        .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/user/**")
-                    .permitAll()
-                    .requestMatchers("/api/health", "/api/status", "/api/public/**")
-                    .permitAll()
-                    .requestMatchers("/api/**")
-                    .authenticated()
-                    .anyRequest()
-                    .denyAll());
-    return http.build();
-  }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/user/**").permitAll()
+                                .requestMatchers("/api/public/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+                                .anyRequest().denyAll()
+                );
+        return http.build();
+    }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
