@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
 import { redirect } from "next/navigation";
 import HealthBanner from "@/app/components/HealthBanner";
+import NoteCreator from "@/app/components/(test)/NoteCreator";
 
 export const metadata: Metadata = {
   title: "Admin | Dagbok",
@@ -19,6 +20,7 @@ const AdminPage = () => {
       <div className="flex justify-start items-start w-[256px]">
         <div className="max-w-screen-lg w-full px-4 h-full">
           <HealthBanner />
+          <NoteCreator />
         </div>
       </div>
     </div>
