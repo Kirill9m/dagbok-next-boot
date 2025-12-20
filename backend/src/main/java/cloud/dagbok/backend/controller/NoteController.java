@@ -23,27 +23,26 @@ public class NoteController {
     this.noteService = noteService;
   }
 
-    @PostMapping("/notes")
-    public ResponseEntity<NoteNew> createNote(
-            @Valid @RequestBody NoteCreateRequest request,
-            Authentication authentication) {
+  @PostMapping("/notes")
+  public ResponseEntity<NoteNew> createNote(
+      @Valid @RequestBody NoteCreateRequest request, Authentication authentication) {
 
-        ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
 
-        log.info("Received note request: {}", request);
-        assert apiPrincipal != null;
-        var createdNote = noteService.createNewUserNote(request, apiPrincipal.userId());
-        log.info("Created note: {}", createdNote);
-        return ResponseEntity.status(201).body(createdNote);
-    }
+    log.info("Received note request: {}", request);
+    assert apiPrincipal != null;
+    var createdNote = noteService.createNewUserNote(request, apiPrincipal.userId());
+    log.info("Created note: {}", createdNote);
+    return ResponseEntity.status(201).body(createdNote);
+  }
 
   @DeleteMapping("/notes/{noteId}")
   public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
 
-      assert apiPrincipal != null;
-      log.info(
+    assert apiPrincipal != null;
+    log.info(
         "Received request to delete note with id: {} for user with id: {}",
         noteId,
         apiPrincipal.userId());
@@ -55,8 +54,8 @@ public class NoteController {
   @GetMapping("/notes/user")
   public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
-      assert apiPrincipal != null;
-      log.info("User: {} requested notes", apiPrincipal.userId());
+    assert apiPrincipal != null;
+    log.info("User: {} requested notes", apiPrincipal.userId());
     return ResponseEntity.ok(noteService.findUserAndGetNotes(apiPrincipal.email()));
   }
 }

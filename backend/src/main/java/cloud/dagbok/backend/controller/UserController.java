@@ -4,7 +4,6 @@ import cloud.dagbok.backend.dto.token.TokenRequest;
 import cloud.dagbok.backend.dto.token.UpdatedToken;
 import cloud.dagbok.backend.dto.user.User;
 import cloud.dagbok.backend.dto.user.UserCheck;
-import cloud.dagbok.backend.dto.user.UserNew;
 import cloud.dagbok.backend.service.TokenService;
 import cloud.dagbok.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -45,21 +44,23 @@ public class UserController {
     log.info("User api check: {}", user.email());
     TokenRequest tokens = userService.loginUser(user.email(), user.password());
 
-    ResponseCookie cookie = ResponseCookie.from("accessToken", tokens.token())
-        .httpOnly(true)
-        .secure(cookieSecure)
-        .path("/")
-        .maxAge(60 * 60)
-        .sameSite("Lax")
-        .build();
+    ResponseCookie cookie =
+        ResponseCookie.from("accessToken", tokens.token())
+            .httpOnly(true)
+            .secure(cookieSecure)
+            .path("/")
+            .maxAge(60 * 60)
+            .sameSite("Lax")
+            .build();
 
-    ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokens.refreshToken())
-        .httpOnly(true)
-        .secure(cookieSecure)
-        .path("/")
-        .maxAge(7 * 24 * 60 * 60)
-        .sameSite("Lax")
-        .build();
+    ResponseCookie refreshCookie =
+        ResponseCookie.from("refreshToken", tokens.refreshToken())
+            .httpOnly(true)
+            .secure(cookieSecure)
+            .path("/")
+            .maxAge(7 * 24 * 60 * 60)
+            .sameSite("Lax")
+            .build();
 
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -74,16 +75,15 @@ public class UserController {
     log.info("Token update request received: {}", accessToken);
     UpdatedToken tokens = tokenService.updateToken(accessToken, refreshToken);
 
-    ResponseCookie cookie = ResponseCookie.from("accessToken", tokens.token())
-        .httpOnly(true)
-        .secure(cookieSecure)
-        .path("/")
-        .maxAge(60 * 60)
-        .sameSite("Lax")
-        .build();
+    ResponseCookie cookie =
+        ResponseCookie.from("accessToken", tokens.token())
+            .httpOnly(true)
+            .secure(cookieSecure)
+            .path("/")
+            .maxAge(60 * 60)
+            .sameSite("Lax")
+            .build();
 
-    return ResponseEntity.ok()
-        .header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .build();
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
 }

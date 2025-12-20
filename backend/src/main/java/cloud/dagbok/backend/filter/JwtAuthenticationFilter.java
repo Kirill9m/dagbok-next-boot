@@ -9,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,15 +33,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getRequestURI();
     return path.startsWith("/user/")
-            || path.equals("/api/health")
-            || path.equals("/api/status")
-            || path.startsWith("/api/public/");
+        || path.equals("/api/health")
+        || path.equals("/api/status")
+        || path.startsWith("/api/public/");
   }
 
   @Override
   protected void doFilterInternal(
-          HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-          throws ServletException, IOException {
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
     String path = request.getRequestURI();
 
@@ -100,8 +99,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     ApiPrincipal apiPrincipal = new ApiPrincipal(user.getId(), user.getEmail());
     UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                    apiPrincipal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
+        new UsernamePasswordAuthenticationToken(
+            apiPrincipal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     filterChain.doFilter(request, response);
