@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:java": "cd ../backend && mvn spotless:apply"
+    "format:java": "cd ../backend && mvn spotless:apply",
+    "postman": "postman"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [

@@ -1,6 +1,6 @@
 package cloud.dagbok.backend.config;
 
-import cloud.dagbok.backend.filter.ApiKeyFilter;
+import cloud.dagbok.backend.filter.JwtAuthenticationFilter;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +20,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class WebSecurityConfig implements WebMvcConfigurer {
 
-  private final ApiKeyFilter apiKeyFilter;
+  private final JwtAuthenticationFilter apiKeyFilter;
 
   @Value("${cors.allowed-origins}")
   private String allowedOrigins;
 
-  public WebSecurityConfig(ApiKeyFilter apiKeyFilter) {
+  public WebSecurityConfig(JwtAuthenticationFilter apiKeyFilter) {
     this.apiKeyFilter = apiKeyFilter;
   }
 
