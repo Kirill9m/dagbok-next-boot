@@ -1,6 +1,6 @@
 package cloud.dagbok.backend.config;
 
-import cloud.dagbok.backend.filter.ApiKeyFilter;
+import cloud.dagbok.backend.filter.JwtAuthenticationFilter;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,29 +20,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class WebSecurityConfig implements WebMvcConfigurer {
 
-  private final ApiKeyFilter apiKeyFilter;
+  private final JwtAuthenticationFilter apiKeyFilter;
 
   @Value("${cors.allowed-origins}")
   private String allowedOrigins;
 
-  public WebSecurityConfig(ApiKeyFilter apiKeyFilter) {
+  public WebSecurityConfig(JwtAuthenticationFilter apiKeyFilter) {
     this.apiKeyFilter = apiKeyFilter;
   }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/user/**").permitAll()
-                                .requestMatchers("/api/public/**").permitAll()
-                                .requestMatchers("/api/**").permitAll()
-                                .anyRequest().denyAll()
-                );
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .csrf(AbstractHttpConfigurer::disable)
+        .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/user/**")
+                    .permitAll()
+                    .requestMatchers("/api/public/**")
+                    .permitAll()
+                    .requestMatchers("/api/**")
+                    .permitAll()
+                    .anyRequest()
+                    .denyAll());
+    return http.build();
+  }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
