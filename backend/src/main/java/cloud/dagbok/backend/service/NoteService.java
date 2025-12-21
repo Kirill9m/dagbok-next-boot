@@ -24,23 +24,17 @@ public class NoteService {
     this.noteRepository = noteRepository;
   }
 
-    @Transactional
-    public NoteNew createNewUserNote(NoteCreateRequest request, Long userId) {
-        UserEntity user =
-                userRepository
-                        .findById(userId)
-                        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+  @Transactional
+  public NoteNew createNewUserNote(NoteCreateRequest request, Long userId) {
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        var savedEntity = noteRepository.save(
-                new NoteEntity(null, user, request.value(), null, null)
-        );
+    var savedEntity = noteRepository.save(new NoteEntity(null, user, request.value(), null, null));
 
-        return new NoteNew(
-                savedEntity.getId(),
-                savedEntity.getValue(),
-                savedEntity.getCreatedAt()
-        );
-    }
+    return new NoteNew(savedEntity.getId(), savedEntity.getValue(), savedEntity.getCreatedAt());
+  }
 
   @Transactional(readOnly = true)
   public UserNotes findUserAndGetNotes(String email) {

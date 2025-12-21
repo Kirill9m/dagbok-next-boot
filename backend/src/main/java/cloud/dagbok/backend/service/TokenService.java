@@ -29,7 +29,7 @@ public class TokenService {
       throw new ConflictException("The token does not match the refresh token");
     }
 
-    if (jwtUtil.validateJwtToken(refreshToken)) {
+    if (!jwtUtil.validateJwtToken(refreshToken)) {
       throw new SecurityException("Invalid or expired refresh token");
     }
 

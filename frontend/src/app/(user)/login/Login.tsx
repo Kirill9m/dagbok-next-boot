@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,8 +16,17 @@ const Login = () => {
     setMessage("");
 
     try {
-      await new Promise((r) => setTimeout(r, 1000));
+      const res = await fetch("/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Login failed");
+
       setMessage("Inloggning lyckades");
+      await router.push("/");
     } catch {
       setMessage("Fel användarnamn eller lösenord");
     } finally {

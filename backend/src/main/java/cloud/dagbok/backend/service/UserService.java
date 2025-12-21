@@ -33,7 +33,7 @@ public class UserService {
   @Transactional
   public UserNew registerUser(User user) {
     if (userRepository.existsByEmail(user.email())) {
-      throw new ConflictException(user.email());
+      throw new ConflictException(user.email() + " is already registered");
     }
 
     var newUser =
