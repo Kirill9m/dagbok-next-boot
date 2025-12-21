@@ -7,6 +7,7 @@ import cloud.dagbok.backend.dto.user.ApiPrincipal;
 import cloud.dagbok.backend.dto.user.UserNotes;
 import cloud.dagbok.backend.service.NoteService;
 import jakarta.validation.Valid;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,9 @@ public class NoteController {
       @Valid @RequestBody NoteCreateRequest request, Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
 
     log.info("Received note request: {}", request);
-    assert apiPrincipal != null;
     var createdNote = noteService.createNewUserNote(request, apiPrincipal.userId());
     log.info("Created note: {}", createdNote);
     return ResponseEntity.status(201).body(createdNote);
@@ -40,8 +41,8 @@ public class NoteController {
   public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
 
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
 
-    assert apiPrincipal != null;
     log.info(
         "Received request to delete note with id: {} for user with id: {}",
         noteId,
@@ -54,7 +55,8 @@ public class NoteController {
   @GetMapping("/notes/user")
   public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
     ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
-    assert apiPrincipal != null;
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+
     log.info("User: {} requested notes", apiPrincipal.userId());
     return ResponseEntity.ok(noteService.findUserAndGetNotes(apiPrincipal.email()));
   }

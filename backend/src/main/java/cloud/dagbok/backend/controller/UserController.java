@@ -70,8 +70,8 @@ public class UserController {
 
   @PutMapping("/refresh")
   public ResponseEntity<Void> updateToken(
-      @CookieValue(name = "accessToken", required = false) String accessToken,
-      @CookieValue(name = "refreshToken", required = false) String refreshToken) {
+      @CookieValue(name = "accessToken") String accessToken,
+      @CookieValue(name = "refreshToken") String refreshToken) {
     log.info("Token update request received: {}", accessToken);
     UpdatedToken tokens = tokenService.updateToken(accessToken, refreshToken);
 
