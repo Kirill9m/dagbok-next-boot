@@ -3,7 +3,7 @@ package cloud.dagbok.backend.controller;
 import cloud.dagbok.backend.dto.note.Note;
 import cloud.dagbok.backend.dto.note.NoteCreateRequest;
 import cloud.dagbok.backend.dto.note.NoteNew;
-import cloud.dagbok.backend.dto.user.ApiPrincipal;
+import cloud.dagbok.backend.dto.user.Principal;
 import cloud.dagbok.backend.dto.user.UserNotes;
 import cloud.dagbok.backend.service.NoteService;
 import jakarta.validation.Valid;
@@ -28,7 +28,7 @@ public class NoteController {
   public ResponseEntity<NoteNew> createNote(
       @Valid @RequestBody NoteCreateRequest request, Authentication authentication) {
 
-    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Principal apiPrincipal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
 
     log.info("Received note request: {}", request);
@@ -40,7 +40,7 @@ public class NoteController {
   @DeleteMapping("/notes/{noteId}")
   public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
 
-    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Principal apiPrincipal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
 
     log.info(
@@ -54,7 +54,7 @@ public class NoteController {
 
   @GetMapping("/notes/user")
   public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
-    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Principal apiPrincipal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
 
     log.info("User: {} requested notes", apiPrincipal.userId());

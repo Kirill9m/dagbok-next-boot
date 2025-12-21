@@ -1,7 +1,6 @@
 package cloud.dagbok.backend.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tokens")
@@ -18,37 +17,12 @@ public class TokenEntity {
   @Column(nullable = false, unique = true)
   private String token;
 
-  @Column(nullable = false, unique = true)
-  private String refreshToken;
-
-  @Column(nullable = false)
-  private Long counter;
-
-  private LocalDateTime lastUsedAt;
-
   public TokenEntity() {}
 
-  public TokenEntity(
-      Long id,
-      UserEntity user,
-      String token,
-      String refreshToken,
-      Long counter,
-      LocalDateTime lastUsedAt) {
+  public TokenEntity(Long id, UserEntity user, String token) {
     this.id = id;
     this.user = user;
     this.token = token;
-    this.refreshToken = refreshToken;
-    this.counter = counter;
-    this.lastUsedAt = lastUsedAt;
-  }
-
-  public String getRefreshToken() {
-    return refreshToken;
-  }
-
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
   }
 
   public Long getId() {
@@ -73,17 +47,5 @@ public class TokenEntity {
 
   public void setToken(String token) {
     this.token = token;
-  }
-
-  public Long getCounter() {
-    return counter;
-  }
-
-  public void setCounter(Long counter) {
-    this.counter = counter;
-  }
-
-  public void setLastUsedAt(LocalDateTime lastUsedAt) {
-    this.lastUsedAt = lastUsedAt;
   }
 }

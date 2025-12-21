@@ -26,7 +26,7 @@ public class UserEntity {
   private TokenEntity token;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private Role role;
 
   public TokenEntity getToken() {

@@ -1,6 +1,6 @@
 package cloud.dagbok.backend.filter;
 
-import cloud.dagbok.backend.dto.user.ApiPrincipal;
+import cloud.dagbok.backend.dto.user.Principal;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
@@ -94,7 +94,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     log.debug("Authenticated user: {} for path: {}", email, path);
 
-    ApiPrincipal apiPrincipal = new ApiPrincipal(user.getId(), user.getEmail());
+    Principal apiPrincipal = new Principal(user.getId(), user.getEmail());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
             apiPrincipal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
