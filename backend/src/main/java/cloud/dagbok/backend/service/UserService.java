@@ -5,8 +5,8 @@ import static cloud.dagbok.backend.utils.BCryptUtil.hashPassword;
 
 import cloud.dagbok.backend.dto.token.TokenRequest;
 import cloud.dagbok.backend.dto.user.User;
-import cloud.dagbok.backend.dto.user.UserNew;
 import cloud.dagbok.backend.dto.user.UserProfile;
+import cloud.dagbok.backend.entity.Role;
 import cloud.dagbok.backend.entity.TokenEntity;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.exceptionHandler.ConflictException;
@@ -32,31 +32,24 @@ public class UserService {
   }
 
   @Transactional
-  public UserNew registerUser(User user) {
+  public void registerUser(User user) {
     if (userRepository.existsByEmail(user.email())) {
       throw new ConflictException(user.email() + " is already registered");
     }
 
     var newUser =
         userRepository.save(
-            new UserEntity(null, user.name(), hashPassword(user.password()), user.email(), null));
+            new UserEntity(
+                null, user.name(), hashPassword(user.password()), user.email(), null, Role.USER));
 
-    var api =
-        tokenRepository.save(
-            new TokenEntity(
-                null,
-                newUser,
-                jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 5L),
-                jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 60 * 7 * 24L),
-                0L,
-                LocalDateTime.now()));
-
-    return new UserNew(
-        newUser.getId(),
-        newUser.getName(),
-        newUser.getEmail(),
-        api.getToken(),
-        api.getRefreshToken());
+    tokenRepository.save(
+        new TokenEntity(
+            null,
+            newUser,
+            jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 5L),
+            jwtUtil.generateToken(newUser.getEmail(), 1000 * 60 * 60 * 7 * 24L),
+            0L,
+            LocalDateTime.now()));
   }
 
   @Transactional
@@ -93,6 +86,6 @@ public class UserService {
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    return new UserProfile(user.getId(), user.getName(), user.getEmail());
+    return new UserProfile(user.getId(), user.getName(), user.getEmail(), user.getRole().name());
   }
 }

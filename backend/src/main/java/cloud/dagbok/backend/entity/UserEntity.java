@@ -25,6 +25,10 @@ public class UserEntity {
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private TokenEntity token;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, unique = true)
+  private Role role;
+
   public TokenEntity getToken() {
     return token;
   }
@@ -36,12 +40,18 @@ public class UserEntity {
   public UserEntity() {}
 
   public UserEntity(
-      Long id, String name, String passwordHashed, String email, List<NoteEntity> notes) {
+      Long id,
+      String name,
+      String passwordHashed,
+      String email,
+      List<NoteEntity> notes,
+      Role role) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
     this.email = email;
     this.notes = notes;
+    this.role = role;
   }
 
   public String getName() {
@@ -74,6 +84,14 @@ public class UserEntity {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   @Override
