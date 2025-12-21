@@ -33,34 +33,20 @@ public class UserController {
 
   @PostMapping("/register")
   public ResponseEntity<Void> register(@Valid @RequestBody User user) {
-    log.info("Attempting to register user: {} {}", user.name(), user.email());
+    log.info("User register attempt");
     userService.registerUser(user);
-    log.info("New user created: {}", user.email());
+    log.info("New user created successfully");
     return ResponseEntity.status(201).build();
   }
 
   @PostMapping("/login")
   public ResponseEntity<Void> login(@Valid @RequestBody UserCheck user) {
-    log.info("User api check: {}", user.email());
+    log.info("User login attempt");
     TokenRequest tokens = userService.loginUser(user.email(), user.password());
 
-    ResponseCookie cookie =
-        ResponseCookie.from("accessToken", tokens.token())
-            .httpOnly(true)
-            .secure(cookieSecure)
-            .path("/")
-            .maxAge(60 * 60)
-            .sameSite("Lax")
-            .build();
-
+    ResponseCookie cookie = createCookie("accessToken", tokens.token(), 300);
     ResponseCookie refreshCookie =
-        ResponseCookie.from("refreshToken", tokens.refreshToken())
-            .httpOnly(true)
-            .secure(cookieSecure)
-            .path("/")
-            .maxAge(7 * 24 * 60 * 60)
-            .sameSite("Lax")
-            .build();
+        createCookie("refreshToken", tokens.refreshToken(), 60 * 60 * 24 * 7);
 
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -72,18 +58,21 @@ public class UserController {
   public ResponseEntity<Void> updateToken(
       @CookieValue(name = "accessToken") String accessToken,
       @CookieValue(name = "refreshToken") String refreshToken) {
-    log.info("Token update request received: {}", accessToken);
+    log.info("User token update attempt");
     UpdatedToken tokens = tokenService.updateToken(accessToken, refreshToken);
 
-    ResponseCookie cookie =
-        ResponseCookie.from("accessToken", tokens.token())
-            .httpOnly(true)
-            .secure(cookieSecure)
-            .path("/")
-            .maxAge(60 * 60)
-            .sameSite("Lax")
-            .build();
+    ResponseCookie cookie = createCookie("accessToken", tokens.token(), 300);
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+  }
+
+  private ResponseCookie createCookie(String name, String value, int maxAgeSeconds) {
+    return ResponseCookie.from(name, value)
+        .httpOnly(true)
+        .secure(cookieSecure)
+        .path("/")
+        .maxAge(maxAgeSeconds)
+        .sameSite("Lax")
+        .build();
   }
 }
