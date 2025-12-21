@@ -6,6 +6,7 @@ import static cloud.dagbok.backend.utils.BCryptUtil.hashPassword;
 import cloud.dagbok.backend.dto.token.TokenRequest;
 import cloud.dagbok.backend.dto.user.User;
 import cloud.dagbok.backend.dto.user.UserNew;
+import cloud.dagbok.backend.dto.user.UserProfile;
 import cloud.dagbok.backend.entity.TokenEntity;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.exceptionHandler.ConflictException;
@@ -84,5 +85,14 @@ public class UserService {
     } else {
       throw new EntityNotFoundException("Invalid credentials");
     }
+  }
+
+  public UserProfile getUserProfile(String email) {
+    UserEntity user =
+        userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+    return new UserProfile(user.getId(), user.getName(), user.getEmail());
   }
 }

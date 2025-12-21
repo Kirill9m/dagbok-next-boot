@@ -32,7 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getRequestURI();
-    return path.startsWith("/user/")
+    return path.equals("/user/login")
+        || path.equals("/user/register")
+        || path.equals("/user/refresh")
         || path.equals("/api/health")
         || path.equals("/api/status")
         || path.startsWith("/api/public/");
@@ -44,11 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     String path = request.getRequestURI();
-
-    if (!path.startsWith("/api/")) {
-      filterChain.doFilter(request, response);
-      return;
-    }
 
     String token = extractTokenFromCookie(request);
 

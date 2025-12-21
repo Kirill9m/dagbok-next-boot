@@ -2,17 +2,21 @@ package cloud.dagbok.backend.controller;
 
 import cloud.dagbok.backend.dto.token.TokenRequest;
 import cloud.dagbok.backend.dto.token.UpdatedToken;
+import cloud.dagbok.backend.dto.user.ApiPrincipal;
 import cloud.dagbok.backend.dto.user.User;
 import cloud.dagbok.backend.dto.user.UserCheck;
+import cloud.dagbok.backend.dto.user.UserProfile;
 import cloud.dagbok.backend.service.TokenService;
 import cloud.dagbok.backend.service.UserService;
 import jakarta.validation.Valid;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -64,6 +68,16 @@ public class UserController {
     ResponseCookie cookie = createCookie("accessToken", tokens.token(), 300);
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+  }
+
+  @GetMapping("/me")
+  public ResponseEntity<UserProfile> getUserInfo(Authentication authentication) {
+    ApiPrincipal apiPrincipal = (ApiPrincipal) authentication.getPrincipal();
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+    log.info("Fetching user info");
+
+    UserProfile profile = userService.getUserProfile(apiPrincipal.email());
+    return ResponseEntity.ok(profile);
   }
 
   private ResponseCookie createCookie(String name, String value, int maxAgeSeconds) {

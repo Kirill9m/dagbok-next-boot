@@ -36,12 +36,16 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/user/**")
+                auth.requestMatchers(
+                        "/user/login",
+                        "/user/register",
+                        "/user/refresh",
+                        "/api/health",
+                        "/api/status",
+                        "/api/public/**")
                     .permitAll()
-                    .requestMatchers("/api/public/**")
-                    .permitAll()
-                    .requestMatchers("/api/**")
-                    .permitAll()
+                    .requestMatchers("/api/**", "/user/me")
+                    .authenticated()
                     .anyRequest()
                     .denyAll());
     return http.build();
