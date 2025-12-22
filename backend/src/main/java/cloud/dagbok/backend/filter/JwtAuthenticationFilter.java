@@ -93,10 +93,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     log.debug("Authenticated user: {} for path: {}", email, path);
 
-    Principal apiPrincipal = new Principal(user.getId(), user.getEmail());
+    Principal principal = new Principal(user.getId(), user.getEmail());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
-            apiPrincipal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
+            principal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     filterChain.doFilter(request, response);

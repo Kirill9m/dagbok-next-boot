@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 
 export const metadata: Metadata = {
-  title: "Användare profil | Dagbok",
+  title: "Användarprofil | Dagbok",
 };
 
 const ProfilePage = async () => {
@@ -15,7 +15,7 @@ const ProfilePage = async () => {
   }
 
   return (
-    <div className={"min-h-screen flex items-center justify-center"}>
+    <main className={"min-h-screen flex items-center justify-center"}>
       <div className="bg-[#2A2A2A] backdrop-blur-xl rounded-2xl p-8 w-full max-w-md shadow-2xl border border-white/10">
         <h1 className={"text-2xl font-semibold text-center mb-6"}>Profil</h1>
         <div className={"justify-center text-center mb-6"}>
@@ -31,7 +31,7 @@ const ProfilePage = async () => {
           </button>
         </form>
       </div>
-    </div>
+    </main>
   );
 };
 
