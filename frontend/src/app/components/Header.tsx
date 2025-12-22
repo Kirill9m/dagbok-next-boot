@@ -25,11 +25,16 @@ const Header = ({ user }: HeaderProps) => {
     profileLink,
     settingsLink,
   ];
-  const visibleLinks = !user
-    ? navLinks
-    : user.role === "ADMIN"
-      ? [...authenticatedLinks, adminLink]
-      : authenticatedLinks;
+
+  let visibleLinks;
+
+  if (!user) {
+    visibleLinks = navLinks;
+  } else if (user.role === "ADMIN") {
+    visibleLinks = [...authenticatedLinks, adminLink];
+  } else {
+    visibleLinks = authenticatedLinks;
+  }
 
   return (
     <header className="flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
