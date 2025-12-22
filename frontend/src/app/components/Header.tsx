@@ -3,19 +3,38 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
+import { User } from "@/lib/props";
 
-const navLinks = [
-  { name: "Calender", href: "/calendar" },
-  { name: "Profil", href: "/profile" },
-  { name: "Inställningar", href: "/settings" },
-  { name: "Admin", href: "/admin" },
-];
+const navLinks = [{ name: "Dagbok cloud", href: "/" }];
 
-const Header = () => {
+const calendarLink = { name: "Kalender", href: "/calendar" };
+const profileLink = { name: "Profil", href: "/profile" };
+const settingsLink = { name: "Inställningar", href: "/settings" };
+const adminLink = { name: "Admin", href: "/admin" };
+
+interface HeaderProps {
+  user: User | null;
+}
+
+const Header = ({ user }: HeaderProps) => {
   const pathname = usePathname();
 
-  const user = CheckAuthStatus();
+  const authenticatedLinks = [
+    ...navLinks,
+    calendarLink,
+    profileLink,
+    settingsLink,
+  ];
+
+  let visibleLinks;
+
+  if (!user) {
+    visibleLinks = navLinks;
+  } else if (user.role === "ADMIN") {
+    visibleLinks = [...authenticatedLinks, adminLink];
+  } else {
+    visibleLinks = authenticatedLinks;
+  }
 
   return (
     <header className="flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
@@ -29,7 +48,7 @@ const Header = () => {
           />
         </Link>
         <nav className="flex items-center gap-6 lg:px-6">
-          {navLinks.map((link) => {
+          {visibleLinks.map((link) => {
             const isActive =
               pathname === link.href ||
               (pathname.startsWith(link.href) && link.href !== "/");
@@ -47,7 +66,18 @@ const Header = () => {
           })}
         </nav>
       </div>
-      {user === null ? <Link href="/login">Login</Link> : null}
+      <div className="flex items-center gap-4">
+        {user ? (
+          <span className="text-sm text-gray-300">Hej, {user.name}</span>
+        ) : (
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-lg bg-[#FF7518] hover:bg-[#ff8833] transition-colors"
+          >
+            Logga in
+          </Link>
+        )}
+      </div>
     </header>
   );
 };

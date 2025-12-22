@@ -1,6 +1,6 @@
 package cloud.dagbok.backend.filter;
 
-import cloud.dagbok.backend.dto.user.ApiPrincipal;
+import cloud.dagbok.backend.dto.user.Principal;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
@@ -32,7 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getRequestURI();
-    return path.startsWith("/user/")
+    return path.equals("/user/login")
+        || path.equals("/user/register")
+        || path.equals("/actuator/health")
         || path.equals("/api/health")
         || path.equals("/api/status")
         || path.startsWith("/api/public/");
@@ -44,11 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     String path = request.getRequestURI();
-
-    if (!path.startsWith("/api/")) {
-      filterChain.doFilter(request, response);
-      return;
-    }
 
     String token = extractTokenFromCookie(request);
 
@@ -97,10 +94,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     log.debug("Authenticated user: {} for path: {}", email, path);
 
-    ApiPrincipal apiPrincipal = new ApiPrincipal(user.getId(), user.getEmail());
+    Principal principal = new Principal(user.getId(), user.getEmail());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
-            apiPrincipal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
+            principal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     filterChain.doFilter(request, response);

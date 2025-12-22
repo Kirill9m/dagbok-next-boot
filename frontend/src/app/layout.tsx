@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import { Roboto } from "next/font/google";
+import getUser from "@/app/actions/session";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -18,15 +19,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUser();
   return (
     <html lang="en" className={roboto.className}>
       <body className={"bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A]"}>
-        <Header />
+        <Header user={user} />
         {children}
       </body>
     </html>

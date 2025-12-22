@@ -5,11 +5,11 @@ export const metadata: Metadata = {
 };
 
 import Register from "@/app/(user)/register/Register";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
+import getUser from "@/app/actions/session";
 import { redirect } from "next/navigation";
 
-const RegisterPage = () => {
-  const user = CheckAuthStatus();
+const RegisterPage = async () => {
+  const user = await getUser();
 
   if (user) {
     redirect("/profile");

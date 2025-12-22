@@ -1,26 +1,28 @@
 import { Metadata } from "next";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
+import getUser from "@/app/actions/session";
 import { redirect } from "next/navigation";
-import HealthBanner from "@/app/components/HealthBanner";
-import NoteCreator from "@/app/components/(test)/NoteCreator";
+import HealthBanner from "@/app/(user)/admin/HealthBanner";
 
 export const metadata: Metadata = {
   title: "Admin | Dagbok",
 };
 
-const AdminPage = () => {
-  const user = CheckAuthStatus();
+const AdminPage = async () => {
+  const user = await getUser();
 
-  if (user) {
+  if (!user) {
     redirect("/login");
+  }
+
+  if (user.role !== "ADMIN") {
+    redirect("/");
   }
 
   return (
     <div className="w-full min-h-screen pt-5">
       <div className="flex justify-start items-start w-[256px]">
-        <div className="max-w-screen-lg w-full px-4 h-full">
+        <div className="max-w-5xl w-full px-4 h-full">
           <HealthBanner />
-          <NoteCreator />
         </div>
       </div>
     </div>
