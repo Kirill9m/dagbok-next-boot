@@ -28,11 +28,11 @@ public class NoteController {
   public ResponseEntity<NoteNew> createNote(
       @Valid @RequestBody NoteCreateRequest request, Authentication authentication) {
 
-    Principal apiPrincipal = (Principal) authentication.getPrincipal();
-    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
 
     log.info("Received note request: {}", request);
-    var createdNote = noteService.createNewUserNote(request, apiPrincipal.userId());
+    var createdNote = noteService.createNewUserNote(request, principal.userId());
     log.info("Created note: {}", createdNote);
     return ResponseEntity.status(201).body(createdNote);
   }

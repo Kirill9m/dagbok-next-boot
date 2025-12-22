@@ -31,9 +31,11 @@ public class NoteService {
             .findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    var savedEntity = noteRepository.save(new NoteEntity(null, user, request.value(), null, null));
+    var savedEntity =
+        noteRepository.save(
+            new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
 
-    return new NoteNew(savedEntity.getId(), savedEntity.getValue(), savedEntity.getCreatedAt());
+    return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
 
   @Transactional(readOnly = true)
@@ -44,10 +46,9 @@ public class NoteService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
 
     return new UserNotes(
-        user.getName(),
         user.getNotes().stream()
             .filter(note -> note.getDeletedAt() == null)
-            .map(note -> new NoteResponse(note.getId(), note.getValue()))
+            .map(note -> new NoteResponse(note.getDate(), note.getText()))
             .toList());
   }
 
@@ -66,7 +67,7 @@ public class NoteService {
 
     return new Note(
         deletedNote.getId(),
-        deletedNote.getValue(),
+        deletedNote.getText(),
         deletedNote.getUser().getId(),
         deletedNote.getCreatedAt(),
         deletedNote.getDeletedAt());
