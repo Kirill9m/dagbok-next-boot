@@ -25,8 +25,8 @@ const Login = () => {
 
       if (!res.ok) throw new Error("Login failed");
 
-      setMessage("Inloggning lyckades");
-      await router.push("/");
+      router.push("/");
+      router.refresh();
     } catch {
       setMessage("Fel användarnamn eller lösenord");
     } finally {

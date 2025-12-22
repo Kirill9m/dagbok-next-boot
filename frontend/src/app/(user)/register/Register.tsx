@@ -1,13 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const validatePassword = (pwd: string): string | null => {
     if (pwd.length < 8) return "Lösenordet måste vara minst 8 tecken";
@@ -35,10 +38,18 @@ const Register = () => {
     }
 
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      setMessage("Registrering lyckades");
-    } catch {
-      setMessage("Registrering misslyckades");
+      const res = await fetch("http://localhost:8080/user/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (!res.ok) throw new Error("Ett fel uppstod");
+
+      router.push("/login");
+      router.refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Ett fel uppstod");
     } finally {
       setLoading(false);
     }
@@ -52,8 +63,24 @@ const Register = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-sm mb-2">
-              E-postadress
+              Name
             </label>
+          </div>
+          <div>
+            <input
+              id="name"
+              type="name"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-3 rounded-xl bg-transparent border border-white/20 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF7518]/30 focus:border-transparent transition-all duration-300"
+              required
+            />
+          </div>
+          <label htmlFor="email" className="block text-sm mb-2">
+            E-postadress
+          </label>
+          <div>
             <input
               id="email"
               type="email"

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CheckAuthStatus from "@/app/(user)/auth/CheckAuthStatus";
+import getUser from "@/app/actions/session";
 import { redirect } from "next/navigation";
 import HealthBanner from "@/app/components/HealthBanner";
 import NoteCreator from "@/app/components/(test)/NoteCreator";
@@ -8,11 +8,15 @@ export const metadata: Metadata = {
   title: "Admin | Dagbok",
 };
 
-const AdminPage = () => {
-  const user = CheckAuthStatus();
+const AdminPage = async () => {
+  const user = await getUser();
 
-  if (user) {
+  if (!user) {
     redirect("/login");
+  }
+
+  if (user.role !== "ADMIN") {
+    redirect("/");
   }
 
   return (
