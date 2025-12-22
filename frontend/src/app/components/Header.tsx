@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { User } from "@/lib/props";
 
 const navLinks = [{ name: "Dagbok cloud", href: "/" }];
 
@@ -18,11 +19,17 @@ interface HeaderProps {
 const Header = ({ user }: HeaderProps) => {
   const pathname = usePathname();
 
-  const userLinks =
-    user?.role === "ADMIN"
-      ? [...navLinks, calendarLink, profileLink, settingsLink]
-      : navLinks;
-  const adminLinks = user ? [...userLinks, adminLink] : navLinks;
+  const authenticatedLinks = [
+    ...navLinks,
+    calendarLink,
+    profileLink,
+    settingsLink,
+  ];
+  const visibleLinks = !user
+    ? navLinks
+    : user.role === "ADMIN"
+      ? [...authenticatedLinks, adminLink]
+      : authenticatedLinks;
 
   return (
     <header className="flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
@@ -36,7 +43,7 @@ const Header = ({ user }: HeaderProps) => {
           />
         </Link>
         <nav className="flex items-center gap-6 lg:px-6">
-          {adminLinks.map((link) => {
+          {visibleLinks.map((link) => {
             const isActive =
               pathname === link.href ||
               (pathname.startsWith(link.href) && link.href !== "/");

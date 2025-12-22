@@ -52,7 +52,7 @@ public class UserService {
       throw new EntityNotFoundException("Invalid credentials");
     }
 
-    String accessToken = jwtUtil.generateToken(email, 1000 * 60 * 60 * 5L);
+    String accessToken = jwtUtil.generateToken(email, 1000 * 60 * 60 * 24 * 7L);
 
     TokenEntity tokenEntity =
         tokenRepository

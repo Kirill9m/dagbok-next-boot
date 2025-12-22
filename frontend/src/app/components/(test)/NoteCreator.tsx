@@ -8,14 +8,17 @@ const NoteCreator = () => {
 
   const addNote = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/notes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
+      const response = await fetch(
+        "${process.env.NEXT_PUBLIC_API_URL}/api/notes",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({ value: note }),
         },
-        body: JSON.stringify({ value: note }),
-      });
+      );
 
       if (!response) {
         throw new Error("No response from server");
@@ -27,12 +30,15 @@ const NoteCreator = () => {
 
   const getLastNote = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/notes/user", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
+      const response = await fetch(
+        "${process.env.NEXT_PUBLIC_API_URL}/api/notes/user",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
         },
-      });
+      );
 
       if (!response) {
         throw new Error("No response from server");

@@ -1,11 +1,11 @@
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
   role: string;
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
   message: string;
   status: number;
 }

@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { User } from "@/lib/props";
 
 const getUser = async (): Promise<User | null> => {
   try {
@@ -9,7 +10,7 @@ const getUser = async (): Promise<User | null> => {
       return null;
     }
 
-    const res = await fetch("http://localhost:8080/user/me", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
       method: "GET",
       headers: {
         Cookie: `accessToken=${accessToken.value}`,

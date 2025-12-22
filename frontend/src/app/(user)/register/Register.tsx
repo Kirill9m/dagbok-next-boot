@@ -38,11 +38,14 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/user/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        },
+      );
 
       if (!res.ok) throw new Error("Ett fel uppstod");
 
@@ -62,14 +65,14 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm mb-2">
+            <label htmlFor="name" className="block text-sm mb-2">
               Name
             </label>
           </div>
           <div>
             <input
               id="name"
-              type="name"
+              type="text"
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -77,6 +80,7 @@ const Register = () => {
               required
             />
           </div>
+
           <label htmlFor="email" className="block text-sm mb-2">
             E-postadress
           </label>
