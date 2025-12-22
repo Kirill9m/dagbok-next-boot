@@ -39,6 +39,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 auth.requestMatchers(
                         "/user/login",
                         "/user/register",
+                        "/actuator/health",
                         "/api/health",
                         "/api/status",
                         "/api/public/**")
@@ -68,6 +69,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/api/**", configuration);
     source.registerCorsConfiguration("/user/**", configuration);
+    source.registerCorsConfiguration("/actuator/**", configuration);
 
     return source;
   }
