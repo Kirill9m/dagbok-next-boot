@@ -4,43 +4,58 @@ const NotesModal = ({
   isOpen,
   onClose,
   notes,
-  onSave,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  notes: string;
-  onSave: (newNotes: string) => void;
+  notes: string[];
 }) => {
   const [text, setText] = React.useState(notes);
+
   if (!isOpen) return null;
 
-  const handleSave = () => {
-    onSave(text);
-    onClose();
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">Redigera anteckningar</h2>
-        <textarea
-          className="w-full h-40 border border-gray-300 rounded-md p-2 mb-4"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <div className="flex justify-end space-x-2">
-          <button
-            className="px-4 py-2 bg-gray-300 rounded-md"
-            onClick={onClose}
+    <div
+      className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-[#2A2A2A] rounded-lg p-6 w-96 max-w-[90vw] shadow-2xl relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
+          aria-label="Stäng"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            Avbryt
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-            onClick={handleSave}
-          >
-            Spara
-          </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <h2 className="text-xl font-bold mb-4 text-white">Anteckningar</h2>
+
+        <div className="w-full h-40 p-3 rounded-lg bg-[#3A3A3A] text-white border border-white/10 mb-4 overflow-y-auto">
+          {notes.map((note, index) => (
+            <div key={index} className="">
+              {note}
+            </div>
+          ))}
         </div>
+
+        <div className="flex justify-end"></div>
       </div>
     </div>
   );

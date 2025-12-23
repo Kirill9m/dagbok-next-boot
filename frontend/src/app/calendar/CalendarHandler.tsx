@@ -1,11 +1,18 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
 
 const CalendarHandler = () => {
   const [saveStatus, setSaveStatus] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<{
+    year: number;
+    month: number;
+    day: number;
+  } | null>(null);
+  const [currentNotes, setCurrentNotes] = useState<string[]>([]);
 
   const handleSaveNote = useCallback(
     async (year: number, month: number, day: number, text: string) => {
@@ -48,12 +55,18 @@ const CalendarHandler = () => {
     year: number,
     month: number,
     day: number,
-    text: string,
   ): void => {
-    console.log(
-      `Navigating to dagbok for ${year}-${month + 1}-${day} with text: ${text}`,
-    );
+    setSelectedDate({ year, month, day });
+    setIsModalOpen(true);
+    setCurrentNotes([
+      "Det här är en anteckning för det valda datumet.",
+      "Du kan lägga till fler anteckningar här.",
+    ]);
   };
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <div className="min-h-screen font-inter p-4">
@@ -61,6 +74,13 @@ const CalendarHandler = () => {
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
       />
+      {isModalOpen && selectedDate && (
+        <NotesModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          notes={currentNotes}
+        />
+      )}
       {saveStatus && (
         <div
           className="fixed bottom-4 right-4 bg-[#FF7518] text-white p-3 rounded-lg shadow-xl z-50 text-sm"
