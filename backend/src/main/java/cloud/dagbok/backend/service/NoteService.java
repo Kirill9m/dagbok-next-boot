@@ -40,7 +40,6 @@ public class NoteService {
       savedEntity =
           noteRepository.save(
               new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
-      userRepository.save(user);
     } else {
       String answer =
           openRouterService.chat("openai/gpt-4o-mini", user.getPrompt(), request.text());

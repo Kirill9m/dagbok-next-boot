@@ -29,6 +29,7 @@ public class UserEntity {
   @Column(nullable = false)
   private Role role;
 
+  @Column(length = 2000)
   private String prompt;
 
   public TokenEntity getToken() {
@@ -37,10 +38,6 @@ public class UserEntity {
 
   public void setToken(TokenEntity token) {
     this.token = token;
-  }
-
-  public UserEntity(String prompt) {
-    this.prompt = prompt;
   }
 
   public UserEntity() {}

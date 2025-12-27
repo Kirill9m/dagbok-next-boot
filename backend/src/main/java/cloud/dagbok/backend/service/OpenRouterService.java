@@ -7,11 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenRouterService {
 
-  private final String apiKey;
-
-  public OpenRouterService(@Value("${openrouter.api-key}") String apiKey) {
-    this.apiKey = apiKey;
-  }
+  @Value("${openrouter.api-key}")
+  private String apiKey;
 
   public String chat(String model, String prompt, String message) {
     return PromptUtil.chat(apiKey, model, prompt, message);
