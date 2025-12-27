@@ -16,10 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class NoteService {
   private final UserRepository userRepository;
   private final NoteRepository noteRepository;
+  private final OpenRouterService openRouterService;
 
-  public NoteService(UserRepository userRepository, NoteRepository noteRepository) {
+  public NoteService(
+      UserRepository userRepository,
+      NoteRepository noteRepository,
+      OpenRouterService openRouterService) {
     this.userRepository = userRepository;
     this.noteRepository = noteRepository;
+    this.openRouterService = openRouterService;
   }
 
   @Transactional
@@ -37,15 +42,11 @@ public class NoteService {
               new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
       userRepository.save(user);
     } else {
+      String answer =
+          openRouterService.chat("openai/gpt-4o-mini", user.getPrompt(), request.text());
       savedEntity =
           noteRepository.save(
-              new NoteEntity(
-                  null,
-                  user,
-                  "Prompt is active: " + request.text(),
-                  request.date().toLocalDate(),
-                  null,
-                  null));
+              new NoteEntity(null, user, answer, request.date().toLocalDate(), null, null));
     }
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }

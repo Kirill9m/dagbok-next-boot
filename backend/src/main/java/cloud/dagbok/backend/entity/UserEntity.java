@@ -102,6 +102,14 @@ public class UserEntity {
     this.role = role;
   }
 
+  public String getPrompt() {
+    return prompt;
+  }
+
+  public void setPrompt(String prompt) {
+    this.prompt = prompt;
+  }
+
   @Override
   public final boolean equals(Object o) {
     if (this == o) return true;
