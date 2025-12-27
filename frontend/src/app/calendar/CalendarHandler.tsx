@@ -4,10 +4,15 @@ import { useState, useCallback } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
 
+interface NotesData {
+  id: number;
+  notes: string[];
+}
+
 const CalendarHandler = () => {
   const [saveStatus, setSaveStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentNotes, setCurrentNotes] = useState<string[]>([]);
+  const [notesData, setNotesData] = useState<NotesData | null>(null);
 
   const handleSaveNote = useCallback(
     async (year: number, month: number, day: number, text: string) => {
@@ -68,14 +73,14 @@ const CalendarHandler = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        setCurrentNotes(data.notes || []);
+        setNotesData(data); // Store the entire response object
       } else {
         console.error(`Failed to fetch notes: HTTP ${res.status}`);
-        setCurrentNotes([]);
+        setNotesData(null);
       }
     } catch (err) {
       console.error("Failed to fetch notes:", err);
-      setCurrentNotes([]);
+      setNotesData(null);
     }
   };
 
@@ -93,7 +98,7 @@ const CalendarHandler = () => {
         <NotesModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          notes={currentNotes}
+          notesData={notesData}
         />
       )}
       {saveStatus && (

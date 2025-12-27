@@ -66,8 +66,9 @@ public class NoteService {
 
     List<NoteEntity> entities = noteRepository.findByDateAndUserIdAndDeletedAtIsNull(date, userId);
 
+    Long noteId = entities.isEmpty() ? null : entities.getFirst().getId();
     List<String> notes = entities.stream().map(NoteEntity::getText).toList();
 
-    return new NoteResponse(notes);
+    return new NoteResponse(noteId, notes);
   }
 }

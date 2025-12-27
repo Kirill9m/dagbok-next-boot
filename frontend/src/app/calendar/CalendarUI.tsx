@@ -138,6 +138,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                     onNavigateToDagbok(year, month, day, noteText);
                   }
                 }}
+                role="button"
               >
                 <div className="flex justify-between items-start mb-1">
                   <strong className="text-lg">{day}</strong>
