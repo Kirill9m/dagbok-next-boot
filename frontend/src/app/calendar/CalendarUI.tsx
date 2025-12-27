@@ -96,19 +96,18 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             &gt;
           </button>
         </div>
-        <label
-          htmlFor="prompt-toggle"
-          className="flex items-center justify-end gap-2"
-        >
-          <input
-            type="checkbox"
-            id="prompt-toggle"
-            className="accent-[#FF7518]"
-            checked={promptEnabled}
-            onChange={(e) => setPromptEnabled(e.target.checked)}
-          />
-          <span>Prompt</span>
-        </label>
+        <div className="flex justify-end mt-2">
+          <label htmlFor="prompt-toggle" className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="prompt-toggle"
+              className="accent-[#FF7518]"
+              checked={promptEnabled}
+              onChange={(e) => setPromptEnabled(e.target.checked)}
+            />
+            <span>Prompt</span>
+          </label>
+        </div>
       </div>
 
       <div className="calendar mt-8">

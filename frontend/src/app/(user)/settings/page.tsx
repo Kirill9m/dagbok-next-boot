@@ -21,12 +21,7 @@ const settingsPage = async () => {
         </h1>
         <div className={"justify-center text-center mb-6"}>
           <div>Prompt:</div>
-          <div
-            className="relative rounded-lg p-6 w-96 max-w-[90vw] shadow-2xl"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-          >
+          <div className="relative rounded-lg p-6 w-96 max-w-[90vw] shadow-2xl">
             {user.prompt}
           </div>
           <button

@@ -157,7 +157,7 @@
         <mxCell id="95" value="Display validation&lt;div&gt;error&lt;/div&gt;" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="1148" y="640" width="140" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="99" value="Open connection pull to the database" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="99" value="Open connection pool to the database" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="689.75" y="510" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="109" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="106" target="108" edge="1">

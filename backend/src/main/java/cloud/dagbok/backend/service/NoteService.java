@@ -37,7 +37,11 @@ public class NoteService {
 
     if (request.prompt() != null && request.prompt()) {
       String userPrompt = user.getPrompt() != null ? user.getPrompt() : "";
-      textToSave = openRouterService.chat("openai/gpt-4o-mini", userPrompt, request.text());
+      try {
+        textToSave = openRouterService.chat("openai/gpt-4o-mini", userPrompt, request.text());
+      } catch (Exception e) {
+        textToSave = request.text();
+      }
     } else {
       textToSave = request.text();
     }

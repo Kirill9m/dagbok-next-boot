@@ -22,7 +22,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final TokenRepository tokenRepository;
   private final JwtUtil jwtUtil;
-  String DEFAULT_PROMPT =
+  private static final String DEFAULT_PROMPT =
       "Help me add entries to the calendar, and assist with removing unnecessary content, checking"
           + " grammar, rewriting for clarity, and returning only the final, clean version without"
           + " comments.";
@@ -80,7 +80,7 @@ public class UserService {
     return new Token(accessToken);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public UserProfile getUserProfile(String email) {
     UserEntity user =
         userRepository
