@@ -29,6 +29,9 @@ public class UserEntity {
   @Column(nullable = false)
   private Role role;
 
+  @Column(length = 2000)
+  private String prompt;
+
   public TokenEntity getToken() {
     return token;
   }
@@ -45,13 +48,15 @@ public class UserEntity {
       String passwordHashed,
       String email,
       List<NoteEntity> notes,
-      Role role) {
+      Role role,
+      String prompt) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
     this.email = email;
     this.notes = notes;
     this.role = role;
+    this.prompt = prompt;
   }
 
   public String getName() {
@@ -92,6 +97,14 @@ public class UserEntity {
 
   public void setRole(Role role) {
     this.role = role;
+  }
+
+  public String getPrompt() {
+    return prompt;
+  }
+
+  public void setPrompt(String prompt) {
+    this.prompt = prompt;
   }
 
   @Override

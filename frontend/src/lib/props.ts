@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: "ADMIN" | "USER";
+  prompt: string;
 }
 
 export interface ErrorResponse {

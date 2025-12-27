@@ -22,6 +22,10 @@ public class UserService {
   private final UserRepository userRepository;
   private final TokenRepository tokenRepository;
   private final JwtUtil jwtUtil;
+  private static final String DEFAULT_PROMPT =
+      "Help me add entries to the calendar, and assist with removing unnecessary content, checking"
+          + " grammar, rewriting for clarity, and returning only the final, clean version without"
+          + " comments.";
 
   public UserService(
       UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
@@ -38,7 +42,13 @@ public class UserService {
 
     userRepository.save(
         new UserEntity(
-            null, user.name(), hashPassword(user.password()), user.email(), null, Role.USER));
+            null,
+            user.name(),
+            hashPassword(user.password()),
+            user.email(),
+            new java.util.ArrayList<>(),
+            Role.USER,
+            DEFAULT_PROMPT));
   }
 
   @Transactional
@@ -70,12 +80,14 @@ public class UserService {
     return new Token(accessToken);
   }
 
+  @Transactional(readOnly = true)
   public UserProfile getUserProfile(String email) {
     UserEntity user =
         userRepository
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    return new UserProfile(user.getId(), user.getName(), user.getEmail(), user.getRole().name());
+    return new UserProfile(
+        user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
   }
 }

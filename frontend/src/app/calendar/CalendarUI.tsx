@@ -9,7 +9,13 @@ interface MonthlyPlannerProps {
     day: number,
     text: string,
   ) => void;
-  onSaveNote: (year: number, month: number, day: number, text: string) => void;
+  onSaveNote: (
+    year: number,
+    month: number,
+    day: number,
+    text: string,
+    prompt: boolean,
+  ) => void;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
@@ -21,6 +27,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   const [year, setYear] = useState(today.getFullYear());
   const [chosenDay, setChosenDay] = useState<number | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
+  const [promptEnabled, setPromptEnabled] = useState(true);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -89,6 +96,18 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             &gt;
           </button>
         </div>
+        <div className="flex justify-end mt-2">
+          <label htmlFor="prompt-toggle" className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="prompt-toggle"
+              className="accent-[#FF7518]"
+              checked={promptEnabled}
+              onChange={(e) => setPromptEnabled(e.target.checked)}
+            />
+            <span>Prompt</span>
+          </label>
+        </div>
       </div>
 
       <div className="calendar mt-8">
@@ -156,7 +175,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   className="mt-1 bg-transparent text-gray-400 px-2 py-1 rounded hover:text-white hover:bg-[#FF7518] transition"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSaveNote(year, month, day, noteText);
+                    onSaveNote(year, month, day, noteText, promptEnabled);
                     const noteKey = `${year}-${month + 1}-${day}`;
                     setNotes((prev) => {
                       const next = { ...prev };

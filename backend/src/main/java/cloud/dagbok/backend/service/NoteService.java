@@ -9,6 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +19,48 @@ import org.springframework.transaction.annotation.Transactional;
 public class NoteService {
   private final UserRepository userRepository;
   private final NoteRepository noteRepository;
+  private final OpenRouterService openRouterService;
+  private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
 
-  public NoteService(UserRepository userRepository, NoteRepository noteRepository) {
+  @Value("${openrouter.model}")
+  private String openRouterModel;
+
+  public NoteService(
+      UserRepository userRepository,
+      NoteRepository noteRepository,
+      OpenRouterService openRouterService) {
     this.userRepository = userRepository;
     this.noteRepository = noteRepository;
+    this.openRouterService = openRouterService;
   }
 
-  @Transactional
   public NoteNew createNewUserNote(NoteCreateRequest request, Long userId) {
     UserEntity user =
         userRepository
             .findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    var savedEntity =
-        noteRepository.save(
-            new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
+    String textToSave;
 
+    if (request.prompt() != null && request.prompt()) {
+      String userPrompt = user.getPrompt() != null ? user.getPrompt() : "";
+      try {
+        textToSave = openRouterService.chat(openRouterModel, userPrompt, request.text());
+      } catch (Exception e) {
+        logger.error("AI generation failed for user {}, falling back to original text", userId, e);
+        textToSave = request.text();
+      }
+    } else {
+      textToSave = request.text();
+    }
+
+    return saveNote(user, textToSave, request.date().toLocalDate());
+  }
+
+  @Transactional
+  protected NoteNew saveNote(UserEntity user, String text, LocalDate date) {
+    NoteEntity savedEntity =
+        noteRepository.save(new NoteEntity(null, user, text, date, null, null));
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
 
