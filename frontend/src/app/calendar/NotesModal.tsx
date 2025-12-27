@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 
-interface NotesData {
+interface Note {
   id: number;
-  notes: string[];
+  text: string;
+}
+
+interface NotesData {
+  notes: Note[];
 }
 
 interface NotesModalProps {
@@ -73,12 +77,9 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
         </h2>
 
         <div className="w-full h-40 p-3 rounded-lg bg-[#3A3A3A] text-white border border-white/10 mb-4 overflow-y-auto">
-          {notesData?.notes.map((note, index) => (
-            <div
-              key={`${notesData.id}-${index}-${note}`}
-              className="mb-2 whitespace-pre-wrap"
-            >
-              {note}
+          {notesData?.notes.map((note) => (
+            <div key={note.id} className="mb-2 whitespace-pre-wrap">
+              {note.text}
             </div>
           ))}
         </div>

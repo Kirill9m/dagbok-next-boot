@@ -1,9 +1,6 @@
 package cloud.dagbok.backend.service;
 
-import cloud.dagbok.backend.dto.note.Note;
-import cloud.dagbok.backend.dto.note.NoteCreateRequest;
-import cloud.dagbok.backend.dto.note.NoteNew;
-import cloud.dagbok.backend.dto.note.NoteResponse;
+import cloud.dagbok.backend.dto.note.*;
 import cloud.dagbok.backend.entity.NoteEntity;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.NoteRepository;
@@ -66,9 +63,9 @@ public class NoteService {
 
     List<NoteEntity> entities = noteRepository.findByDateAndUserIdAndDeletedAtIsNull(date, userId);
 
-    Long noteId = entities.isEmpty() ? null : entities.getFirst().getId();
-    List<String> notes = entities.stream().map(NoteEntity::getText).toList();
+    List<NoteItem> notes =
+        entities.stream().map(e -> new NoteItem(e.getId(), e.getText())).toList();
 
-    return new NoteResponse(noteId, notes);
+    return new NoteResponse(notes);
   }
 }

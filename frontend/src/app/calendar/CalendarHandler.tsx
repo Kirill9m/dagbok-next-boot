@@ -4,9 +4,13 @@ import { useState, useCallback } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
 
-interface NotesData {
+interface Note {
   id: number;
-  notes: string[];
+  text: string;
+}
+
+interface NotesData {
+  notes: Note[];
 }
 
 const CalendarHandler = () => {
@@ -43,6 +47,7 @@ const CalendarHandler = () => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         setSaveStatus("Sparat");
+        setNotesData(null);
       } catch (err) {
         console.error("Failed to save note:", err);
         setSaveStatus("Fel vid sparning");
@@ -73,7 +78,7 @@ const CalendarHandler = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        setNotesData(data); // Store the entire response object
+        setNotesData(data);
       } else {
         console.error(`Failed to fetch notes: HTTP ${res.status}`);
         setNotesData(null);

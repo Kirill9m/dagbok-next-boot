@@ -132,7 +132,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   onNavigateToDagbok(year, month, day, noteText);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     setChosenDay(day);
                     onNavigateToDagbok(year, month, day, noteText);
@@ -157,6 +157,12 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     onSaveNote(year, month, day, noteText);
+                    const noteKey = `${year}-${month + 1}-${day}`;
+                    setNotes((prev) => {
+                      const next = { ...prev };
+                      delete next[noteKey];
+                      return next;
+                    });
                   }}
                 >
                   Spara
