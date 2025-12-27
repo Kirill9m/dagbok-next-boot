@@ -86,6 +86,7 @@ public class UserService {
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    return new UserProfile(user.getId(), user.getName(), user.getEmail(), user.getRole().name());
+    return new UserProfile(
+        user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
   }
 }
