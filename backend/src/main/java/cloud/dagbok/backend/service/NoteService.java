@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ public class NoteService {
   private final NoteRepository noteRepository;
   private final OpenRouterService openRouterService;
   private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
+
+  @Value("${openrouter.model}")
+  private String openRouterModel;
 
   public NoteService(
       UserRepository userRepository,
@@ -41,7 +45,7 @@ public class NoteService {
     if (request.prompt() != null && request.prompt()) {
       String userPrompt = user.getPrompt() != null ? user.getPrompt() : "";
       try {
-        textToSave = openRouterService.chat("openai/gpt-4o-mini", userPrompt, request.text());
+        textToSave = openRouterService.chat(openRouterModel, userPrompt, request.text());
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
         textToSave = request.text();
