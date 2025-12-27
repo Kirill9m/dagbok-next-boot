@@ -19,7 +19,13 @@ const CalendarHandler = () => {
   const [notesData, setNotesData] = useState<NotesData | null>(null);
 
   const handleSaveNote = useCallback(
-    async (year: number, month: number, day: number, text: string) => {
+    async (
+      year: number,
+      month: number,
+      day: number,
+      text: string,
+      prompt: boolean,
+    ) => {
       if (!text.trim()) {
         setSaveStatus("Text is empty");
         return;
@@ -39,6 +45,7 @@ const CalendarHandler = () => {
             body: JSON.stringify({
               text,
               date: isoDate,
+              prompt,
             }),
             credentials: "include",
           },

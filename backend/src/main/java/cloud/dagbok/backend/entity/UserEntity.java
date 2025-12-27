@@ -29,12 +29,18 @@ public class UserEntity {
   @Column(nullable = false)
   private Role role;
 
+  private String prompt;
+
   public TokenEntity getToken() {
     return token;
   }
 
   public void setToken(TokenEntity token) {
     this.token = token;
+  }
+
+  public UserEntity(String prompt) {
+    this.prompt = prompt;
   }
 
   public UserEntity() {}
@@ -45,13 +51,15 @@ public class UserEntity {
       String passwordHashed,
       String email,
       List<NoteEntity> notes,
-      Role role) {
+      Role role,
+      String prompt) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
     this.email = email;
     this.notes = notes;
     this.role = role;
+    this.prompt = prompt;
   }
 
   public String getName() {

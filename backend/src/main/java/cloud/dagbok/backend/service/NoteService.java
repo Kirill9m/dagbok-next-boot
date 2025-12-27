@@ -29,10 +29,24 @@ public class NoteService {
             .findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    var savedEntity =
-        noteRepository.save(
-            new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
+    NoteEntity savedEntity = null;
 
+    if (request.prompt() != null && !request.prompt()) {
+      savedEntity =
+          noteRepository.save(
+              new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
+      userRepository.save(user);
+    } else {
+      savedEntity =
+          noteRepository.save(
+              new NoteEntity(
+                  null,
+                  user,
+                  "Prompt is active: " + request.text(),
+                  request.date().toLocalDate(),
+                  null,
+                  null));
+    }
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
 

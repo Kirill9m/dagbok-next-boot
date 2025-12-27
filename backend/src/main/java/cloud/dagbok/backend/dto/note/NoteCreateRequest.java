@@ -5,4 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record NoteCreateRequest(
-    @NotBlank(message = "Note text cannot be blank") String text, @NotNull LocalDateTime date) {}
+    @NotBlank(message = "Note text cannot be blank") String text,
+    @NotNull LocalDateTime date,
+    Boolean prompt) {}

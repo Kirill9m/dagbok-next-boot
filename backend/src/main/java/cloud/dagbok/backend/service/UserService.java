@@ -22,6 +22,10 @@ public class UserService {
   private final UserRepository userRepository;
   private final TokenRepository tokenRepository;
   private final JwtUtil jwtUtil;
+  String promptDefault =
+      "Help me add entries to the calendar, and assist with removing unnecessary content, checking"
+          + " grammar, rewriting for clarity, and returning only the final, clean version without"
+          + " comments.";
 
   public UserService(
       UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
@@ -38,7 +42,13 @@ public class UserService {
 
     userRepository.save(
         new UserEntity(
-            null, user.name(), hashPassword(user.password()), user.email(), null, Role.USER));
+            null,
+            user.name(),
+            hashPassword(user.password()),
+            user.email(),
+            null,
+            Role.USER,
+            promptDefault));
   }
 
   @Transactional
