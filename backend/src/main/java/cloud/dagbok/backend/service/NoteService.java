@@ -4,13 +4,14 @@ import cloud.dagbok.backend.dto.note.Note;
 import cloud.dagbok.backend.dto.note.NoteCreateRequest;
 import cloud.dagbok.backend.dto.note.NoteNew;
 import cloud.dagbok.backend.dto.note.NoteResponse;
-import cloud.dagbok.backend.dto.user.UserNotes;
 import cloud.dagbok.backend.entity.NoteEntity;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,20 +39,6 @@ public class NoteService {
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
 
-  @Transactional(readOnly = true)
-  public UserNotes findUserAndGetNotes(String email) {
-    UserEntity user =
-        userRepository
-            .findByEmail(email)
-            .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
-
-    return new UserNotes(
-        user.getNotes().stream()
-            .filter(note -> note.getDeletedAt() == null)
-            .map(note -> new NoteResponse(note.getDate(), note.getText()))
-            .toList());
-  }
-
   @Transactional
   public Note deleteNote(Long noteId, Long userId) {
     NoteEntity noteToDelete =
@@ -71,5 +58,21 @@ public class NoteService {
         deletedNote.getUser().getId(),
         deletedNote.getCreatedAt(),
         deletedNote.getDeletedAt());
+  }
+
+  @Transactional(readOnly = true)
+  public NoteResponse getNoteByDate(Long userId, LocalDateTime dateTime) {
+    LocalDate date = dateTime.toLocalDate();
+
+    List<NoteEntity> entities = noteRepository.findByDateAndUserIdAndDeletedAtIsNull(date, userId);
+
+    if (entities.isEmpty()) {
+      throw new EntityNotFoundException(
+          "No note found for user with id: " + userId + " on date: " + date);
+    }
+
+    List<String> notes = entities.stream().map(NoteEntity::getText).toList();
+
+    return new NoteResponse(notes);
   }
 }

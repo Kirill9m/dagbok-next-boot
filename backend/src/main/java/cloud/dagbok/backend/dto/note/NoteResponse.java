@@ -1,5 +1,5 @@
 package cloud.dagbok.backend.dto.note;
 
-import java.time.LocalDate;
+import java.util.List;
 
-public record NoteResponse(LocalDate date, String value) {}
+public record NoteResponse(List<String> notes) {}
