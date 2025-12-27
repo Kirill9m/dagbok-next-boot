@@ -66,11 +66,6 @@ public class NoteService {
 
     List<NoteEntity> entities = noteRepository.findByDateAndUserIdAndDeletedAtIsNull(date, userId);
 
-    if (entities.isEmpty()) {
-      throw new EntityNotFoundException(
-          "No note found for user with id: " + userId + " on date: " + date);
-    }
-
     List<String> notes = entities.stream().map(NoteEntity::getText).toList();
 
     return new NoteResponse(notes);

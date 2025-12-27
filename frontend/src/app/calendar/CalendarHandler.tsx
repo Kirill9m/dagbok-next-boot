@@ -1,17 +1,12 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
 
 const CalendarHandler = () => {
   const [saveStatus, setSaveStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<{
-    year: number;
-    month: number;
-    day: number;
-  } | null>(null);
   const [currentNotes, setCurrentNotes] = useState<string[]>([]);
 
   const handleSaveNote = useCallback(
@@ -58,31 +53,34 @@ const CalendarHandler = () => {
     month: number,
     day: number,
   ): Promise<void> => {
-    setSelectedDate({ year, month, day });
     setIsModalOpen(true);
 
     const date = new Date(year, month, day);
     const formatted = date.toLocaleDateString("sv-SE");
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user?date=${formatted}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      },
-    );
-    if (res.ok) {
-      const data = await res.json();
-      setCurrentNotes(data.notes || []);
-      return;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user?date=${formatted}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentNotes(data.notes || []);
+      } else {
+        console.error(`Failed to fetch notes: HTTP ${res.status}`);
+        setCurrentNotes([]);
+      }
+    } catch (err) {
+      console.error("Failed to fetch notes:", err);
+      setCurrentNotes([]);
     }
   };
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-    setSelectedDate(null);
-    setCurrentNotes(["Inga anteckningar"]);
   }, []);
 
   return (
@@ -91,7 +89,7 @@ const CalendarHandler = () => {
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
       />
-      {isModalOpen && selectedDate && (
+      {isModalOpen && (
         <NotesModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

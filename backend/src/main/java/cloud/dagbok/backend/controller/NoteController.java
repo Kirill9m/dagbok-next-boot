@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -55,12 +56,13 @@ public class NoteController {
   }
 
   @GetMapping("/notes/user")
-  public ResponseEntity<NoteResponse> getUserById(
-      @RequestParam String date, Authentication authentication) {
+  public ResponseEntity<NoteResponse> getNotesByDate(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+      Authentication authentication) {
     Principal principal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(principal, "Principal cannot be null");
 
-    LocalDateTime dateTime = LocalDate.parse(date).atStartOfDay();
+    LocalDateTime dateTime = date.atStartOfDay();
 
     log.info("User: {} requested notes for date: {}", principal.userId(), date);
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));

@@ -131,6 +131,13 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   setChosenDay(day);
                   onNavigateToDagbok(year, month, day, noteText);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setChosenDay(day);
+                    onNavigateToDagbok(year, month, day, noteText);
+                  }
+                }}
               >
                 <div className="flex justify-between items-start mb-1">
                   <strong className="text-lg">{day}</strong>

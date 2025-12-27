@@ -9,8 +9,6 @@ const NotesModal = ({
   onClose: () => void;
   notes: string[];
 }) => {
-  const [text, setText] = React.useState(notes);
-
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -21,7 +19,7 @@ const NotesModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       onClick={handleBackdropClick}
     >
       <div className="bg-[#2A2A2A] rounded-lg p-6 w-96 max-w-[90vw] shadow-2xl relative">
@@ -49,13 +47,11 @@ const NotesModal = ({
 
         <div className="w-full h-40 p-3 rounded-lg bg-[#3A3A3A] text-white border border-white/10 mb-4 overflow-y-auto">
           {notes.map((note, index) => (
-            <div key={index} className="">
+            <div key={index} className="mb-2 whitespace-pre-wrap">
               {note}
             </div>
           ))}
         </div>
-
-        <div className="flex justify-end"></div>
       </div>
     </div>
   );

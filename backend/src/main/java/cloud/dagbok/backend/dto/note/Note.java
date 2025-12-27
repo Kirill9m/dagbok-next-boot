@@ -4,8 +4,4 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record Note(
-    Long id,
-    @NotNull String value,
-    Long userId,
-    LocalDateTime createdAt,
-    LocalDateTime deletedAt) {}
+    Long id, @NotNull String text, Long userId, LocalDateTime createdAt, LocalDateTime deletedAt) {}
