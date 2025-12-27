@@ -24,7 +24,7 @@ const CalendarHandler = () => {
       setSaveStatus("Skriver...");
 
       try {
-        const noteDate = new Date(year, month, day);
+        const noteDate = new Date(year, month, day + 1);
         const isoDate = noteDate.toISOString();
 
         const res = await fetch(
@@ -46,26 +46,43 @@ const CalendarHandler = () => {
       } catch (err) {
         console.error("Failed to save note:", err);
         setSaveStatus("Fel vid sparning");
+      } finally {
+        setTimeout(() => setSaveStatus(""), 3000);
       }
     },
     [],
   );
 
-  const onNavigateToDagbok = (
+  const onNavigateToDagbok = async (
     year: number,
     month: number,
     day: number,
-  ): void => {
+  ): Promise<void> => {
     setSelectedDate({ year, month, day });
     setIsModalOpen(true);
-    setCurrentNotes([
-      "Det här är en anteckning för det valda datumet.",
-      "Du kan lägga till fler anteckningar här.",
-    ]);
+
+    const date = new Date(year, month, day);
+    const formatted = date.toLocaleDateString("sv-SE");
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user?date=${formatted}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      },
+    );
+    if (res.ok) {
+      const data = await res.json();
+      setCurrentNotes(data.notes || []);
+      return;
+    }
   };
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
+    setSelectedDate(null);
+    setCurrentNotes(["Inga anteckningar"]);
   }, []);
 
   return (
