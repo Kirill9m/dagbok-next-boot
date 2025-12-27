@@ -27,26 +27,28 @@ public class NoteService {
     this.openRouterService = openRouterService;
   }
 
-  @Transactional
   public NoteNew createNewUserNote(NoteCreateRequest request, Long userId) {
     UserEntity user =
         userRepository
             .findById(userId)
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    NoteEntity savedEntity = null;
+    String textToSave;
 
-    if (request.prompt() != null && !request.prompt()) {
-      savedEntity =
-          noteRepository.save(
-              new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
+    if (request.prompt() != null && request.prompt()) {
+      String userPrompt = user.getPrompt() != null ? user.getPrompt() : "";
+      textToSave = openRouterService.chat("openai/gpt-4o-mini", userPrompt, request.text());
     } else {
-      String answer =
-          openRouterService.chat("openai/gpt-4o-mini", user.getPrompt(), request.text());
-      savedEntity =
-          noteRepository.save(
-              new NoteEntity(null, user, answer, request.date().toLocalDate(), null, null));
+      textToSave = request.text();
     }
+
+    return saveNote(user, textToSave, request.date().toLocalDate());
+  }
+
+  @Transactional
+  protected NoteNew saveNote(UserEntity user, String text, LocalDate date) {
+    NoteEntity savedEntity =
+        noteRepository.save(new NoteEntity(null, user, text, date, null, null));
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
 
