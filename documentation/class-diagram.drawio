@@ -1,10 +1,10 @@
-<mxfile host="drawio-plugin" modified="2025-12-23T03:33:19.683Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" etag="TKbtf9fmL-0LmI8vYj_J" version="22.1.22" type="embed">
+<mxfile host="drawio-plugin" modified="2025-12-27T20:52:21.540Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" etag="HvqY1RegvM6eAHwQ22J8" version="22.1.22" type="embed">
   <diagram id="HSk5vobgZFTCAi8h4PCx" name="Page-1">
-    <mxGraphModel dx="2776" dy="1935" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1684" dy="1246" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="node0" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;User&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;+ User(Long, String, String, String, List&amp;lt;Note&amp;gt;, Role): &lt;/p&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;+ User():&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;- role: Role&lt;br&gt;- token: Token&lt;br&gt;- name: String&lt;br&gt;- id: Long&lt;br&gt;- email: String&lt;br&gt;~ notes: List&amp;lt;Note&amp;gt;&lt;br&gt;- password: String&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
+        <mxCell id="node0" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;User&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;+ User(Long, String, String, String, List&amp;lt;Note&amp;gt;, Role): &lt;/p&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;+ User():&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;- role: Role&lt;br&gt;- token: Token&lt;br&gt;- name: String&lt;br&gt;- id: Long&lt;br&gt;- email: String&lt;br&gt;~ notes: List&amp;lt;Note&amp;gt;&lt;br&gt;- password: String&lt;/p&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;- prompt: String&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
           <mxGeometry x="-290" y="100" width="630" height="298" as="geometry" />
         </mxCell>
         <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3" target="node0" edge="1">
@@ -19,8 +19,14 @@
         <mxCell id="5" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Token&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;+ Token(Long, User, String): &lt;br&gt;+ Token(): &lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt;- id: Long&lt;br&gt;- token: String&lt;br&gt;- user: User&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
           <mxGeometry x="570" y="310" width="510" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="11" value="&lt;strong data-end=&quot;497&quot; data-start=&quot;476&quot;&gt;&lt;font style=&quot;font-size: 32px;&quot;&gt;UML Class Diagram&lt;/font&gt;&lt;/strong&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="11" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="&lt;strong data-end=&quot;497&quot; data-start=&quot;476&quot;&gt;&lt;font style=&quot;font-size: 32px;&quot;&gt;UML Class Diagram&lt;/font&gt;&lt;/strong&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-260" y="-160" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="&lt;strong data-end=&quot;497&quot; data-start=&quot;476&quot;&gt;&lt;font style=&quot;font-size: 32px;&quot;&gt;UML Class Diagram&lt;/font&gt;&lt;/strong&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-260" y="-270" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
