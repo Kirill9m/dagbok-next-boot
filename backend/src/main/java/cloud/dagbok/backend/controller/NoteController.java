@@ -3,13 +3,16 @@ package cloud.dagbok.backend.controller;
 import cloud.dagbok.backend.dto.note.Note;
 import cloud.dagbok.backend.dto.note.NoteCreateRequest;
 import cloud.dagbok.backend.dto.note.NoteNew;
+import cloud.dagbok.backend.dto.note.NoteResponse;
 import cloud.dagbok.backend.dto.user.Principal;
-import cloud.dagbok.backend.dto.user.UserNotes;
 import cloud.dagbok.backend.service.NoteService;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +31,11 @@ public class NoteController {
   public ResponseEntity<NoteNew> createNote(
       @Valid @RequestBody NoteCreateRequest request, Authentication authentication) {
 
-    Principal apiPrincipal = (Principal) authentication.getPrincipal();
-    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
 
     log.info("Received note request: {}", request);
-    var createdNote = noteService.createNewUserNote(request, apiPrincipal.userId());
+    var createdNote = noteService.createNewUserNote(request, principal.userId());
     log.info("Created note: {}", createdNote);
     return ResponseEntity.status(201).body(createdNote);
   }
@@ -53,11 +56,15 @@ public class NoteController {
   }
 
   @GetMapping("/notes/user")
-  public ResponseEntity<UserNotes> getUserById(Authentication authentication) {
-    Principal apiPrincipal = (Principal) authentication.getPrincipal();
-    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+  public ResponseEntity<NoteResponse> getNotesByDate(
+      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+      Authentication authentication) {
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
 
-    log.info("User: {} requested notes", apiPrincipal.userId());
-    return ResponseEntity.ok(noteService.findUserAndGetNotes(apiPrincipal.email()));
+    LocalDateTime dateTime = date.atStartOfDay();
+
+    log.info("User: {} requested notes for date: {}", principal.userId(), date);
+    return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
   }
 }

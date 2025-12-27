@@ -1,3 +1,5 @@
 package cloud.dagbok.backend.dto.note;
 
-public record NoteResponse(Long id, String value) {}
+import java.util.List;
+
+public record NoteResponse(List<NoteItem> notes) {}
