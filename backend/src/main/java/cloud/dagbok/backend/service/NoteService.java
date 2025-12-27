@@ -36,17 +36,17 @@ public class NoteService {
 
     NoteEntity savedEntity = null;
 
-    if (request.prompt() != null && !request.prompt()) {
-      savedEntity =
-          noteRepository.save(
-              new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
-      userRepository.save(user);
-    } else {
+    if (request.prompt() != null && request.prompt()) {
       String answer =
           openRouterService.chat("openai/gpt-4o-mini", user.getPrompt(), request.text());
       savedEntity =
           noteRepository.save(
               new NoteEntity(null, user, answer, request.date().toLocalDate(), null, null));
+    } else {
+      savedEntity =
+          noteRepository.save(
+              new NoteEntity(null, user, request.text(), request.date().toLocalDate(), null, null));
+      userRepository.save(user);
     }
     return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
   }
