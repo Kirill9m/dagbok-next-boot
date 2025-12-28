@@ -1,21 +1,29 @@
 "use client";
 
 import { User } from "@/lib/props";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SettingsModalProps {
   user?: User;
 }
 
-const SettingsModal = ({ user }: SettingsModalProps) => {
+const SettingsForm = ({ user }: SettingsModalProps) => {
   const [userPrompt, setUserPrompt] = useState(user?.prompt || "");
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const maxLength = 2000;
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [timeoutId]);
 
   const handleSave = async () => {
     if (isSaving) return;
     setIsSaving(true);
+
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/user/prompt`,
@@ -39,8 +47,9 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
       setSaveStatus("Fel vid uppdatering av prompt.");
     } finally {
       setIsSaving(false);
-      const timeoutId = setTimeout(() => setSaveStatus(""), 3000);
-      return () => clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
+      const newTimeoutId = setTimeout(() => setSaveStatus(""), 3000);
+      setTimeoutId(newTimeoutId);
     }
   };
 
@@ -88,4 +97,4 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
   );
 };
 
-export default SettingsModal;
+export default SettingsForm;

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import getUser from "@/app/actions/session";
 import { redirect } from "next/navigation";
-import SettingsModal from "@/app/(user)/settings/SettingsModal";
+import SettingsForm from "@/app/(user)/settings/SettingsForm";
 
 export const metadata: Metadata = {
   title: "Inställningar | Dagbok",
@@ -14,7 +14,7 @@ const settingsPage = async () => {
     redirect("/login");
   }
 
-  return <SettingsModal user={user} />;
+  return <SettingsForm user={user} />;
 };
 
 export default settingsPage;
