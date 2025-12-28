@@ -70,7 +70,7 @@ const Header = ({ user }: HeaderProps) => {
         </nav>
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-md hover:bg-[#FF7518]/60 transition-colors"
+          className="md:hidden p-3 rounded-md hover:bg-[#FF7518]/60 transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={mobileMenuOpen}
@@ -107,7 +107,7 @@ const Header = ({ user }: HeaderProps) => {
         ) : (
           <Link
             href="/login"
-            className="px-3 sm:px-4 py-2 text-sm rounded-lg bg-[#FF7518] hover:bg-[#ff8833] transition-colors"
+            className="px-3 sm:px-4 py-2 text-sm rounded-lg bg-[#FF7518] hover:bg-[#ff8833] transition-colors min-h-[44px]"
           >
             Logga in
           </Link>

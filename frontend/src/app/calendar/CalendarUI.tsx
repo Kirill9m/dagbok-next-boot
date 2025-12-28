@@ -104,7 +104,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             <input
               type="checkbox"
               id="prompt-toggle"
-              className="accent-[#FF7518] w-5 h-5 cursor-pointer"
+              className="accent-[#FF7518] w-11 h-11 cursor-pointer"
               checked={promptEnabled}
               onChange={(e) => setPromptEnabled(e.target.checked)}
             />
