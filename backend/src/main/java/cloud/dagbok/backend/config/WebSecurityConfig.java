@@ -44,7 +44,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         "/api/status",
                         "/api/public/**")
                     .permitAll()
-                    .requestMatchers("/api/**", "/user/me")
+                    .requestMatchers("/api/**", "/user/me", "/user/prompt")
                     .authenticated()
                     .anyRequest()
                     .denyAll());

@@ -16,6 +16,7 @@ public class NoteEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
+  @Column(length = 2000)
   private String text;
 
   @Column(nullable = false)
