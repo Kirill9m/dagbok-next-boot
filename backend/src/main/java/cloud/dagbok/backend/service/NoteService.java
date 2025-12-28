@@ -46,9 +46,9 @@ public class NoteService {
       String userPrompt =
           user.getPrompt() != null
               ? user.getPrompt()
-                  + "Today is: "
+                  + " Today is: "
                   + request.date().toLocalDate()
-                  + "I'm: "
+                  + " I'm: "
                   + user.getName()
               : "";
       try {

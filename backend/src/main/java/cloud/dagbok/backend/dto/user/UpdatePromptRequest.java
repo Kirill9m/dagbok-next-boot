@@ -1,3 +1,5 @@
 package cloud.dagbok.backend.dto.user;
 
-public record UpdatePromptRequest(String newPrompt) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdatePromptRequest(@NotBlank String newPrompt) {}
