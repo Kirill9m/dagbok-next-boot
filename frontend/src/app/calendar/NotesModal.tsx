@@ -47,7 +47,7 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
       role="presentation"
     >
       <div
-        className="bg-[#2A2A2A] rounded-lg p-6 w-96 max-w-[90vw] shadow-2xl relative"
+        className="bg-[#2A2A2A] rounded-lg p-4 sm:p-6 w-full max-w-[90vw] sm:max-w-md shadow-2xl relative"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
