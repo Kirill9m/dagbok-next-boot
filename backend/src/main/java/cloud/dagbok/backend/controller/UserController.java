@@ -1,7 +1,11 @@
 package cloud.dagbok.backend.controller;
 
 import cloud.dagbok.backend.dto.token.Token;
-import cloud.dagbok.backend.dto.user.*;
+import cloud.dagbok.backend.dto.user.Principal;
+import cloud.dagbok.backend.dto.user.UpdatePromptRequest;
+import cloud.dagbok.backend.dto.user.User;
+import cloud.dagbok.backend.dto.user.UserCheck;
+import cloud.dagbok.backend.dto.user.UserProfile;
 import cloud.dagbok.backend.service.UserService;
 import jakarta.validation.Valid;
 import java.util.Objects;
@@ -59,7 +63,7 @@ public class UserController {
 
   @PutMapping("/prompt")
   public ResponseEntity<UserProfile> updateUserPrompt(
-      Authentication authentication, @RequestBody UpdatePromptRequest prompt) {
+      Authentication authentication, @Valid @RequestBody UpdatePromptRequest prompt) {
     Principal apiPrincipal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
     log.info("Updating user prompt");

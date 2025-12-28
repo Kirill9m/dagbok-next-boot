@@ -10,10 +10,9 @@ interface SettingsModalProps {
 const SettingsModal = ({ user }: SettingsModalProps) => {
   const [userPrompt, setUserPrompt] = useState(user?.prompt || "");
   const [saveStatus, setSaveStatus] = useState("");
+  const maxLength = 2000;
 
   const handleSave = async () => {
-    console.log(userPrompt);
-
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/user/prompt`,
@@ -32,7 +31,8 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
       }
 
       setSaveStatus("Prompt uppdaterad!");
-    } catch {
+    } catch (error) {
+      console.error("Failed to update user prompt:", error);
       setSaveStatus("Fel vid uppdatering av prompt.");
     } finally {
       setTimeout(() => setSaveStatus(""), 3000);
@@ -46,18 +46,30 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
           Inställningar
         </h1>
         <div className={"justify-center text-center mb-6"}>
-          <div className="mb-2">Prompt:</div>
+          <label htmlFor="prompt-textarea" className="mb-2 block">
+            Prompt:
+          </label>
           <textarea
+            id="prompt-textarea"
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
+            maxLength={maxLength}
+            aria-describedby="char-count"
             className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
             rows={5}
           />
+          <div
+            id="char-count"
+            className="text-sm text-gray-400 mt-1 text-right"
+            aria-live="polite"
+          >
+            {userPrompt.length}/{maxLength} tecken
+          </div>
           <button
             className="text-gray-400 mt-4 px-4 py-2 rounded hover:bg-[#FF7518] hover:text-white transition"
             onClick={handleSave}
           >
-            Ändra
+            Spara
           </button>
         </div>
       </div>
