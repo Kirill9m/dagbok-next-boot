@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
 };
 
 export default async function RootLayout({
@@ -27,7 +32,7 @@ export default async function RootLayout({
   const user = await getUser();
   return (
     <html lang="en" className={roboto.className}>
-      <body className={"bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A]"}>
+      <body className={"bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden"}>
         <Header user={user} />
         {children}
       </body>

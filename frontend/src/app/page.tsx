@@ -12,8 +12,8 @@ export default function Home() {
           priority
         />
       </div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">Dagbok Cloud</h1>
-      <p className="text-lg text-gray-600">
+      <h1 className="text-3xl font-bold text-white mb-2">Dagbok Cloud</h1>
+      <p className="text-lg text-gray-300">
         Work In Progress: Time Reporting System is currently under development.
       </p>
     </div>
