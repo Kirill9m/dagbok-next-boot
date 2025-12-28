@@ -54,10 +54,15 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
             maxLength={maxLength}
+            aria-describedby="char-count"
             className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
             rows={5}
           />
-          <div className="text-sm text-gray-400 mt-1 text-right">
+          <div
+            id="char-count"
+            className="text-sm text-gray-400 mt-1 text-right"
+            aria-live="polite"
+          >
             {userPrompt.length}/{maxLength} tecken
           </div>
           <button
