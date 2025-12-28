@@ -39,7 +39,7 @@ const Header = ({ user }: HeaderProps) => {
   }
 
   return (
-    <header className="flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
+    <header className="relative flex items-center justify-between px-3 py-3 sm:px-6 lg:px-6 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
       <div className="flex items-center gap-4 sm:gap-10">
         <Link href="/">
           <Image
@@ -101,7 +101,7 @@ const Header = ({ user }: HeaderProps) => {
       </div>
       <div className="flex items-center gap-4">
         {user ? (
-          <span className="text-xs sm:text-sm text-gray-300 truncate max-w-[120px] sm:max-w-none">
+          <span className="text-xs sm:text-sm text-gray-300 truncate max-w-32 sm:max-w-none">
             Hej, {user.name}
           </span>
         ) : (
@@ -115,7 +115,7 @@ const Header = ({ user }: HeaderProps) => {
       </div>
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <nav className="md:hidden absolute top-[60px] left-0 right-0 bg-[#2A2A2A] border-b-2 border-b-[#3F3D3D] shadow-lg z-50">
+        <nav className="md:hidden absolute top-full left-0 right-0 bg-[#2A2A2A] border-b-2 border-b-[#3F3D3D] shadow-lg z-50">
           <div className="flex flex-col p-4 gap-2">
             {visibleLinks.map((link) => {
               const isActive =
