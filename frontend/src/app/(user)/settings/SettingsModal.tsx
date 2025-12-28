@@ -10,9 +10,12 @@ interface SettingsModalProps {
 const SettingsModal = ({ user }: SettingsModalProps) => {
   const [userPrompt, setUserPrompt] = useState(user?.prompt || "");
   const [saveStatus, setSaveStatus] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const maxLength = 2000;
 
   const handleSave = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/user/prompt`,
@@ -35,7 +38,9 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
       console.error("Failed to update user prompt:", error);
       setSaveStatus("Fel vid uppdatering av prompt.");
     } finally {
-      setTimeout(() => setSaveStatus(""), 3000);
+      setIsSaving(false);
+      const timeoutId = setTimeout(() => setSaveStatus(""), 3000);
+      return () => clearTimeout(timeoutId);
     }
   };
 
@@ -66,18 +71,16 @@ const SettingsModal = ({ user }: SettingsModalProps) => {
             {userPrompt.length}/{maxLength} tecken
           </div>
           <button
-            className="text-gray-400 mt-4 px-4 py-2 rounded hover:bg-[#FF7518] hover:text-white transition"
+            className="text-gray-400 mt-4 px-4 py-2 rounded hover:bg-[#FF7518] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSave}
+            disabled={isSaving}
           >
-            Spara
+            {isSaving ? "Sparar..." : "Spara"}
           </button>
         </div>
       </div>
       {saveStatus && (
-        <div
-          className="fixed bottom-4 right-4 bg-[#FF7518] text-white p-3 rounded-lg shadow-xl z-50 text-sm"
-          role="status"
-        >
+        <div className="fixed bottom-4 right-4 bg-[#FF7518] text-white p-3 rounded-lg shadow-xl z-50 text-sm">
           {saveStatus}
         </div>
       )}
