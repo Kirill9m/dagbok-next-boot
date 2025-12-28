@@ -96,16 +96,16 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             &gt;
           </button>
         </div>
-        <div className="flex justify-end mt-2">
-          <label htmlFor="prompt-toggle" className="flex items-center gap-2">
+        <div className="flex justify-center sm:justify-end mt-4">
+          <label htmlFor="prompt-toggle" className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               id="prompt-toggle"
-              className="accent-[#FF7518]"
+              className="accent-[#FF7518] w-5 h-5 cursor-pointer"
               checked={promptEnabled}
               onChange={(e) => setPromptEnabled(e.target.checked)}
             />
-            <span>Prompt</span>
+            <span className="text-sm sm:text-base">Prompt</span>
           </label>
         </div>
       </div>
@@ -168,11 +168,11 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   value={noteText}
                   onChange={(e) => handleNoteChange(day, e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-full h-10 p-2 text-sm bg-transparent text-gray-100 rounded-xl border border-white/10 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF7518]/20"
+                  className="w-full h-16 sm:h-12 p-2 text-sm bg-transparent text-gray-100 rounded-xl border border-white/10 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF7518]/20"
                 />
 
                 <button
-                  className="mt-1 bg-transparent text-gray-400 px-2 py-1 rounded hover:text-white hover:bg-[#FF7518] transition"
+                  className="mt-2 w-full sm:w-auto bg-transparent text-gray-400 px-4 py-2 rounded hover:text-white hover:bg-[#FF7518] transition min-h-[44px] text-sm font-medium"
                   onClick={(e) => {
                     e.stopPropagation();
                     onSaveNote(year, month, day, noteText, promptEnabled);
