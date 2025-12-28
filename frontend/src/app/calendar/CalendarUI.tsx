@@ -97,7 +97,10 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
           </button>
         </div>
         <div className="flex justify-center sm:justify-end mt-4">
-          <label htmlFor="prompt-toggle" className="flex items-center gap-2 cursor-pointer">
+          <label
+            htmlFor="prompt-toggle"
+            className="flex items-center gap-2 cursor-pointer"
+          >
             <input
               type="checkbox"
               id="prompt-toggle"
