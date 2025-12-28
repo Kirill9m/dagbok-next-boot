@@ -90,4 +90,16 @@ public class UserService {
     return new UserProfile(
         user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
   }
+
+  public UserProfile updateUserPrompt(Long userId, String newPrompt) {
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+    user.setPrompt(newPrompt);
+    userRepository.save(user);
+    return new UserProfile(
+        user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
+  }
 }

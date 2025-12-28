@@ -43,7 +43,14 @@ public class NoteService {
     String textToSave;
 
     if (request.prompt() != null && request.prompt()) {
-      String userPrompt = user.getPrompt() != null ? user.getPrompt() : "";
+      String userPrompt =
+          user.getPrompt() != null
+              ? user.getPrompt()
+                  + "Today is: "
+                  + request.date().toLocalDate()
+                  + "I'm: "
+                  + user.getName()
+              : "";
       try {
         textToSave = openRouterService.chat(openRouterModel, userPrompt, request.text());
       } catch (Exception e) {

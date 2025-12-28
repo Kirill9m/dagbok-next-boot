@@ -1,10 +1,7 @@
 package cloud.dagbok.backend.controller;
 
 import cloud.dagbok.backend.dto.token.Token;
-import cloud.dagbok.backend.dto.user.Principal;
-import cloud.dagbok.backend.dto.user.User;
-import cloud.dagbok.backend.dto.user.UserCheck;
-import cloud.dagbok.backend.dto.user.UserProfile;
+import cloud.dagbok.backend.dto.user.*;
 import cloud.dagbok.backend.service.UserService;
 import jakarta.validation.Valid;
 import java.util.Objects;
@@ -58,6 +55,18 @@ public class UserController {
 
     UserProfile profile = userService.getUserProfile(apiPrincipal.email());
     return ResponseEntity.ok(profile);
+  }
+
+  @PutMapping("/prompt")
+  public ResponseEntity<UserProfile> updateUserPrompt(
+      Authentication authentication, @RequestBody UpdatePromptRequest prompt) {
+    Principal apiPrincipal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+    log.info("Updating user prompt");
+
+    UserProfile updatedProfile =
+        userService.updateUserPrompt(apiPrincipal.userId(), prompt.newPrompt());
+    return ResponseEntity.ok(updatedProfile);
   }
 
   private ResponseCookie createCookie(String name, String value, int maxAgeSeconds) {
