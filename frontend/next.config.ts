@@ -5,7 +5,9 @@ const apiBase = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
 const nextConfig: NextConfig = {
   async rewrites() {
     const destination =
-      apiBase.length > 0 ? `${apiBase}/api/:path*` : `/api/:path*`;
+      apiBase.length > 0
+        ? `${apiBase}/api/:path*`
+        : "http://localhost:8080/api/:path*";
 
     return [
       {
