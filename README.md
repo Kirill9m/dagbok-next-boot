@@ -1,4 +1,6 @@
-# ⌛ Dagbok Time Reporting System
+# Dagbok Time Reporting System
+
+**A Full-Stack Project for Small Business Time Reporting (Next.js & Spring Boot)**
 
 🚀 Project Deployment
 
@@ -15,7 +17,5 @@ Improved performance
 Protection and reliability
 
 🌐 Live URL: https://dagbok.cloud/
-
-**A Full-Stack Project for Small Business Time Reporting (Next.js & Spring Boot)**
 
 ![dev.png](public/dev.png)
