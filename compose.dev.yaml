@@ -3,16 +3,16 @@ services:
     image: mysql:9.5
     container_name: dagbok-dev-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: devroot123
+      MYSQL_ROOT_PASSWORD: DevOnly_Root_!A9s#2kL
       MYSQL_DATABASE: dagbok_dev
       MYSQL_USER: dagbok_user
-      MYSQL_PASSWORD: dagbok_pass
+      MYSQL_PASSWORD: DevOnly_User_!G7p$8mQ
     ports:
       - "3307:3306"
     volumes:
       - dagbok-dev-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 3s
       retries: 20
