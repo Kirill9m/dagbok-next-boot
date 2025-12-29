@@ -8,3 +8,19 @@ html,
 body {
   font-family: "Roboto", sans-serif;
 }
+
+.preview-container {
+  width: 100%;
+}
+
+.preview-frame {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.preview-video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
