@@ -1,0 +1,27 @@
+services:
+  mysql-dev:
+    image: mysql:9.5
+    container_name: dagbok-dev-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: devroot123
+      MYSQL_DATABASE: dagbok_dev
+      MYSQL_USER: dagbok_user
+      MYSQL_PASSWORD: dagbok_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - dagbok-dev-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks:
+      - dagbok-dev-network
+
+networks:
+  dagbok-dev-network:
+    driver: bridge
+
+volumes:
+  dagbok-dev-data:
