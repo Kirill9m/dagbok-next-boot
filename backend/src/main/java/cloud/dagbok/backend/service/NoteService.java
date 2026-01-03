@@ -43,22 +43,18 @@ public class NoteService {
     String textToSave;
 
     if (request.prompt() != null && request.prompt()) {
-      String userPrompt =
-          user.getPrompt() != null
-              ? user.getPrompt()
-                  + " Today is: "
-                  + request.date().toLocalDate()
-                  + " I'm: "
-                  + user.getName()
-              : "";
       try {
-        textToSave = openRouterService.chat(openRouterModel, userPrompt, request.text());
+        textToSave =
+            openRouterService.chat(openRouterModel, user.getPrompt(), request.text())
+                + signature(request.date().toLocalDate().toString(), user.getName());
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
-        textToSave = request.text();
+        textToSave =
+            request.text() + signature(request.date().toLocalDate().toString(), user.getName());
       }
     } else {
-      textToSave = request.text();
+      textToSave =
+          request.text() + signature(request.date().toLocalDate().toString(), user.getName());
     }
 
     return saveNote(user, textToSave, request.date().toLocalDate());
@@ -114,5 +110,19 @@ public class NoteService {
     }
     List<NotesCountByDate> counts = noteRepository.countNotesByDate(userId, year, month);
     return new NoteItemWithDate(counts);
+  }
+
+  private String signature(String date, String name) {
+    return """
+
+    ***
+
+    **%s**
+
+    **%s**
+
+    Generated with ❤️ by dagbok.cloud
+    """
+        .formatted(date, name);
   }
 }

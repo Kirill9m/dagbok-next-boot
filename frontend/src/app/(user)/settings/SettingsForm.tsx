@@ -59,6 +59,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
         <h1 className={"text-2xl font-semibold text-center mb-6"}>
           Inställningar
         </h1>
+        <p className={"text-xs font-semibold text-center mb-6"}>(Avancerat)</p>
         <div className={"justify-center text-center mb-6"}>
           <label htmlFor="prompt-textarea" className="mb-2 block">
             Prompt:
