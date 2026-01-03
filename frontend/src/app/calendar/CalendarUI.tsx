@@ -76,7 +76,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   });
 
   const dateStyles =
-    "border-2 border-gray-700 bg-[#4A4A4A] text-white rounded-lg p-4 transform transition-all duration-300 ease-in-out hover:scale-[1.03] cursor-pointer shadow-md";
+    "relative border-2 border-gray-700 bg-[#4A4A4A] text-white rounded-lg p-4 transform transition-all duration-300 ease-in-out hover:scale-[1.03] cursor-pointer shadow-md";
 
   useEffect(() => {
     const loadCounts = async () => {
@@ -89,8 +89,8 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
         if (res.ok) {
           const data = await res.json();
           const counts: Record<string, number> = {};
-          if (data.notes && Array.isArray(data.notes)) {
-            data.notes.forEach((item: { date: string; count: number }) => {
+          if (data.counts && Array.isArray(data.counts)) {
+            data.counts.forEach((item: { date: string; count: number }) => {
               const datePart = item.date.split("-");
               const d = Number.parseInt(datePart[2], 10);
               const m = Number.parseInt(datePart[1], 10);
@@ -211,7 +211,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 >
                   <strong className="text-lg">{day}</strong>
                   {notesCountByDay[`${year}-${month + 1}-${day}`] > 0 && (
-                    <span className="relative top-0.5 right-0.5 grid min-h-6 min-w-6 translate-x-2/4 -translate-y-2/4 place-items-center rounded-full bg-[#FF7518] py-1 px-1 text-xs text-white">
+                    <span className="absolute -top-2 -right-2 grid min-h-6 min-w-6 place-items-center rounded-full bg-[#FF7518] py-1 px-1 text-xs font-bold text-white shadow-lg border border-white/20 z-10">
                       {notesCountByDay[`${year}-${month + 1}-${day}`]}
                     </span>
                   )}
