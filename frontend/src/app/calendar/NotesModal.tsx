@@ -34,6 +34,7 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      role="presentation"
     >
       <div
         className="bg-[#2A2A2A] rounded-lg p-0 w-full max-w-[95vw] sm:max-w-3xl shadow-2xl relative flex flex-col max-h-[90vh]"
@@ -102,59 +103,27 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
                         {...props}
                       />
                     ),
-                    code: ({ node, className, children, ...props }) => {
-                      const match = /language-(\w+)/.exec(className || "");
-                      const isInline = !match;
-                      if (!isInline) {
-                        return (
-                          <pre className="bg-gray-900/80 border border-gray-700 rounded-md p-3 my-4 overflow-x-auto text-sm">
-                            <code
-                              className={`font-mono ${className || ""}`}
-                              {...props}
-                            >
-                              {children}
-                            </code>
-                          </pre>
-                        );
-                      }
-                      return (
-                        <code
-                          className={`bg-gray-800/80 border border-gray-700 rounded px-1.5 py-0.5 text-sm font-mono ${className || ""}`}
-                          {...props}
-                        >
-                          {children}
-                        </code>
-                      );
-                    },
-                    a: ({ children, href, ...props }) => (
-                      <a
-                        href={href}
-                        className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-words"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        {...props}
-                      >
-                        {children}
-                      </a>
-                    ),
-                    blockquote: (props) => (
-                      <blockquote
-                        className="border-l-4 border-gray-600 pl-4 ml-1 italic text-gray-300 my-4"
-                        {...props}
-                      />
-                    ),
-                    strong: (props) => (
-                      <strong className="font-semibold text-white" {...props} />
-                    ),
-                    em: (props) => (
-                      <em className="italic text-gray-300" {...props} />
-                    ),
                     p: (props) => (
                       <p
                         className="mb-4 leading-relaxed whitespace-pre-wrap"
                         {...props}
                       />
                     ),
+                    code: ({ node, className, children, ...props }) => {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !match ? (
+                        <code
+                          className="bg-gray-800/80 rounded px-1.5 py-0.5 text-sm font-mono"
+                          {...props}
+                        >
+                          {children}
+                        </code>
+                      ) : (
+                        <pre className="bg-gray-900/80 rounded-md p-3 my-4 overflow-x-auto text-sm">
+                          <code {...props}>{children}</code>
+                        </pre>
+                      );
+                    },
                     hr: (props) => (
                       <hr className="border-gray-600 my-6" {...props} />
                     ),
