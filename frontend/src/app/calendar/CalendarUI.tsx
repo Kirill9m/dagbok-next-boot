@@ -33,6 +33,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   const [notesCountByDay, setNotesCountByDay] = useState<
     Record<string, number>
   >({});
+  const [isLoadingCounts, setIsLoadingCounts] = useState(false);
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -99,9 +100,15 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             });
           }
           setNotesCountByDay(counts);
+        } else {
+          console.error("Failed to load counts: HTTP", res.status);
+          setNotesCountByDay({});
         }
       } catch (err) {
         console.error("Failed to load counts:", err);
+        setNotesCountByDay({});
+      } finally {
+        setIsLoadingCounts(false);
       }
     };
 
