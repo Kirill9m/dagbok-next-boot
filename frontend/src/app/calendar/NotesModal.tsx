@@ -122,7 +122,8 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
                       children?: React.ReactNode;
                       [key: string]: unknown;
                     }) => {
-                      const isInline = inline || !className;
+                      const isInline =
+                        inline || !(className && className.startsWith("language-"));
                       if (!isInline) {
                         return (
                           <pre className="bg-gray-900/80 border border-gray-700 rounded-md p-3 my-4 overflow-x-auto text-sm">

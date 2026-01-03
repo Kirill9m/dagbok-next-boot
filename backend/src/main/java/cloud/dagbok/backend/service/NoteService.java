@@ -21,6 +21,7 @@ public class NoteService {
   private final NoteRepository noteRepository;
   private final OpenRouterService openRouterService;
   private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
+  private static final String CONTEXT_MESSAGE_FORMAT = "Today is: %s\nI'm: %s\n\n%s";
 
   @Value("${openrouter.model}")
   private String openRouterModel;
@@ -46,7 +47,7 @@ public class NoteService {
       try {
         String messageWithContext =
             String.format(
-                "Today is: %s\nI'm: %s\n\n%s",
+                CONTEXT_MESSAGE_FORMAT,
                 request.date().toLocalDate().toString(), user.getName(), request.text());
         textToSave =
             openRouterService.chat(openRouterModel, user.getPrompt(), messageWithContext)
