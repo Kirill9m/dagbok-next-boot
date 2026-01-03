@@ -68,6 +68,12 @@ public class NoteController {
   @GetMapping("/notes/counts/{year}/{month}")
   public ResponseEntity<NoteItemWithDate> getNoteCountsByMonth(
       @PathVariable int year, @PathVariable int month, Authentication authentication) {
+    if (month < 1 || month > 12) {
+      throw new IllegalArgumentException("Month must be between 1 and 12");
+    }
+    if (year < 1900 || year > 2100) {
+      throw new IllegalArgumentException("Year must be between 1900 and 2100");
+    }
     Principal principal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(principal, "Principal cannot be null");
 
@@ -77,7 +83,7 @@ public class NoteController {
         year,
         month);
 
-    NoteItemWithDate count = noteService.getNotesByMonth(principal.userId(), year, month);
-    return ResponseEntity.ok(count);
+    NoteItemWithDate noteCounts = noteService.getNotesByMonth(principal.userId(), year, month);
+    return ResponseEntity.ok(noteCounts);
   }
 }

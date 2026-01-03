@@ -91,9 +91,9 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
           if (data.notes && Array.isArray(data.notes)) {
             data.notes.forEach((item: { date: string; count: number }) => {
               const datePart = item.date.split("-");
-              const d = parseInt(datePart[2], 10);
-              const m = parseInt(datePart[1], 10);
-              const y = parseInt(datePart[0], 10);
+              const d = Number.parseInt(datePart[2], 10);
+              const m = Number.parseInt(datePart[1], 10);
+              const y = Number.parseInt(datePart[0], 10);
               const key = `${y}-${m}-${d}`;
               counts[key] = item.count;
             });
@@ -199,10 +199,8 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 role="button"
               >
                 <div
+                  role="button"
                   className="flex justify-between items-start mb-1"
-                  onMouseEnter={() => {
-                    const key = `${year}-${month + 1}-${day}`;
-                  }}
                 >
                   <strong className="text-lg">{day}</strong>
                   {notesCountByDay[`${year}-${month + 1}-${day}`] > 0 && (

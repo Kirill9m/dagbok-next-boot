@@ -1,5 +1,6 @@
 package cloud.dagbok.backend.dto.note;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
-public record NoteItemWithDate(List<NotesCountByDate> notes) {}
+public record NoteItemWithDate(@NotNull List<NotesCountByDate> notes) {}
