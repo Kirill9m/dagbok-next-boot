@@ -44,12 +44,17 @@ public class NoteService {
 
     if (request.prompt() != null && request.prompt()) {
       try {
+        String messageWithContext =
+            String.format(
+                "Today is: %s\nI'm: %s\n\n%s",
+                request.date().toLocalDate().toString(), user.getName(), request.text());
         textToSave =
-            openRouterService.chat(openRouterModel, user.getPrompt(), request.text())
+            openRouterService.chat(openRouterModel, user.getPrompt(), messageWithContext)
                 + signature(request.date().toLocalDate().toString(), user.getName());
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
-        textToSave = request.text();
+        textToSave =
+            request.text() + signature(request.date().toLocalDate().toString(), user.getName());
       }
     } else {
       textToSave =

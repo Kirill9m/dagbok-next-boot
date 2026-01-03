@@ -35,14 +35,25 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-[#2A2A2A] rounded-lg p-0 w-full max-w-[95vw] sm:max-w-3xl shadow-2xl relative flex flex-col max-h-[90vh]">
+      <div
+        className="bg-[#2A2A2A] rounded-lg p-0 w-full max-w-[95vw] sm:max-w-3xl shadow-2xl relative flex flex-col max-h-[90vh]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="notes-modal-title"
+      >
         <div className="p-4 sm:p-6 border-b border-white/10">
-          <h2 className="text-2xl font-semibold text-white">Anteckningar</h2>
+          <h2
+            id="notes-modal-title"
+            className="text-2xl font-semibold text-white"
+          >
+            Anteckningar
+          </h2>
         </div>
 
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
+          aria-label="Stäng"
         >
           <svg
             className="w-6 h-6"
@@ -99,6 +110,70 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
                     ),
                     hr: (props) => (
                       <hr className="border-gray-600 my-6" {...props} />
+                    ),
+                    code: ({
+                      inline,
+                      className,
+                      children,
+                      ...props
+                    }: {
+                      inline?: boolean;
+                      className?: string;
+                      children?: React.ReactNode;
+                      [key: string]: unknown;
+                    }) => {
+                      const isInline = inline || !className;
+                      if (!isInline) {
+                        return (
+                          <pre className="bg-gray-900/80 border border-gray-700 rounded-md p-3 my-4 overflow-x-auto text-sm">
+                            <code
+                              className={`font-mono ${className || ""}`}
+                              {...props}
+                            >
+                              {children}
+                            </code>
+                          </pre>
+                        );
+                      }
+                      return (
+                        <code
+                          className={`bg-gray-800/80 border border-gray-700 rounded px-1.5 py-0.5 text-sm font-mono ${className || ""}`}
+                          {...props}
+                        >
+                          {children}
+                        </code>
+                      );
+                    },
+                    a: ({
+                      children,
+                      href,
+                      ...props
+                    }: {
+                      children?: React.ReactNode;
+                      href?: string;
+                      [key: string]: unknown;
+                    }) => (
+                      <a
+                        href={href}
+                        className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-words"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        {...props}
+                      >
+                        {children}
+                      </a>
+                    ),
+                    blockquote: (props) => (
+                      <blockquote
+                        className="border-l-4 border-gray-600 pl-4 ml-1 italic text-gray-300 my-4"
+                        {...props}
+                      />
+                    ),
+                    strong: (props) => (
+                      <strong className="font-semibold text-white" {...props} />
+                    ),
+                    em: (props) => (
+                      <em className="italic text-gray-300" {...props} />
                     ),
                   }}
                 >
