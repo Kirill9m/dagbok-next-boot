@@ -49,7 +49,8 @@ public class NoteService {
                 + signature(request.date().toLocalDate().toString(), user.getName());
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
-        textToSave = request.text();
+        textToSave =
+            request.text() + signature(request.date().toLocalDate().toString(), user.getName());
       }
     } else {
       textToSave =
