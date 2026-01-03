@@ -103,4 +103,10 @@ public class NoteService {
 
     return new NoteResponse(notes);
   }
+
+  @Transactional(readOnly = true)
+  public NoteItemWithDate getNotesByMonth(Long userId, int year, int month) {
+    List<NotesCountByDate> counts = noteRepository.countNotesByDate(userId, year, month);
+    return new NoteItemWithDate(counts);
+  }
 }

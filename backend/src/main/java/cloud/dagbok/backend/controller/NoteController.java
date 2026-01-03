@@ -1,9 +1,6 @@
 package cloud.dagbok.backend.controller;
 
-import cloud.dagbok.backend.dto.note.Note;
-import cloud.dagbok.backend.dto.note.NoteCreateRequest;
-import cloud.dagbok.backend.dto.note.NoteNew;
-import cloud.dagbok.backend.dto.note.NoteResponse;
+import cloud.dagbok.backend.dto.note.*;
 import cloud.dagbok.backend.dto.user.Principal;
 import cloud.dagbok.backend.service.NoteService;
 import jakarta.validation.Valid;
@@ -66,5 +63,21 @@ public class NoteController {
 
     log.info("User: {} requested notes for date: {}", principal.userId(), date);
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
+  }
+
+  @GetMapping("/notes/counts/{year}/{month}")
+  public ResponseEntity<NoteItemWithDate> getNoteCountsByMonth(
+      @PathVariable int year, @PathVariable int month, Authentication authentication) {
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    log.info(
+        "User: {} requested note counts for year: {} and month: {}",
+        principal.userId(),
+        year,
+        month);
+
+    NoteItemWithDate count = noteService.getNotesByMonth(principal.userId(), year, month);
+    return ResponseEntity.ok(count);
   }
 }

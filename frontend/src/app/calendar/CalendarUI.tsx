@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -16,11 +16,13 @@ interface MonthlyPlannerProps {
     text: string,
     prompt: boolean,
   ) => void;
+  refreshKey?: number;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
   onSaveNote,
+  refreshKey,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -28,6 +30,9 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   const [chosenDay, setChosenDay] = useState<number | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [promptEnabled, setPromptEnabled] = useState(true);
+  const [notesCountByDay, setNotesCountByDay] = useState<
+    Record<string, number>
+  >({});
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -71,6 +76,37 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
 
   const dateStyles =
     "border-2 border-gray-700 bg-[#4A4A4A] text-white rounded-lg p-4 transform transition-all duration-300 ease-in-out hover:scale-[1.03] cursor-pointer shadow-md";
+
+  useEffect(() => {
+    const loadCounts = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/notes/counts/${year}/${month + 1}`,
+          { credentials: "include" },
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          const counts: Record<string, number> = {};
+          if (data.notes && Array.isArray(data.notes)) {
+            data.notes.forEach((item: { date: string; count: number }) => {
+              const datePart = item.date.split("-");
+              const d = parseInt(datePart[2], 10);
+              const m = parseInt(datePart[1], 10);
+              const y = parseInt(datePart[0], 10);
+              const key = `${y}-${m}-${d}`;
+              counts[key] = item.count;
+            });
+          }
+          setNotesCountByDay(counts);
+        }
+      } catch (err) {
+        console.error("Failed to load counts:", err);
+      }
+    };
+
+    void loadCounts();
+  }, [year, month, refreshKey]);
 
   return (
     <div className="p-4 sm:p-6 md:p-8 bg-[#2A2A2A] rounded-xl shadow-2xl text-white max-w-7xl mx-auto my-8">
@@ -162,8 +198,18 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 }}
                 role="button"
               >
-                <div className="flex justify-between items-start mb-1">
+                <div
+                  className="flex justify-between items-start mb-1"
+                  onMouseEnter={() => {
+                    const key = `${year}-${month + 1}-${day}`;
+                  }}
+                >
                   <strong className="text-lg">{day}</strong>
+                  {notesCountByDay[`${year}-${month + 1}-${day}`] > 0 && (
+                    <span className="relative top-0.5 right-0.5 grid min-h-6 min-w-6 translate-x-2/4 -translate-y-2/4 place-items-center rounded-full bg-[#FF7518] py-1 px-1 text-xs text-white">
+                      {notesCountByDay[`${year}-${month + 1}-${day}`]}
+                    </span>
+                  )}
                 </div>
 
                 <textarea
