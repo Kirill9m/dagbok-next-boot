@@ -17,6 +17,7 @@ const CalendarHandler = () => {
   const [saveStatus, setSaveStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notesData, setNotesData] = useState<NotesData | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleSaveNote = useCallback(
     async (
@@ -55,6 +56,7 @@ const CalendarHandler = () => {
 
         setSaveStatus("Sparat");
         setNotesData(null);
+        setRefreshKey((prev) => prev + 1);
       } catch (err) {
         console.error("Failed to save note:", err);
         setSaveStatus("Fel vid sparning");
@@ -105,6 +107,7 @@ const CalendarHandler = () => {
       <CalendarUI
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
+        refreshKey={refreshKey}
       />
       {isModalOpen && (
         <NotesModal

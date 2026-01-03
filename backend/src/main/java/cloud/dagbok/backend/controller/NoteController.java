@@ -2,6 +2,7 @@ package cloud.dagbok.backend.controller;
 
 import cloud.dagbok.backend.dto.note.Note;
 import cloud.dagbok.backend.dto.note.NoteCreateRequest;
+import cloud.dagbok.backend.dto.note.NoteItemWithDate;
 import cloud.dagbok.backend.dto.note.NoteNew;
 import cloud.dagbok.backend.dto.note.NoteResponse;
 import cloud.dagbok.backend.dto.user.Principal;
@@ -66,5 +67,27 @@ public class NoteController {
 
     log.info("User: {} requested notes for date: {}", principal.userId(), date);
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
+  }
+
+  @GetMapping("/notes/counts/{year}/{month}")
+  public ResponseEntity<NoteItemWithDate> getNoteCountsByMonth(
+      @PathVariable int year, @PathVariable int month, Authentication authentication) {
+    if (month < 1 || month > 12) {
+      throw new IllegalArgumentException("Month must be between 1 and 12");
+    }
+    if (year < 1900 || year > 2100) {
+      throw new IllegalArgumentException("Year must be between 1900 and 2100");
+    }
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    log.info(
+        "User: {} requested note counts for year: {} and month: {}",
+        principal.userId(),
+        year,
+        month);
+
+    NoteItemWithDate noteCounts = noteService.getNotesByMonth(principal.userId(), year, month);
+    return ResponseEntity.ok(noteCounts);
   }
 }

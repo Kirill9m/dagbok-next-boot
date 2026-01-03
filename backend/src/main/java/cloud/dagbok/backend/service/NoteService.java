@@ -103,4 +103,16 @@ public class NoteService {
 
     return new NoteResponse(notes);
   }
+
+  @Transactional(readOnly = true)
+  public NoteItemWithDate getNotesByMonth(Long userId, int year, int month) {
+    if (month < 1 || month > 12) {
+      throw new IllegalArgumentException("Month must be between 1 and 12, got: " + month);
+    }
+    if (year < 1900 || year > 2100) {
+      throw new IllegalArgumentException("Year must be between 1900 and 2100, got: " + year);
+    }
+    List<NotesCountByDate> counts = noteRepository.countNotesByDate(userId, year, month);
+    return new NoteItemWithDate(counts);
+  }
 }
