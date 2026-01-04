@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -30,29 +30,38 @@ const NotesModalContent = ({
   const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
   const [draftText, setDraftText] = useState("");
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
-
   const startEdit = (note: Note) => {
     setEditingNoteId(note.id);
     setDraftText(note.text);
   };
 
-  const cancelEdit = () => {
+  const cancelEdit = useCallback(() => {
     setEditingNoteId(null);
     setDraftText("");
-  };
+  }, []);
 
   const saveEdit = () => {
     if (editingNoteId == null || !onEdit) return;
+    if (!draftText.trim()) {
+      return;
+    }
     onEdit(editingNoteId, draftText);
     cancelEdit();
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (editingNoteId !== null) {
+          cancelEdit();
+        } else {
+          onClose();
+        }
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, editingNoteId, cancelEdit]);
 
   return (
     <div
@@ -108,7 +117,7 @@ const NotesModalContent = ({
                         className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
                         value={draftText}
                         onChange={(e) => setDraftText(e.target.value)}
-                        rows={5}
+                        rows={Math.max(5, draftText.split("\n").length)}
                       />
                     ) : (
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>

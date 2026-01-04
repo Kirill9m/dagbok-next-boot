@@ -6,7 +6,7 @@ import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -113,14 +113,15 @@ public class NoteService {
     return new NoteItemWithDate(counts);
   }
 
-  public Note updateUserNote(Long id, @NotNull String text, Long aLong) {
+  @Transactional
+  public Note updateUserNote(Long id, @NotBlank String text, Long userId) {
     NoteEntity noteEntity =
         noteRepository
-            .findByIdAndUserIdAndDeletedAtIsNull(id, aLong)
+            .findByIdAndUserIdAndDeletedAtIsNull(id, userId)
             .orElseThrow(
                 () ->
                     new EntityNotFoundException(
-                        "Note not found with id: " + id + " for user with id: " + aLong));
+                        "Note not found with id: " + id + " for user with id: " + userId));
 
     noteEntity.setText(text);
     NoteEntity updatedEntity = noteRepository.save(noteEntity);
