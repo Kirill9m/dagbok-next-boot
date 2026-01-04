@@ -33,10 +33,13 @@ export default async function RootLayout({
 }>) {
   const user = await getUser();
   return (
-    <html lang="en" className={`${roboto.variable} ${roboto.className}`}>
+    <html
+      lang="en"
+      className={`${roboto.variable} ${roboto.className} bg-[#1A1A1A]`}
+    >
       <body
         className={
-          "bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden"
+          "bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden min-h-screen"
         }
       >
         <Header user={user} />
