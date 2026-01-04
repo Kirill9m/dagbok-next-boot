@@ -15,10 +15,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
   const maxLength = 2000;
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-
     return () => {
-      document.body.style.overflow = "unset";
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [timeoutId]);
