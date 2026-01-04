@@ -93,7 +93,7 @@ const NotesModal = ({
                   {onEdit && (
                     <button
                       onClick={() => onEdit(note.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm  hover:bg-[#FF7518] text-white rounded transition"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
                     >
                       <svg
                         className="w-4 h-4"
@@ -114,7 +114,7 @@ const NotesModal = ({
                   {onDelete && (
                     <button
                       onClick={() => onDelete(note.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm hover:bg-red-700 text-white rounded transition"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-700/70 hover:bg-red-700 text-white rounded transition"
                     >
                       <svg
                         className="w-4 h-4"

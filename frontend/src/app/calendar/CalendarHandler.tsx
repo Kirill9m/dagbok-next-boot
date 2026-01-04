@@ -104,12 +104,16 @@ const CalendarHandler = () => {
 
   const handleDelete = async (noteId: number) => {
     try {
-      const response = await fetch(`/api/notes/${noteId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/${noteId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
 
       if (response.ok) {
-        console.log("Note is deleted successfully");
+        setSaveStatus("Raderat");
         setNotesData((prevData) => {
           if (!prevData) return prevData;
           return {
@@ -118,11 +122,12 @@ const CalendarHandler = () => {
         });
         setRefreshKey((prev) => prev + 1);
       } else {
-        console.error("Failed to delete note:", response.statusText);
+        setSaveStatus("Fel vid radering");
       }
     } catch (error) {
-      console.error("Error:", error);
+      setSaveStatus("Fel vid radering");
     }
+    setTimeout(() => setSaveStatus(""), 3000);
   };
 
   return (

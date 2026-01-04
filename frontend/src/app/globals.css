@@ -1,13 +1,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-body {
-  color: #ededed;
+@theme {
+  --font-family: "Roboto", sans-serif;
 }
 
-html,
 body {
-  font-family: var(--roboto), sans-serif;
+  color: #ededed;
+  font-family: var(--font-family), serif;
 }
 
 .preview-container {
