@@ -102,6 +102,34 @@ const CalendarHandler = () => {
     setIsModalOpen(false);
   }, []);
 
+  const handleDelete = async (noteId: number) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/${noteId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+
+      if (response.ok) {
+        setSaveStatus("Raderat");
+        setNotesData((prevData) => {
+          if (!prevData) return prevData;
+          return {
+            notes: prevData.notes.filter((note) => note.id !== noteId),
+          };
+        });
+        setRefreshKey((prev) => prev + 1);
+      } else {
+        setSaveStatus("Fel vid radering");
+      }
+    } catch (error) {
+      setSaveStatus("Fel vid radering");
+    }
+    setTimeout(() => setSaveStatus(""), 3000);
+  };
+
   return (
     <div className="min-h-screen font-inter p-4">
       <CalendarUI
@@ -114,6 +142,12 @@ const CalendarHandler = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           notesData={notesData}
+          onEdit={(noteId) => {
+            console.log("Radigera note:", noteId);
+          }}
+          onDelete={(noteId) => {
+            handleDelete(noteId);
+          }}
         />
       )}
       {saveStatus && (

@@ -17,9 +17,17 @@ interface NotesModalProps {
   isOpen: boolean;
   onClose: () => void;
   notesData: NotesData | null;
+  onEdit?: (noteId: number) => void;
+  onDelete?: (noteId: number) => void;
 }
 
-const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
+const NotesModal = ({
+  isOpen,
+  onClose,
+  notesData,
+  onEdit,
+  onDelete,
+}: NotesModalProps) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -74,63 +82,57 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
         <div className="p-4 sm:p-6 overflow-y-auto">
           {notesData?.notes.map((note, index) => (
             <React.Fragment key={note.id}>
-              <div className="text-gray-200 text-base py-4 first:pt-0">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    ul: (props) => (
-                      <ul
-                        className="list-disc ml-6 mb-4 space-y-1"
-                        {...props}
-                      />
-                    ),
-                    ol: (props) => (
-                      <ol
-                        className="list-decimal ml-6 mb-4 space-y-1"
-                        {...props}
-                      />
-                    ),
-                    li: (props) => <li className="mb-1" {...props} />,
-                    h1: (props) => (
-                      <h1
-                        className="text-2xl font-bold mb-4 text-white"
-                        {...props}
-                      />
-                    ),
-                    h2: (props) => (
-                      <h2
-                        className="text-xl font-bold mb-3 mt-6 text-white"
-                        {...props}
-                      />
-                    ),
-                    p: (props) => (
-                      <p
-                        className="mb-4 leading-relaxed whitespace-pre-wrap"
-                        {...props}
-                      />
-                    ),
-                    code: ({ node, className, children, ...props }) => {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !match ? (
-                        <code
-                          className="bg-gray-800/80 rounded px-1.5 py-0.5 text-sm font-mono"
-                          {...props}
-                        >
-                          {children}
-                        </code>
-                      ) : (
-                        <pre className="bg-gray-900/80 rounded-md p-3 my-4 overflow-x-auto text-sm">
-                          <code {...props}>{children}</code>
-                        </pre>
-                      );
-                    },
-                    hr: (props) => (
-                      <hr className="border-gray-600 my-6" {...props} />
-                    ),
-                  }}
-                >
-                  {note.text}
-                </ReactMarkdown>
+              <div className="relative group">
+                <div className="prose prose-invert max-w-none">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {note.text}
+                  </ReactMarkdown>
+                </div>
+
+                <div className="flex gap-2 mt-3">
+                  {onEdit && (
+                    <button
+                      onClick={() => onEdit(note.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                      Redigera
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button
+                      onClick={() => onDelete(note.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-700/70 hover:bg-red-700 text-white rounded transition"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      Ta bort
+                    </button>
+                  )}
+                </div>
               </div>
               {index < notesData.notes.length - 1 && (
                 <hr className="border-gray-700 my-4" />

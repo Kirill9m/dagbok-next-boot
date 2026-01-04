@@ -6,7 +6,7 @@ import getUser from "@/app/actions/session";
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["400", "600"],
   variable: "--roboto",
 });
 
@@ -33,7 +33,7 @@ export default async function RootLayout({
 }>) {
   const user = await getUser();
   return (
-    <html lang="en" className={roboto.className}>
+    <html lang="en" className={`${roboto.variable} ${roboto.className}`}>
       <body
         className={
           "bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden"

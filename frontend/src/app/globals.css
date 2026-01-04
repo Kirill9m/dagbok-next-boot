@@ -1,12 +1,13 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-family: "Roboto", sans-serif;
+}
 
 body {
   color: #ededed;
-}
-
-html,
-body {
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font-family), serif;
 }
 
 .preview-container {
