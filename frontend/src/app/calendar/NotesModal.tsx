@@ -71,7 +71,7 @@ const NotesModalContent = ({
 
   return (
     <div
-      className="fixed inset-0 bg-[#2A2A2A] sm:bg-black/50 sm:flex sm:items-center sm:justify-center z-50 overflow-y-auto"
+      className="fixed inset-0 bg-[#2A2A2A] sm:bg-black/50 sm:flex sm:items-center sm:justify-center z-[60] overflow-y-auto"
       onClick={(e) => e.target === e.currentTarget && onClose()}
       role="presentation"
     >
