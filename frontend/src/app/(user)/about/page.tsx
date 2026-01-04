@@ -1,4 +1,12 @@
-const aboutPage = () => {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Om oss - Dagbok Cloud",
+  description:
+    "AI-Powered Notes System for professional work logs and personal thoughts",
+};
+
+const AboutPage = () => {
   return (
     <div className="flex flex-col items-start justify-start min-h-screen px-4 py-8 space-y-6">
       <header className="space-y-2">
@@ -30,8 +38,6 @@ const aboutPage = () => {
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/Kirill9m/dagbok-next-boot"
-              target="_blank"
-              rel="noreferrer"
             >
               Full application source code
             </a>
@@ -41,8 +47,6 @@ const aboutPage = () => {
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/Kirill9m/dagbok-next-boot/tree/main/documentation"
-              target="_blank"
-              rel="noreferrer"
             >
               Detailed diagrams
             </a>
@@ -51,12 +55,7 @@ const aboutPage = () => {
             <span className="font-medium text-white">
               Quick Diagram Viewer:
             </span>{" "}
-            <a
-              className="text-blue-400 hover:underline"
-              href="/diagrams"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="text-blue-400 hover:underline" href="/diagrams">
               Live iframe viewer
             </a>
           </li>
@@ -65,8 +64,6 @@ const aboutPage = () => {
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/users/Kirill9m/projects/2"
-              target="_blank"
-              rel="noreferrer"
             >
               Public Kanban/issues
             </a>
@@ -76,8 +73,6 @@ const aboutPage = () => {
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/Kirill9m/dagbok-next-boot/issues"
-              target="_blank"
-              rel="noreferrer"
             >
               Reported issues & feature requests
             </a>
@@ -87,8 +82,6 @@ const aboutPage = () => {
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/Kirill9m/dagbok-next-boot/tree/main/documentation/adr"
-              target="_blank"
-              rel="noreferrer"
             >
               Architecture Decision Record
             </a>
@@ -99,4 +92,4 @@ const aboutPage = () => {
   );
 };
 
-export default aboutPage;
+export default AboutPage;
