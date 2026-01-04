@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/lib/props";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface SettingsModalProps {
   user?: User;
@@ -16,6 +16,15 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
 
   useEffect(() => {
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [timeoutId]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "unset";
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [timeoutId]);
@@ -54,25 +63,32 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
   };
 
   return (
-    <main className={"min-h-screen flex items-center justify-center"}>
-      <div className="bg-[#2A2A2A] backdrop-blur-xl rounded-2xl p-8 w-full max-w-md shadow-2xl border border-white/10">
-        <h1 className={"text-2xl font-semibold text-center mb-6"}>
-          Inställningar
-        </h1>
-        <p className={"text-xs font-semibold text-center mb-6"}>(Avancerat)</p>
+    <main className={"min-h-screen flex sm:items-center justify-center"}>
+      <div className="bg-[#2A2A2A] w-full h-screen overflow-hidden flex flex-col sm:rounded-lg sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-3xl shadow-2xl relative p-4">
+        <div className=" sm:p-1 border-b border-white/10">
+          <h2
+            id="notes-modal-title"
+            className="text-2xl font-semibold text-white"
+          >
+            Inställningar
+            <p className={"text-xs font-semibold mb-6"}>(Avancerat)</p>
+          </h2>
+        </div>
         <div className={"justify-center text-center mb-6"}>
-          <label htmlFor="prompt-textarea" className="mb-2 block">
+          <label htmlFor="prompt-textarea" className="mb-2 block pt-5">
             Prompt:
           </label>
-          <textarea
-            id="prompt-textarea"
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-            maxLength={maxLength}
-            aria-describedby="char-count"
-            className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
-            rows={5}
-          />
+          <div className="prose prose-invert max-w-none">
+            <textarea
+              id="prompt-textarea"
+              value={userPrompt}
+              onChange={(e) => setUserPrompt(e.target.value)}
+              maxLength={maxLength}
+              aria-describedby="char-count"
+              className="relative rounded-lg p-4 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
+              rows={15}
+            />
+          </div>
           <div
             id="char-count"
             className="text-sm text-gray-400 mt-1 text-right"
@@ -81,7 +97,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
             {userPrompt.length}/{maxLength} tecken
           </div>
           <button
-            className="text-gray-400 mt-4 px-4 py-2 rounded hover:bg-[#FF7518] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-white mt-4 px-4 py-2 rounded bg-[#FF7518] sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSave}
             disabled={isSaving}
           >
