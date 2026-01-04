@@ -1,10 +1,6 @@
 package cloud.dagbok.backend.controller;
 
-import cloud.dagbok.backend.dto.note.Note;
-import cloud.dagbok.backend.dto.note.NoteCreateRequest;
-import cloud.dagbok.backend.dto.note.NoteItemWithDate;
-import cloud.dagbok.backend.dto.note.NoteNew;
-import cloud.dagbok.backend.dto.note.NoteResponse;
+import cloud.dagbok.backend.dto.note.*;
 import cloud.dagbok.backend.dto.user.Principal;
 import cloud.dagbok.backend.service.NoteService;
 import jakarta.validation.Valid;
@@ -39,6 +35,18 @@ public class NoteController {
     var createdNote = noteService.createNewUserNote(request, principal.userId());
     log.info("Created note: {}", createdNote);
     return ResponseEntity.status(201).body(createdNote);
+  }
+
+  @PutMapping("/notes")
+  public ResponseEntity<Note> updateNote(
+      @Valid @RequestBody NoteUpdateRequest request, Authentication authentication) {
+
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    log.info("Received update note request: {}", request);
+    var updatedNote = noteService.updateUserNote(request.id(), request.text(), principal.userId());
+    return ResponseEntity.ok(updatedNote);
   }
 
   @DeleteMapping("/notes/{noteId}")

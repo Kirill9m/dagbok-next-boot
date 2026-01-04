@@ -102,6 +102,79 @@ const CalendarHandler = () => {
     setIsModalOpen(false);
   }, []);
 
+  const handleDelete = async (noteId: number) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/${noteId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+
+      if (response.ok) {
+        setSaveStatus("Raderat");
+        setNotesData((prevData) => {
+          if (!prevData) return prevData;
+          return {
+            notes: prevData.notes.filter((note) => note.id !== noteId),
+          };
+        });
+        setRefreshKey((prev) => prev + 1);
+      } else {
+        console.error(`Failed to delete note: HTTP ${response.status}`);
+        setSaveStatus("Fel vid radering");
+      }
+    } catch (err) {
+      console.error("Failed to delete note:", err);
+      setSaveStatus("Fel vid radering");
+    }
+    setTimeout(() => setSaveStatus(""), 3000);
+  };
+
+  const handleNoteEdit = async (noteId: number, draftText: string) => {
+    try {
+      if (!draftText.trim()) {
+        setSaveStatus("Text får inte vara tom");
+        setTimeout(() => setSaveStatus(""), 3000);
+        return;
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: noteId,
+            text: draftText,
+          }),
+          credentials: "include",
+        },
+      );
+
+      if (response.ok) {
+        setSaveStatus("Uppdaterat");
+        setNotesData((prevData) => {
+          if (!prevData) return prevData;
+          return {
+            notes: prevData.notes.map((note) =>
+              note.id === noteId ? { ...note, text: draftText } : note,
+            ),
+          };
+        });
+        setRefreshKey((prev) => prev + 1);
+      } else {
+        console.error(`Failed to update note: HTTP ${response.status}`);
+        setSaveStatus("Fel vid uppdatering");
+      }
+    } catch (err) {
+      console.error("Failed to update note:", err);
+      setSaveStatus("Fel vid uppdatering");
+    }
+    setTimeout(() => setSaveStatus(""), 3000);
+  };
+
   return (
     <div className="min-h-screen font-inter p-4">
       <CalendarUI
@@ -114,6 +187,8 @@ const CalendarHandler = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           notesData={notesData}
+          onEdit={handleNoteEdit}
+          onDelete={handleDelete}
         />
       )}
       {saveStatus && (

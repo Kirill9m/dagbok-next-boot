@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -17,18 +17,51 @@ interface NotesModalProps {
   isOpen: boolean;
   onClose: () => void;
   notesData: NotesData | null;
+  onEdit?: (noteId: number, nextText: string) => void;
+  onDelete?: (noteId: number) => void;
 }
 
-const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
+const NotesModalContent = ({
+  onClose,
+  notesData,
+  onEdit,
+  onDelete,
+}: Omit<NotesModalProps, "isOpen">) => {
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
+  const [draftText, setDraftText] = useState("");
+
+  const startEdit = (note: Note) => {
+    setEditingNoteId(note.id);
+    setDraftText(note.text);
+  };
+
+  const cancelEdit = useCallback(() => {
+    setEditingNoteId(null);
+    setDraftText("");
+  }, []);
+
+  const saveEdit = () => {
+    if (editingNoteId == null || !onEdit) return;
+    if (!draftText.trim()) {
+      return;
+    }
+    onEdit(editingNoteId, draftText);
+    cancelEdit();
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (editingNoteId !== null) {
+          cancelEdit();
+        } else {
+          onClose();
+        }
+      }
     };
-    if (isOpen) document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+  }, [onClose, editingNoteId, cancelEdit]);
 
   return (
     <div
@@ -72,71 +105,72 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
         </button>
 
         <div className="p-4 sm:p-6 overflow-y-auto">
-          {notesData?.notes.map((note, index) => (
-            <React.Fragment key={note.id}>
-              <div className="text-gray-200 text-base py-4 first:pt-0">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    ul: (props) => (
-                      <ul
-                        className="list-disc ml-6 mb-4 space-y-1"
-                        {...props}
+          {notesData?.notes.map((note, index) => {
+            const isEditing = editingNoteId === note.id;
+
+            return (
+              <React.Fragment key={note.id}>
+                <div className="relative group">
+                  <div className="prose prose-invert max-w-none">
+                    {isEditing ? (
+                      <textarea
+                        className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
+                        value={draftText}
+                        onChange={(e) => setDraftText(e.target.value)}
+                        rows={Math.max(5, draftText.split("\n").length)}
                       />
-                    ),
-                    ol: (props) => (
-                      <ol
-                        className="list-decimal ml-6 mb-4 space-y-1"
-                        {...props}
-                      />
-                    ),
-                    li: (props) => <li className="mb-1" {...props} />,
-                    h1: (props) => (
-                      <h1
-                        className="text-2xl font-bold mb-4 text-white"
-                        {...props}
-                      />
-                    ),
-                    h2: (props) => (
-                      <h2
-                        className="text-xl font-bold mb-3 mt-6 text-white"
-                        {...props}
-                      />
-                    ),
-                    p: (props) => (
-                      <p
-                        className="mb-4 leading-relaxed whitespace-pre-wrap"
-                        {...props}
-                      />
-                    ),
-                    code: ({ node, className, children, ...props }) => {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !match ? (
-                        <code
-                          className="bg-gray-800/80 rounded px-1.5 py-0.5 text-sm font-mono"
-                          {...props}
+                    ) : (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {note.text}
+                      </ReactMarkdown>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 mt-3">
+                    {onEdit && !isEditing && (
+                      <button
+                        onClick={() => startEdit(note)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
+                      >
+                        Redigera
+                      </button>
+                    )}
+
+                    {onEdit && isEditing && (
+                      <>
+                        <button
+                          onClick={saveEdit}
+                          className="px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
                         >
-                          {children}
-                        </code>
-                      ) : (
-                        <pre className="bg-gray-900/80 rounded-md p-3 my-4 overflow-x-auto text-sm">
-                          <code {...props}>{children}</code>
-                        </pre>
-                      );
-                    },
-                    hr: (props) => (
-                      <hr className="border-gray-600 my-6" {...props} />
-                    ),
-                  }}
-                >
-                  {note.text}
-                </ReactMarkdown>
-              </div>
-              {index < notesData.notes.length - 1 && (
-                <hr className="border-gray-700 my-4" />
-              )}
-            </React.Fragment>
-          ))}
+                          Spara
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          className="px-3 py-1.5 text-sm bg-gray-700/70 hover:bg-gray-700 text-white rounded transition"
+                        >
+                          Avbryt
+                        </button>
+                      </>
+                    )}
+
+                    {onDelete && !isEditing && (
+                      <button
+                        onClick={() => onDelete(note.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-700/70 hover:bg-red-700 text-white rounded transition"
+                      >
+                        Ta bort
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {index < (notesData?.notes.length ?? 0) - 1 && (
+                  <hr className="border-gray-700 my-4" />
+                )}
+              </React.Fragment>
+            );
+          })}
+
           {(!notesData || notesData.notes.length === 0) && (
             <p className="text-gray-400 italic text-center">
               Inga anteckningar.
@@ -145,6 +179,24 @@ const NotesModal = ({ isOpen, onClose, notesData }: NotesModalProps) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const NotesModal = ({
+  isOpen,
+  onClose,
+  notesData,
+  onEdit,
+  onDelete,
+}: NotesModalProps) => {
+  if (!isOpen) return null;
+  return (
+    <NotesModalContent
+      onClose={onClose}
+      notesData={notesData}
+      onEdit={onEdit}
+      onDelete={onDelete}
+    />
   );
 };
 
