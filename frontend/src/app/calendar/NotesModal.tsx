@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -17,26 +17,42 @@ interface NotesModalProps {
   isOpen: boolean;
   onClose: () => void;
   notesData: NotesData | null;
-  onEdit?: (noteId: number) => void;
+  onEdit?: (noteId: number, nextText: string) => void;
   onDelete?: (noteId: number) => void;
 }
 
-const NotesModal = ({
-  isOpen,
+const NotesModalContent = ({
   onClose,
   notesData,
   onEdit,
   onDelete,
-}: NotesModalProps) => {
+}: Omit<NotesModalProps, "isOpen">) => {
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
+  const [draftText, setDraftText] = useState("");
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    if (isOpen) document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [onClose]);
 
-  if (!isOpen) return null;
+  const startEdit = (note: Note) => {
+    setEditingNoteId(note.id);
+    setDraftText(note.text);
+  };
+
+  const cancelEdit = () => {
+    setEditingNoteId(null);
+    setDraftText("");
+  };
+
+  const saveEdit = () => {
+    if (editingNoteId == null || !onEdit) return;
+    onEdit(editingNoteId, draftText);
+    cancelEdit();
+  };
 
   return (
     <div
@@ -80,65 +96,72 @@ const NotesModal = ({
         </button>
 
         <div className="p-4 sm:p-6 overflow-y-auto">
-          {notesData?.notes.map((note, index) => (
-            <React.Fragment key={note.id}>
-              <div className="relative group">
-                <div className="prose prose-invert max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {note.text}
-                  </ReactMarkdown>
+          {notesData?.notes.map((note, index) => {
+            const isEditing = editingNoteId === note.id;
+
+            return (
+              <React.Fragment key={note.id}>
+                <div className="relative group">
+                  <div className="prose prose-invert max-w-none">
+                    {isEditing ? (
+                      <textarea
+                        className="relative rounded-lg p-6 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
+                        value={draftText}
+                        onChange={(e) => setDraftText(e.target.value)}
+                        rows={5}
+                      />
+                    ) : (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {note.text}
+                      </ReactMarkdown>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 mt-3">
+                    {onEdit && !isEditing && (
+                      <button
+                        onClick={() => startEdit(note)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
+                      >
+                        Redigera
+                      </button>
+                    )}
+
+                    {onEdit && isEditing && (
+                      <>
+                        <button
+                          onClick={saveEdit}
+                          className="px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
+                        >
+                          Spara
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          className="px-3 py-1.5 text-sm bg-gray-700/70 hover:bg-gray-700 text-white rounded transition"
+                        >
+                          Avbryt
+                        </button>
+                      </>
+                    )}
+
+                    {onDelete && !isEditing && (
+                      <button
+                        onClick={() => onDelete(note.id)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-700/70 hover:bg-red-700 text-white rounded transition"
+                      >
+                        Ta bort
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                <div className="flex gap-2 mt-3">
-                  {onEdit && (
-                    <button
-                      onClick={() => onEdit(note.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-[#FF7518]/70 hover:bg-[#FF7518] text-white rounded transition"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                        />
-                      </svg>
-                      Redigera
-                    </button>
-                  )}
-                  {onDelete && (
-                    <button
-                      onClick={() => onDelete(note.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-red-700/70 hover:bg-red-700 text-white rounded transition"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                      Ta bort
-                    </button>
-                  )}
-                </div>
-              </div>
-              {index < notesData.notes.length - 1 && (
-                <hr className="border-gray-700 my-4" />
-              )}
-            </React.Fragment>
-          ))}
+                {index < (notesData?.notes.length ?? 0) - 1 && (
+                  <hr className="border-gray-700 my-4" />
+                )}
+              </React.Fragment>
+            );
+          })}
+
           {(!notesData || notesData.notes.length === 0) && (
             <p className="text-gray-400 italic text-center">
               Inga anteckningar.
@@ -147,6 +170,24 @@ const NotesModal = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const NotesModal = ({
+  isOpen,
+  onClose,
+  notesData,
+  onEdit,
+  onDelete,
+}: NotesModalProps) => {
+  if (!isOpen) return null;
+  return (
+    <NotesModalContent
+      onClose={onClose}
+      notesData={notesData}
+      onEdit={onEdit}
+      onDelete={onDelete}
+    />
   );
 };
 

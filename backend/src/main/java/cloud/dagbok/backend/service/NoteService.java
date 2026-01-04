@@ -6,6 +6,7 @@ import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -110,6 +111,25 @@ public class NoteService {
     }
     List<NotesCountByDate> counts = noteRepository.countNotesByDate(userId, year, month);
     return new NoteItemWithDate(counts);
+  }
+
+  public Note updateUserNote(Long id, @NotNull String text, Long aLong) {
+    NoteEntity noteEntity =
+        noteRepository
+            .findByIdAndUserIdAndDeletedAtIsNull(id, aLong)
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        "Note not found with id: " + id + " for user with id: " + aLong));
+
+    noteEntity.setText(text);
+    NoteEntity updatedEntity = noteRepository.save(noteEntity);
+    return new Note(
+        updatedEntity.getId(),
+        updatedEntity.getText(),
+        updatedEntity.getUser().getId(),
+        updatedEntity.getCreatedAt(),
+        updatedEntity.getDeletedAt());
   }
 
   private String signature(String date, String name) {

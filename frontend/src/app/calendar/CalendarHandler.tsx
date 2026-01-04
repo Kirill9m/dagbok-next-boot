@@ -124,8 +124,43 @@ const CalendarHandler = () => {
       } else {
         setSaveStatus("Fel vid radering");
       }
-    } catch (error) {
+    } catch {
       setSaveStatus("Fel vid radering");
+    }
+    setTimeout(() => setSaveStatus(""), 3000);
+  };
+
+  const handleNoteEdit = async (noteId: number, draftText: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: noteId,
+            text: draftText,
+          }),
+          credentials: "include",
+        },
+      );
+
+      if (response.ok) {
+        setSaveStatus("Uppdaterat");
+        setNotesData((prevData) => {
+          if (!prevData) return prevData;
+          return {
+            notes: prevData.notes.map((note) =>
+              note.id === noteId ? { ...note, text: draftText } : note,
+            ),
+          };
+        });
+        setRefreshKey((prev) => prev + 1);
+      } else {
+        setSaveStatus("Fel vid uppdatering");
+      }
+    } catch {
+      setSaveStatus("Fel vid uppdatering");
     }
     setTimeout(() => setSaveStatus(""), 3000);
   };
@@ -142,8 +177,8 @@ const CalendarHandler = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           notesData={notesData}
-          onEdit={(noteId) => {
-            console.log("Radigera note:", noteId);
+          onEdit={(noteId, draftText) => {
+            handleNoteEdit(noteId, draftText);
           }}
           onDelete={(noteId) => {
             handleDelete(noteId);
