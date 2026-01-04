@@ -37,11 +37,7 @@ export default async function RootLayout({
       lang="en"
       className={`${roboto.variable} ${roboto.className} bg-[#1A1A1A]`}
     >
-      <body
-        className={
-          "bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden min-h-screen"
-        }
-      >
+      <body className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] overflow-x-hidden min-h-screen pb-20 sm:pb-0">
         <Header user={user} />
         {children}
       </body>
