@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/lib/props";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SettingsModalProps {
   user?: User;
@@ -13,12 +13,6 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const maxLength = 2000;
-
-  useEffect(() => {
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [timeoutId]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -65,13 +59,13 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
   return (
     <main className={"min-h-screen flex sm:items-center justify-center"}>
       <div className="bg-[#2A2A2A] w-full h-screen overflow-hidden flex flex-col sm:rounded-lg sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-3xl shadow-2xl relative p-4">
-        <div className=" sm:p-1 border-b border-white/10">
+        <div className="sm:p-1 border-b border-white/10">
           <h2
-            id="notes-modal-title"
+            id="settings-modal-title"
             className="text-2xl font-semibold text-white"
           >
             Inställningar
-            <p className={"text-xs font-semibold mb-6"}>(Avancerat)</p>
+            <span className={"text-xs font-semibold mb-6"}>(Avancerat)</span>
           </h2>
         </div>
         <div className={"justify-center text-center mb-6"}>
