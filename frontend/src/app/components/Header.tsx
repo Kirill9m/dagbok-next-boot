@@ -6,7 +6,10 @@ import { usePathname } from "next/navigation";
 import { User } from "@/lib/props";
 import { useState } from "react";
 
-const navLinks = [{ name: "Dagbok cloud", href: "/" }];
+const navLinks = [
+  { name: "Dagbok cloud", href: "/" },
+  { name: "Om oss", href: "/about" },
+];
 
 const calendarLink = { name: "Kalender", href: "/calendar" };
 const profileLink = { name: "Profil", href: "/profile" };
