@@ -41,6 +41,18 @@ public class NoteController {
     return ResponseEntity.status(201).body(createdNote);
   }
 
+  @PutMapping("/notes")
+  public ResponseEntity<Note> updateNote(
+      @Valid @RequestBody Note note, Authentication authentication) {
+
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    log.info("Received update note request: {}", note);
+    var updatedNote = noteService.updateUserNote(note.id(), note.text(), principal.userId());
+    return ResponseEntity.ok(updatedNote);
+  }
+
   @DeleteMapping("/notes/{noteId}")
   public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
 
