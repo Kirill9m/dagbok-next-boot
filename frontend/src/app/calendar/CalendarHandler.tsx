@@ -102,6 +102,29 @@ const CalendarHandler = () => {
     setIsModalOpen(false);
   }, []);
 
+  const handleDelete = async (noteId: number) => {
+    try {
+      const response = await fetch(`/api/notes/${noteId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        console.log("Note is deleted successfully");
+        setNotesData((prevData) => {
+          if (!prevData) return prevData;
+          return {
+            notes: prevData.notes.filter((note) => note.id !== noteId),
+          };
+        });
+        setRefreshKey((prev) => prev + 1);
+      } else {
+        console.error("Failed to delete note:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen font-inter p-4">
       <CalendarUI
@@ -114,6 +137,12 @@ const CalendarHandler = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           notesData={notesData}
+          onEdit={(noteId) => {
+            console.log("Radigera note:", noteId);
+          }}
+          onDelete={(noteId) => {
+            handleDelete(noteId);
+          }}
         />
       )}
       {saveStatus && (
