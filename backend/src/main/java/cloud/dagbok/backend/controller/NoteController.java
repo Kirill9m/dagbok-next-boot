@@ -77,14 +77,17 @@ public class NoteController {
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
   }
 
-  @GetMapping("/notes/user/find/{searchText}")
+  @GetMapping("/notes/user/search")
   public ResponseEntity<NoteResponse> findNoteByText(
-      @PathVariable String searchText, Authentication authentication) {
+      @RequestParam String query, Authentication authentication) {
     Principal principal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(principal, "Principal cannot be null");
+    if (query == null || query.trim().isEmpty()) {
+      throw new IllegalArgumentException("Search query cannot be empty");
+    }
 
-    log.info("User: {} requested notes with text: {}", principal.userId(), searchText);
-    return ResponseEntity.ok(noteService.findNotesByText(principal.userId(), searchText));
+    log.info("User: {} requested notes with text: {}", principal.userId(), query);
+    return ResponseEntity.ok(noteService.findNotesByText(principal.userId(), query.trim()));
   }
 
   @GetMapping("/notes/counts/{year}/{month}")

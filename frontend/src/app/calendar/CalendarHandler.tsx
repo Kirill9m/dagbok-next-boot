@@ -103,7 +103,7 @@ const CalendarHandler = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user/find/${query}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user/search?q=${encodeURIComponent(query)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

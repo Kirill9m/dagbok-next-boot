@@ -18,7 +18,7 @@ interface MonthlyPlannerProps {
     prompt: boolean,
   ) => void;
   refreshKey?: number;
-  onSearch: (query: string) => void;
+  onSearch: (query: string) => Promise<void>;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
@@ -138,7 +138,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
           </div>
           <button
             onClick={() => handleNavigate("next")}
-            className="text-[#FF7518] text-xs font-bold p-2 rounded-full hover:bg-gray-700 transition"
+            className="text-[#FF7518] text-xl font-bold p-2 rounded-full hover:bg-gray-700 transition"
           >
             &gt;
           </button>

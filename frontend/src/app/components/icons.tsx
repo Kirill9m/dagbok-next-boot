@@ -138,13 +138,14 @@ export const LoginIcon = ({ className = "w-6 h-6" }: IconProps) => (
   </svg>
 );
 
-export const SearchIcon = ({ className = "w-6 h-6" }) => (
+export const SearchIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
+    aria-label="Search"
   >
     <path
       strokeLinecap="round"
@@ -155,12 +156,13 @@ export const SearchIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const AIRobotHeadIcon = ({ className = "w-6 h-6" }) => (
+export const AIRobotHeadIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    aria-label="AI Assistant"
   >
     {/* Head */}
     <rect
