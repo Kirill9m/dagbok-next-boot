@@ -100,6 +100,7 @@ const CalendarHandler = () => {
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
+    setNotesData(null);
   }, []);
 
   const handleDelete = async (noteId: number) => {
