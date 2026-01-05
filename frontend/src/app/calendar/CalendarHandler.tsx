@@ -18,6 +18,8 @@ const CalendarHandler = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notesData, setNotesData] = useState<NotesData | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const handleSaveNote = useCallback(
     async (
@@ -99,7 +101,10 @@ const CalendarHandler = () => {
   };
 
   const findNote = async (query: string): Promise<void> => {
-    setIsModalOpen(true);
+    // Reset states and start loading
+    setIsSearching(true);
+    setSearchError(null);
+    setNotesData(null);
 
     try {
       const res = await fetch(
@@ -110,22 +115,30 @@ const CalendarHandler = () => {
           credentials: "include",
         },
       );
+      
       if (res.ok) {
         const data = await res.json();
         setNotesData(data);
+        setIsModalOpen(true); // Open modal only after successful fetch
       } else {
+        const errorMessage = res.status === 400 
+          ? "Ogiltig sökning. Kontrollera din sökfråga." 
+          : `Kunde inte söka anteckningar (HTTP ${res.status})`;
+        setSearchError(errorMessage);
         console.error(`Failed to fetch notes: HTTP ${res.status}`);
-        setNotesData(null);
       }
     } catch (err) {
       console.error("Failed to fetch notes:", err);
-      setNotesData(null);
+      setSearchError("Ett fel uppstod vid sökning. Försök igen.");
+    } finally {
+      setIsSearching(false);
     }
   };
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setNotesData(null);
+    setSearchError(null);
   }, []);
 
   const handleDelete = async (noteId: number) => {
@@ -208,6 +221,8 @@ const CalendarHandler = () => {
         onNavigateToDagbok={onNavigateToDagbok}
         refreshKey={refreshKey}
         onSearch={findNote}
+        isSearching={isSearching}
+        searchError={searchError}
       />
       {isModalOpen && (
         <NotesModal
