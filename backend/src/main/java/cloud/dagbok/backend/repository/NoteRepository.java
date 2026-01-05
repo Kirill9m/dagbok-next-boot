@@ -43,5 +43,6 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
    * @param userId the ID of the user whose notes should be searched
    * @return list of notes containing the search text
    */
-  List<NoteEntity> findByTextContainingAndUserIdAndDeletedAtIsNull(String searchText, Long userId);
+  List<NoteEntity> findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
+      String searchText, Long userId);
 }

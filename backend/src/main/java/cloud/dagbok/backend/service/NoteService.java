@@ -147,9 +147,11 @@ public class NoteService {
         .formatted(date, name);
   }
 
+  @Transactional(readOnly = true)
   public NoteResponse findNotesByText(Long userId, String searchText) {
     List<NoteEntity> entities =
-        noteRepository.findByTextContainingAndUserIdAndDeletedAtIsNull(searchText, userId);
+        noteRepository.findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
+            searchText, userId);
 
     List<NoteItem> notes =
         entities.stream().map(e -> new NoteItem(e.getId(), e.getText())).toList();

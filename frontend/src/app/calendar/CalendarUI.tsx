@@ -155,6 +155,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
               <input
                 type="text"
                 placeholder="Sök..."
+                maxLength={200}
                 aria-label="Sök anteckningar"
                 className="bg-transparent outline-none text-white w-full"
                 value={searchInput}
