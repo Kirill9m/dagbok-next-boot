@@ -196,13 +196,9 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
               />
             </label>
           </div>
-          
+
           {/* Loading and error messages */}
-          {isSearching && (
-            <div className="text-gray-400 text-sm">
-              Söker...
-            </div>
-          )}
+          {isSearching && <div className="text-gray-400 text-sm">Söker...</div>}
           {searchError && (
             <div className="text-red-400 text-sm" role="alert">
               {searchError}

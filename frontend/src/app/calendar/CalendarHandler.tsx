@@ -101,7 +101,6 @@ const CalendarHandler = () => {
   };
 
   const findNote = async (query: string): Promise<void> => {
-    // Reset states and start loading
     setIsSearching(true);
     setSearchError(null);
     setNotesData(null);
@@ -115,15 +114,16 @@ const CalendarHandler = () => {
           credentials: "include",
         },
       );
-      
+
       if (res.ok) {
         const data = await res.json();
         setNotesData(data);
-        setIsModalOpen(true); // Open modal only after successful fetch
+        setIsModalOpen(true);
       } else {
-        const errorMessage = res.status === 400 
-          ? "Ogiltig sökning. Kontrollera din sökfråga." 
-          : `Kunde inte söka anteckningar (HTTP ${res.status})`;
+        const errorMessage =
+          res.status === 400
+            ? "Ogiltig sökning. Kontrollera din sökfråga."
+            : `Kunde inte söka anteckningar (HTTP ${res.status})`;
         setSearchError(errorMessage);
         console.error(`Failed to fetch notes: HTTP ${res.status}`);
       }

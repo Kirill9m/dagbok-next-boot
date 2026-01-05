@@ -30,7 +30,7 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
 
   /**
    * Finds notes containing the specified text for a given user.
-   * 
+   *
    * <p>Performance note: This query uses LIKE %searchText% which performs a full table scan.
    * For better performance with large datasets, consider:
    * <ul>

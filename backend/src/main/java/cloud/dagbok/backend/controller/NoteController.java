@@ -79,15 +79,14 @@ public class NoteController {
 
   @GetMapping("/notes/user/search")
   public ResponseEntity<NoteResponse> findNoteByText(
-      @RequestParam String query, Authentication authentication) {
+      @RequestParam(name = "q") String query, Authentication authentication) {
     Principal principal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(principal, "Principal cannot be null");
-    
-    // Validate and sanitize search query
+
     if (query == null || query.trim().isEmpty()) {
       throw new IllegalArgumentException("Search query cannot be empty");
     }
-    
+
     String sanitizedQuery = query.trim();
     if (sanitizedQuery.length() > 500) {
       throw new IllegalArgumentException("Search query exceeds maximum length of 500 characters");
