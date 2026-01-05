@@ -1,9 +1,15 @@
-export const LogoIcon = ({ className = "w-8 h-8" }) => (
+interface IconProps {
+  className?: string;
+}
+
+export const LogoIcon = ({ className = "w-8 h-8" }: IconProps) => (
   <svg
     className={className}
     viewBox="0 0 32 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="Dagbok Cloud Logo"
   >
     <path
       d="M19.6893 0C24.2213 0 27.9423 3.39052 28.3329 7.71387H25.8573C25.477 4.73051 22.8672 2.41016 19.6893 2.41016C16.7903 2.41037 14.3646 4.34153 13.6727 6.94531C13.6645 6.94063 13.6566 6.93532 13.6483 6.93066C12.9557 6.53715 12.2012 6.22898 11.3856 6.00781C12.4654 2.53124 15.774 0.000208396 19.6893 0Z"
@@ -24,12 +30,13 @@ export const LogoIcon = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-export const CalendarIcon = ({ className = "w-6 h-6" }) => (
+export const CalendarIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
+    aria-label="Calendar"
   >
     <path
       strokeLinecap="round"
@@ -40,12 +47,14 @@ export const CalendarIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const ProfileIcon = ({ className = "w-6 h-6" }) => (
+export const ProfileIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
+    role="img"
+    aria-label="Profile"
   >
     <path
       strokeLinecap="round"
@@ -56,12 +65,13 @@ export const ProfileIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const SettingsIcon = ({ className = "w-6 h-6" }) => (
+export const SettingsIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
+    aria-label="Settings"
   >
     <path
       strokeLinecap="round"
@@ -78,12 +88,13 @@ export const SettingsIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const AdminIcon = ({ className = "w-6 h-6" }) => (
+export const AdminIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
+    aria-label="Admin"
   >
     <path
       strokeLinecap="round"
@@ -94,7 +105,7 @@ export const AdminIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const HomeIcon = ({ className = "w-6 h-6" }) => (
+export const HomeIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -110,12 +121,13 @@ export const HomeIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export const LoginIcon = ({ className = "w-6 h-6" }) => (
+export const LoginIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
     stroke="currentColor"
     viewBox="0 0 24 24"
+    aria-label="Login"
   >
     <path
       strokeLinecap="round"
