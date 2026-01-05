@@ -77,6 +77,16 @@ public class NoteController {
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
   }
 
+  @GetMapping("/notes/user/find/{searchText}")
+  public ResponseEntity<NoteResponse> findNoteByText(
+      @PathVariable String searchText, Authentication authentication) {
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    log.info("User: {} requested notes with text: {}", principal.userId(), searchText);
+    return ResponseEntity.ok(noteService.findNotesByText(principal.userId(), searchText));
+  }
+
   @GetMapping("/notes/counts/{year}/{month}")
   public ResponseEntity<NoteItemWithDate> getNoteCountsByMonth(
       @PathVariable int year, @PathVariable int month, Authentication authentication) {

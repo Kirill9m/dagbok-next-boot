@@ -146,4 +146,14 @@ public class NoteService {
     """
         .formatted(date, name);
   }
+
+  public NoteResponse findNotesByText(Long userId, String searchText) {
+    List<NoteEntity> entities =
+        noteRepository.findByTextContainingAndUserIdAndDeletedAtIsNull(searchText, userId);
+
+    List<NoteItem> notes =
+        entities.stream().map(e -> new NoteItem(e.getId(), e.getText())).toList();
+
+    return new NoteResponse(notes);
+  }
 }

@@ -27,4 +27,6 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
 """)
   List<NotesCountByDate> countNotesByDate(
       @Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+
+  List<NoteEntity> findByTextContainingAndUserIdAndDeletedAtIsNull(String searchText, Long userId);
 }
