@@ -18,12 +18,14 @@ interface MonthlyPlannerProps {
     prompt: boolean,
   ) => void;
   refreshKey?: number;
+  onSearch: (query: string) => void;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
   onSaveNote,
   refreshKey,
+  onSearch,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -153,7 +155,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  console.log("search clicked: " + searchInput);
+                  onSearch(searchInput);
                 }
               }}
             />

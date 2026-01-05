@@ -98,6 +98,31 @@ const CalendarHandler = () => {
     }
   };
 
+  const findNote = async (query: string): Promise<void> => {
+    setIsModalOpen(true);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user/find/${query}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        },
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setNotesData(data);
+      } else {
+        console.error(`Failed to fetch notes: HTTP ${res.status}`);
+        setNotesData(null);
+      }
+    } catch (err) {
+      console.error("Failed to fetch notes:", err);
+      setNotesData(null);
+    }
+  };
+
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setNotesData(null);
@@ -182,6 +207,7 @@ const CalendarHandler = () => {
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
         refreshKey={refreshKey}
+        onSearch={findNote}
       />
       {isModalOpen && (
         <NotesModal
