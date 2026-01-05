@@ -98,7 +98,7 @@ const AboutPage = () => {
               target="_blank"
               rel="noreferrer"
             >
-              Architecture Decision Record
+              Architecture Decision Records
             </a>
           </li>
           <li>
@@ -110,6 +110,17 @@ const AboutPage = () => {
               rel="noreferrer"
             >
               Figma prototyp
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-white">QA:</span>{" "}
+            <a
+              className="text-blue-400 hover:underline"
+              href="https://github.com/Kirill9m/dagbok-next-boot/blob/main/documentation/QA.md"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Quality Assurance
             </a>
           </li>
         </ul>
