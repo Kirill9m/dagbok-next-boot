@@ -137,3 +137,53 @@ export const LoginIcon = ({ className = "w-6 h-6" }: IconProps) => (
     />
   </svg>
 );
+
+export const SearchIcon = ({ className = "w-6 h-6" }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+    />
+  </svg>
+);
+
+export const AIRobotHeadIcon = ({ className = "w-6 h-6" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Head */}
+    <rect
+      x="6"
+      y="6"
+      width="12"
+      height="12"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      fill="none"
+    />
+
+    {/* AI Text */}
+    <text
+      x="12"
+      y="14.5"
+      textAnchor="middle"
+      fontSize="8"
+      fontWeight="bold"
+      fill="currentColor"
+    >
+      AI
+    </text>
+  </svg>
+);

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { AIRobotHeadIcon, SearchIcon } from "@/app/components/icons";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -34,6 +35,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
     Record<string, number>
   >({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -134,12 +136,36 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
           </div>
           <button
             onClick={() => handleNavigate("next")}
-            className="text-[#FF7518] text-xl font-bold p-2 rounded-full hover:bg-gray-700 transition"
+            className="text-[#FF7518] text-xs font-bold p-2 rounded-full hover:bg-gray-700 transition"
           >
             &gt;
           </button>
         </div>
-        <div className="flex justify-center sm:justify-end mt-4">
+
+        <div className="flex justify-center mt-4 gap-1">
+          <div className="flex items-center gap-2 bg-[#4A4A4A] rounded-lg px-4 py-2 w-full max-w-md">
+            <SearchIcon className="w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Sök..."
+              className="bg-transparent outline-none text-white w-full"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  console.log("search clicked: " + searchInput);
+                }
+              }}
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput("")}
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </button>
+            )}
+          </div>
           <label
             htmlFor="prompt-toggle"
             className="flex items-center gap-2 cursor-pointer"
@@ -147,11 +173,15 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             <input
               type="checkbox"
               id="prompt-toggle"
-              className="accent-[#FF7518] w-11 h-11 cursor-pointer"
+              className="sr-only"
               checked={promptEnabled}
               onChange={(e) => setPromptEnabled(e.target.checked)}
             />
-            <span className="text-sm sm:text-base">Prompt</span>
+            <AIRobotHeadIcon
+              className={`w-10 h-10 transition-colors duration-300 ${
+                promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+              }`}
+            />
           </label>
         </div>
       </div>
