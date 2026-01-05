@@ -215,7 +215,7 @@ const CalendarHandler = () => {
   };
 
   return (
-    <div className="min-h-screen font-inter p-4">
+    <div className="font-inter min-h-screen p-4">
       <CalendarUI
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
@@ -235,7 +235,7 @@ const CalendarHandler = () => {
       )}
       {saveStatus && (
         <div
-          className="fixed bottom-4 right-4 bg-[#FF7518] text-white p-3 rounded-lg shadow-xl z-50 text-sm"
+          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm text-white shadow-xl"
           role="status"
         >
           {saveStatus}

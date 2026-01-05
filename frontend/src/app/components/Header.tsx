@@ -91,7 +91,7 @@ const Header = ({ user }: HeaderProps) => {
   return (
     <>
       {/* Desktop Header */}
-      <header className="hidden md:flex items-center justify-between px-6 lg:px-6 py-3 border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A]">
+      <header className="hidden items-center justify-between border-b-2 border-b-[#3F3D3D] bg-[#2A2A2A] px-6 py-3 md:flex lg:px-6">
         <div className="flex items-center gap-10">
           <Link href="/">
             <LogoIcon />
@@ -105,7 +105,7 @@ const Header = ({ user }: HeaderProps) => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3 py-1 rounded-md transition-colors duration-300 whitespace-nowrap ${
+                  className={`rounded-md px-3 py-1 whitespace-nowrap transition-colors duration-300 ${
                     isActive ? "bg-[#FF7518]/60" : "hover:bg-[#FF7518]/60"
                   }`}
                 >
@@ -117,13 +117,13 @@ const Header = ({ user }: HeaderProps) => {
         </div>
         <div className="flex items-center gap-4">
           {user ? (
-            <span className="text-sm text-gray-300 truncate">
+            <span className="truncate text-sm text-gray-300">
               Hej, {user.name}
             </span>
           ) : (
             <Link
               href="/login"
-              className="px-4 py-2 text-sm rounded-lg bg-[#FF7518] hover:bg-[#ff8833] transition-colors"
+              className="rounded-lg bg-[#FF7518] px-4 py-2 text-sm transition-colors hover:bg-[#ff8833]"
             >
               Logga in
             </Link>
@@ -132,7 +132,7 @@ const Header = ({ user }: HeaderProps) => {
       </header>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#2A2A2A] border-t-2 border-t-[#3F3D3D] pb-safe">
+      <nav className="pb-safe fixed right-0 bottom-0 left-0 z-50 border-t-2 border-t-[#3F3D3D] bg-[#2A2A2A] md:hidden">
         <div className="flex items-center justify-around px-2 py-2">
           {mobileLinks.map((link) => {
             const isActive =
@@ -142,9 +142,7 @@ const Header = ({ user }: HeaderProps) => {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors min-w-[60px] ${
-                  isActive ? "text-[#FF7518]" : "text-gray-400 hover:text-white"
-                }`}
+                className={`flex min-w-[60px] touch-manipulation flex-col items-center gap-1 rounded-lg px-3 py-3 transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-95 active:bg-white/5 ${isActive ? "text-[#FF7518]" : "text-gray-400 active:text-gray-300"} `}
               >
                 {link.icon}
                 <span className="text-xs font-medium">{link.name}</span>

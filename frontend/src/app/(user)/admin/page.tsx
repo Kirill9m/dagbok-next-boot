@@ -19,9 +19,9 @@ const AdminPage = async () => {
   }
 
   return (
-    <div className="w-full min-h-screen pt-5">
-      <div className="flex justify-start items-start w-full px-4">
-        <div className="max-w-5xl w-full">
+    <div className="min-h-screen w-full pt-5">
+      <div className="flex w-full items-start justify-start px-4">
+        <div className="w-full max-w-5xl">
           <HealthBanner />
         </div>
       </div>

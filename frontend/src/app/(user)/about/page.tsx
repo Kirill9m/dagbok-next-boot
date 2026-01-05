@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const AboutPage = () => {
   return (
-    <div className="flex flex-col items-start justify-start min-h-screen px-4 py-8 space-y-6">
+    <div className="flex min-h-screen flex-col items-start justify-start space-y-6 px-4 py-8">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold text-white">
           Dagbok (Digital Logbook)
@@ -23,7 +23,7 @@ const AboutPage = () => {
         <h2 className="text-xl font-semibold text-white">
           Key Technology Stack
         </h2>
-        <ul className="list-disc list-inside text-gray-300 space-y-1">
+        <ul className="list-inside list-disc space-y-1 text-gray-300">
           <li>Frontend: Next.js (16.1.1) for SSR.</li>
           <li>Backend: Spring Boot (4.0.0) for secure REST API.</li>
           <li>Database: JPA (Hibernate) with MySQL for persistent storage.</li>
@@ -32,7 +32,7 @@ const AboutPage = () => {
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold text-white">Project Resources</h2>
-        <ul className="list-none text-gray-300 space-y-2">
+        <ul className="list-none space-y-2 text-gray-300">
           <li>
             <span className="font-medium text-white">GitHub Repository:</span>{" "}
             <a
