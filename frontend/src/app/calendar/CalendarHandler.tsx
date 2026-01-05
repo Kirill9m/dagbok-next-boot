@@ -18,6 +18,8 @@ const CalendarHandler = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notesData, setNotesData] = useState<NotesData | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const handleSaveNote = useCallback(
     async (
@@ -98,9 +100,45 @@ const CalendarHandler = () => {
     }
   };
 
+  const findNote = async (query: string): Promise<void> => {
+    setIsSearching(true);
+    setSearchError(null);
+    setNotesData(null);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/user/search?q=${encodeURIComponent(query)}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        },
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        setNotesData(data);
+        setIsModalOpen(true);
+      } else {
+        const errorMessage =
+          res.status === 400
+            ? "Ogiltig sökning. Kontrollera din sökfråga."
+            : `Kunde inte söka anteckningar (HTTP ${res.status})`;
+        setSearchError(errorMessage);
+        console.error(`Failed to fetch notes: HTTP ${res.status}`);
+      }
+    } catch (err) {
+      console.error("Failed to fetch notes:", err);
+      setSearchError("Ett fel uppstod vid sökning. Försök igen.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
     setNotesData(null);
+    setSearchError(null);
   }, []);
 
   const handleDelete = async (noteId: number) => {
@@ -182,6 +220,9 @@ const CalendarHandler = () => {
         onSaveNote={handleSaveNote}
         onNavigateToDagbok={onNavigateToDagbok}
         refreshKey={refreshKey}
+        onSearch={findNote}
+        isSearching={isSearching}
+        searchError={searchError}
       />
       {isModalOpen && (
         <NotesModal

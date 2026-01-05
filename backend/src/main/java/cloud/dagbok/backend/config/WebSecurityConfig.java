@@ -42,7 +42,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         "/actuator/health",
                         "/api/health",
                         "/api/status",
-                        "/api/public/**")
+                        "/api/public/**",
+                        "/error")
                     .permitAll()
                     .requestMatchers("/api/**", "/user/me", "/user/prompt")
                     .authenticated()

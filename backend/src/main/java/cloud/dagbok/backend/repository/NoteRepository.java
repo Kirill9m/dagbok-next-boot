@@ -27,4 +27,22 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
 """)
   List<NotesCountByDate> countNotesByDate(
       @Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+
+  /**
+   * Finds notes containing the specified text for a given user.
+   *
+   * <p>Performance note: This query uses LIKE %searchText% which performs a full table scan.
+   * For better performance with large datasets, consider:
+   * <ul>
+   *   <li>Adding a database index on the 'text' column if supported by your database</li>
+   *   <li>Using full-text search capabilities (e.g., PostgreSQL's to_tsvector/to_tsquery)</li>
+   *   <li>Implementing a dedicated search engine (e.g., Elasticsearch) for complex search requirements</li>
+   * </ul>
+   *
+   * @param searchText the text to search for within note contents
+   * @param userId the ID of the user whose notes should be searched
+   * @return list of notes containing the search text
+   */
+  List<NoteEntity> findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
+      String searchText, Long userId);
 }

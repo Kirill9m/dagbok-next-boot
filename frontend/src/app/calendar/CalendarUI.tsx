@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { AIRobotHeadIcon, SearchIcon } from "@/app/components/icons";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -17,12 +18,18 @@ interface MonthlyPlannerProps {
     prompt: boolean,
   ) => void;
   refreshKey?: number;
+  onSearch: (query: string) => Promise<void>;
+  isSearching?: boolean;
+  searchError?: string | null;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onNavigateToDagbok,
   onSaveNote,
   refreshKey,
+  onSearch,
+  isSearching = false,
+  searchError = null,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -34,6 +41,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
     Record<string, number>
   >({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -139,20 +147,64 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             &gt;
           </button>
         </div>
-        <div className="flex justify-center sm:justify-end mt-4">
-          <label
-            htmlFor="prompt-toggle"
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <input
-              type="checkbox"
-              id="prompt-toggle"
-              className="accent-[#FF7518] w-11 h-11 cursor-pointer"
-              checked={promptEnabled}
-              onChange={(e) => setPromptEnabled(e.target.checked)}
-            />
-            <span className="text-sm sm:text-base">Prompt</span>
-          </label>
+
+        <div className="flex flex-col items-center mt-4 gap-2">
+          <div className="flex justify-center gap-1 w-full">
+            <div className="flex items-center gap-2 bg-[#4A4A4A] rounded-lg px-4 py-2 w-full max-w-md">
+              <SearchIcon className="w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Sök..."
+                maxLength={200}
+                aria-label="Sök anteckningar"
+                className="bg-transparent outline-none text-white w-full"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && searchInput.trim() && !isSearching) {
+                    onSearch(searchInput);
+                  }
+                }}
+                disabled={isSearching}
+              />
+              {searchInput && (
+                <button
+                  onClick={() => setSearchInput("")}
+                  className="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded"
+                  aria-label="Rensa sökfält"
+                  type="button"
+                  tabIndex={0}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            <label
+              htmlFor="prompt-toggle"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                id="prompt-toggle"
+                className="sr-only"
+                checked={promptEnabled}
+                onChange={(e) => setPromptEnabled(e.target.checked)}
+              />
+              <AIRobotHeadIcon
+                className={`w-10 h-10 transition-colors duration-300 ${
+                  promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                }`}
+              />
+            </label>
+          </div>
+
+          {/* Loading and error messages */}
+          {isSearching && <div className="text-gray-400 text-sm">Söker...</div>}
+          {searchError && (
+            <div className="text-red-400 text-sm" role="alert">
+              {searchError}
+            </div>
+          )}
         </div>
       </div>
 

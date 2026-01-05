@@ -77,6 +77,25 @@ public class NoteController {
     return ResponseEntity.ok(noteService.getNoteByDate(principal.userId(), dateTime));
   }
 
+  @GetMapping("/notes/user/search")
+  public ResponseEntity<NoteResponse> findNoteByText(
+      @RequestParam(name = "q") String query, Authentication authentication) {
+    Principal principal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(principal, "Principal cannot be null");
+
+    if (query == null || query.trim().isEmpty()) {
+      throw new IllegalArgumentException("Search query cannot be empty");
+    }
+
+    String sanitizedQuery = query.trim();
+    if (sanitizedQuery.length() > 500) {
+      throw new IllegalArgumentException("Search query exceeds maximum length of 500 characters");
+    }
+
+    log.info("User: {} requested notes with text: {}", principal.userId(), sanitizedQuery);
+    return ResponseEntity.ok(noteService.findNotesByText(principal.userId(), sanitizedQuery));
+  }
+
   @GetMapping("/notes/counts/{year}/{month}")
   public ResponseEntity<NoteItemWithDate> getNoteCountsByMonth(
       @PathVariable int year, @PathVariable int month, Authentication authentication) {
