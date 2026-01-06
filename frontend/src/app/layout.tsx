@@ -14,8 +14,15 @@ export const metadata: Metadata = {
   title: "Dagbok cloud | Time Reporting & Work Log System",
   description:
     "A modern, full-stack time reporting system for small businesses built with Next.js and Spring Boot.",
+  manifest: "/manifest.json",
   icons: {
     icon: "/icon.svg",
+    apple: "/icon-192x192-v2.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Dagbok",
   },
 };
 
@@ -23,7 +30,7 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#1A1A1A",
+  themeColor: "#FF7518",
 };
 
 export default async function RootLayout({
