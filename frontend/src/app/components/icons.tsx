@@ -190,7 +190,7 @@ export const AIRobotHeadIcon = ({ className = "w-6 h-6" }: IconProps) => (
   </svg>
 );
 
-export const EditIcon = ({ className }: IconProps) => (
+export const EditIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -206,7 +206,7 @@ export const EditIcon = ({ className }: IconProps) => (
   </svg>
 );
 
-export const CheckIcon = ({ className }: IconProps) => (
+export const CheckIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"
@@ -222,7 +222,7 @@ export const CheckIcon = ({ className }: IconProps) => (
   </svg>
 );
 
-export const XIcon = ({ className }: IconProps) => (
+export const XIcon = ({ className = "w-6 h-6" }: IconProps) => (
   <svg
     className={className}
     fill="none"

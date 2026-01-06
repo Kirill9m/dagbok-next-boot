@@ -144,7 +144,7 @@ const NotesModalContent = ({
                             draftText.trim()
                               ? "bg-[#FF7518] hover:bg-[#FF7518]/80 active:scale-[0.98] active:brightness-90"
                               : "cursor-not-allowed bg-[#FF7518]/50 opacity-60"
-                          } `}
+                          }`}
                           aria-label="Spara ändringar"
                         >
                           <CheckIcon className="h-5 w-5 flex-shrink-0 sm:h-4 sm:w-4" />

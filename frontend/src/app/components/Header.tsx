@@ -142,7 +142,7 @@ const Header = ({ user }: HeaderProps) => {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`flex min-w-[60px] touch-manipulation flex-col items-center gap-1 rounded-lg px-3 py-3 transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-95 active:bg-white/5 ${isActive ? "text-[#FF7518]" : "text-gray-400 active:text-gray-300"} `}
+                className={`flex min-w-[60px] touch-manipulation flex-col items-center gap-1 rounded-lg px-3 py-3 transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-95 active:bg-white/5 ${isActive ? "text-[#FF7518]" : "text-gray-400 active:text-gray-300"}`}
               >
                 {link.icon}
                 <span className="text-xs font-medium">{link.name}</span>
