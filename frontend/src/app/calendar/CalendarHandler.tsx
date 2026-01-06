@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
 
@@ -20,6 +20,16 @@ const CalendarHandler = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const statusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on component unmount
+  useEffect(() => {
+    return () => {
+      if (statusTimeoutRef.current) {
+        clearTimeout(statusTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSaveNote = useCallback(
     async (
@@ -31,7 +41,10 @@ const CalendarHandler = () => {
     ) => {
       if (!text.trim()) {
         setSaveStatus("Text is empty");
-        setTimeout(() => setSaveStatus(""), 3000);
+        if (statusTimeoutRef.current) {
+          clearTimeout(statusTimeoutRef.current);
+        }
+        statusTimeoutRef.current = setTimeout(() => setSaveStatus(""), 3000);
         return;
       }
 
@@ -64,7 +77,10 @@ const CalendarHandler = () => {
         console.error("Failed to save note:", err);
         setSaveStatus("Fel vid sparning");
       } finally {
-        setTimeout(() => setSaveStatus(""), 3000);
+        if (statusTimeoutRef.current) {
+          clearTimeout(statusTimeoutRef.current);
+        }
+        statusTimeoutRef.current = setTimeout(() => setSaveStatus(""), 3000);
       }
     },
     [],
@@ -169,14 +185,20 @@ const CalendarHandler = () => {
       console.error("Failed to delete note:", err);
       setSaveStatus("Fel vid radering");
     }
-    setTimeout(() => setSaveStatus(""), 3000);
+    if (statusTimeoutRef.current) {
+      clearTimeout(statusTimeoutRef.current);
+    }
+    statusTimeoutRef.current = setTimeout(() => setSaveStatus(""), 3000);
   };
 
   const handleNoteEdit = async (noteId: number, draftText: string) => {
     try {
       if (!draftText.trim()) {
         setSaveStatus("Text får inte vara tom");
-        setTimeout(() => setSaveStatus(""), 3000);
+        if (statusTimeoutRef.current) {
+          clearTimeout(statusTimeoutRef.current);
+        }
+        statusTimeoutRef.current = setTimeout(() => setSaveStatus(""), 3000);
         return;
       }
 
@@ -212,7 +234,10 @@ const CalendarHandler = () => {
       console.error("Failed to update note:", err);
       setSaveStatus("Fel vid uppdatering");
     }
-    setTimeout(() => setSaveStatus(""), 3000);
+    if (statusTimeoutRef.current) {
+      clearTimeout(statusTimeoutRef.current);
+    }
+    statusTimeoutRef.current = setTimeout(() => setSaveStatus(""), 3000);
   };
 
   return (
