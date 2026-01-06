@@ -116,6 +116,7 @@ public class UserService {
         user.getModel());
   }
 
+  @Transactional
   public UserProfile updateUserPrompt(Long userId, String newPrompt) {
     UserEntity user =
         userRepository

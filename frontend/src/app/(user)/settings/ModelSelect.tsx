@@ -74,7 +74,7 @@ export default function ModelSelect({
         onClick={handleSave}
         disabled={isSaving}
       >
-        Spara
+        {isSaving ? "Sparar..." : "Spara"}
       </button>
     </>
   );
