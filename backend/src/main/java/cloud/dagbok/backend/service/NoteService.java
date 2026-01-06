@@ -58,6 +58,14 @@ public class NoteService {
             result.totalTokens(),
             result.costUSD());
 
+        LocalDate now = LocalDate.now();
+
+        Double totalMonthlyCost =
+            noteRepository.getTotalCostUSDByUserIdByMonth(
+                user.getId(), now.getYear(), now.getMonthValue());
+        user.setMonthlyCost(totalMonthlyCost);
+        userRepository.save(user);
+
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
         textToSave =

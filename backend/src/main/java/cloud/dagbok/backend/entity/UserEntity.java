@@ -37,6 +37,12 @@ public class UserEntity {
   @Column(nullable = false, length = 50)
   private Model model;
 
+  @Column(name = "total_costusd")
+  private Double totalCostUSD;
+
+  @Column(name = "monthly_cost")
+  private Double monthlyCost;
+
   public TokenEntity getToken() {
     return token;
   }
@@ -64,6 +70,22 @@ public class UserEntity {
     this.role = role;
     this.prompt = prompt;
     this.model = model;
+  }
+
+  public Double getMonthlyCost() {
+    return monthlyCost;
+  }
+
+  public void setMonthlyCost(Double monthlyCost) {
+    this.monthlyCost = monthlyCost;
+  }
+
+  public double getTotalCostUSD() {
+    return totalCostUSD;
+  }
+
+  public void setTotalCostUSD(double totalCostUSD) {
+    this.totalCostUSD = totalCostUSD;
   }
 
   public Model getModel() {
