@@ -4,6 +4,7 @@ export interface User {
   email: string;
   role: "ADMIN" | "USER";
   prompt: string;
+  model: string;
 }
 
 export interface ErrorResponse {
