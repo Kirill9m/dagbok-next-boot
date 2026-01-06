@@ -5,6 +5,7 @@ import cloud.dagbok.backend.entity.NoteEntity;
 import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
+import cloud.dagbok.backend.utils.PromptUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -38,12 +39,25 @@ public class NoteService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
     String textToSave;
+    Integer tokens = null;
+    Double cost = null;
 
     if (request.prompt() != null && request.prompt()) {
       try {
+        PromptUtil.ChatResult result =
+            openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text());
+
         textToSave =
-            openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text())
-                + signature(request.date().toLocalDate().toString(), user.getName());
+            result.text() + signature(request.date().toLocalDate().toString(), user.getName());
+        tokens = result.totalTokens();
+        cost = result.costUSD();
+
+        logger.info(
+            "AI generation for user {}: {} tokens, USD: {}",
+            userId,
+            result.totalTokens(),
+            result.costUSD());
+
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
         textToSave =
@@ -54,7 +68,24 @@ public class NoteService {
           request.text() + signature(request.date().toLocalDate().toString(), user.getName());
     }
 
-    return saveNote(user, textToSave, request.date().toLocalDate());
+    return saveNote(user, textToSave, request.date().toLocalDate(), tokens, cost);
+  }
+
+  private NoteNew saveNote(
+      UserEntity user, String text, LocalDate date, Integer tokens, Double cost) {
+    NoteEntity note = new NoteEntity();
+    note.setUser(user);
+    note.setText(text);
+    note.setDate(date);
+    note.setTokensUsed(tokens);
+    note.setCostUSD(cost);
+
+    noteRepository.save(note);
+    return convertToDTO(note);
+  }
+
+  private NoteNew convertToDTO(NoteEntity note) {
+    return new NoteNew(note.getId(), note.getText(), note.getDate());
   }
 
   @Transactional

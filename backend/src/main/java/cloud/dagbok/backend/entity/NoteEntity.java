@@ -25,6 +25,10 @@ public class NoteEntity {
   @CreationTimestamp private LocalDateTime createdAt;
   private LocalDateTime deletedAt;
 
+  @Column private Integer tokensUsed;
+
+  @Column private Double costUSD;
+
   public LocalDateTime getDeletedAt() {
     return deletedAt;
   }
@@ -48,6 +52,22 @@ public class NoteEntity {
     this.createdAt = createdAt;
     this.deletedAt = deletedAt;
     this.date = date;
+  }
+
+  public Double getCostUSD() {
+    return costUSD;
+  }
+
+  public void setCostUSD(Double costUSD) {
+    this.costUSD = costUSD;
+  }
+
+  public Integer getTokensUsed() {
+    return tokensUsed;
+  }
+
+  public void setTokensUsed(Integer tokensUsed) {
+    this.tokensUsed = tokensUsed;
   }
 
   public LocalDateTime getCreatedAt() {
