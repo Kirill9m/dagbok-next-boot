@@ -40,7 +40,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
         </div>
         <SettingsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="mb-6 justify-center text-center">
-          {activeTab == "tab1" && (
+          {activeTab === "tab1" && (
             <PromptEditor
               userPrompt={userPrompt}
               setUserPrompt={setUserPrompt}
@@ -51,7 +51,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
               setTimeoutId={setTimeoutId}
             />
           )}
-          {activeTab == "tab2" && (
+          {activeTab === "tab2" && (
             <ModelSelect
               selectedModel={selectedModel}
               setSelectedModel={setSelectedModel}

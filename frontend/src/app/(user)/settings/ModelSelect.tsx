@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface ModelSelectProps {
   selectedModel: string;
   setSelectedModel: (model: string) => void;
@@ -12,7 +10,7 @@ interface ModelSelectProps {
 
 const MODEL_OPTIONS = [
   { value: "openai/gpt-4o-mini", label: "GPT-4O Mini" },
-  { value: "xiaomi/mimo-v2-flash:free", label: "Xiaomi Mimo V2 Flash(free)" },
+  { value: "xiaomi/mimo-v2-flash:free", label: "Xiaomi Mimo V2 Flash (free)" },
 ];
 
 export default function ModelSelect({
@@ -28,13 +26,12 @@ export default function ModelSelect({
     if (isSaving) return;
     setIsSaving(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/model?model=${encodeURIComponent(selectedModel)}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/model`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: selectedModel }),
+        credentials: "include",
+      });
 
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);

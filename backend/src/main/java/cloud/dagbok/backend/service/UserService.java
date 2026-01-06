@@ -133,6 +133,7 @@ public class UserService {
         user.getModel());
   }
 
+  @Transactional
   public UserProfile updateUserModel(Long userId, String model) {
     UserEntity user =
         userRepository
