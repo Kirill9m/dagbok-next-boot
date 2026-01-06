@@ -132,4 +132,21 @@ public class UserService {
         user.getPrompt(),
         user.getModel());
   }
+
+  public UserProfile updateUserModel(Long userId, String model) {
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+    user.setModel(Model.fromValue(model));
+    userRepository.save(user);
+    return new UserProfile(
+        user.getId(),
+        user.getName(),
+        user.getEmail(),
+        user.getRole().name(),
+        user.getPrompt(),
+        user.getModel());
+  }
 }

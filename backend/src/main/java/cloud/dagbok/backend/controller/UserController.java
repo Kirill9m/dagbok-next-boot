@@ -82,4 +82,15 @@ public class UserController {
         .sameSite("Lax")
         .build();
   }
+
+  @PatchMapping("/model")
+  public ResponseEntity<UserProfile> updateUserModel(
+      Authentication authentication, @RequestParam String model) {
+    Principal apiPrincipal = (Principal) authentication.getPrincipal();
+    Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
+    log.info("Updating user model");
+
+    UserProfile updatedProfile = userService.updateUserModel(apiPrincipal.userId(), model);
+    return ResponseEntity.ok(updatedProfile);
+  }
 }
