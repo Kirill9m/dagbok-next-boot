@@ -48,7 +48,7 @@ const HealthBanner = () => {
 
   if (loading) {
     return (
-      <div className="bg-gray-500/80 text-white py-1 px-3 rounded-lg text-xs font-medium flex items-center gap-2">
+      <div className="flex items-center gap-2 rounded-lg bg-gray-500/80 px-3 py-1 text-xs font-medium text-white">
         <span className="animate-pulse">●</span>
         Checking...
       </div>
@@ -57,7 +57,7 @@ const HealthBanner = () => {
 
   if (error || !health) {
     return (
-      <div className="bg-red-500/90 text-white py-1 px-3 rounded-lg text-xs font-medium flex items-center gap-2">
+      <div className="flex items-center gap-2 rounded-lg bg-red-500/90 px-3 py-1 text-xs font-medium text-white">
         <span className="text-red-200">●</span>
         {error || "API Offline"}
       </div>
@@ -70,7 +70,7 @@ const HealthBanner = () => {
     <div
       className={`${
         isHealthy ? "bg-green-500/90" : "bg-red-500/90"
-      } text-white py-1 px-3 rounded-lg text-xs font-medium flex items-center gap-2`}
+      } flex items-center gap-2 rounded-lg px-3 py-1 text-xs font-medium text-white`}
     >
       <span className={isHealthy ? "text-green-200" : "text-red-200"}>●</span>
       API {health.status}

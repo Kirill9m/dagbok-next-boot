@@ -15,17 +15,17 @@ const ProfilePage = async () => {
   }
 
   return (
-    <main className={"min-h-screen flex items-center justify-center"}>
-      <div className="bg-[#2A2A2A] backdrop-blur-xl rounded-2xl p-8 w-full max-w-md shadow-2xl border border-white/10">
-        <h1 className={"text-2xl font-semibold text-center mb-6"}>Profil</h1>
-        <div className={"justify-center text-center mb-6"}>
+    <main className={"flex min-h-screen items-center justify-center"}>
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#2A2A2A] p-8 shadow-2xl backdrop-blur-xl">
+        <h1 className={"mb-6 text-center text-2xl font-semibold"}>Profil</h1>
+        <div className={"mb-6 justify-center text-center"}>
           <div>Användare: {user.name}</div>
           <div>Email: {user.email}</div>
         </div>
         <form action={logout}>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-[#FF7518] hover:bg-[#ff8833] text-white font-medium transition-all duration-300 w-full"
+            className="w-full rounded-lg bg-[#FF7518] px-4 py-2 font-medium text-white transition-all duration-300 hover:bg-[#ff8833]"
           >
             Logga ut
           </button>

@@ -54,18 +54,18 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
   };
 
   return (
-    <main className={"min-h-screen flex sm:items-center justify-center"}>
-      <div className="bg-[#2A2A2A] w-full h-screen overflow-hidden flex flex-col sm:rounded-lg sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-3xl shadow-2xl relative p-4">
-        <div className="sm:p-1 border-b border-white/10">
+    <main className={"flex min-h-screen justify-center sm:items-center"}>
+      <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[#2A2A2A] p-4 shadow-2xl sm:h-auto sm:max-h-[90vh] sm:w-full sm:max-w-3xl sm:rounded-lg">
+        <div className="border-b border-white/10 sm:p-1">
           <h2
             id="settings-modal-title"
             className="text-2xl font-semibold text-white"
           >
             Inställningar
-            <span className={"text-xs font-semibold mb-6"}>(Avancerat)</span>
+            <span className={"mb-6 text-xs font-semibold"}>(Avancerat)</span>
           </h2>
         </div>
-        <div className={"justify-center text-center mb-6"}>
+        <div className={"mb-6 justify-center text-center"}>
           <label htmlFor="prompt-textarea" className="mb-2 block pt-5">
             Prompt:
           </label>
@@ -76,19 +76,19 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
               onChange={(e) => setUserPrompt(e.target.value)}
               maxLength={maxLength}
               aria-describedby="char-count"
-              className="relative rounded-lg p-4 w-full shadow-2xl outline-none focus:ring-2 focus:ring-blue-500 bg-[#1A1A1A] min-h-[100px] text-left resize-none"
+              className="relative min-h-[100px] w-full resize-none rounded-lg bg-[#1A1A1A] p-4 text-left shadow-2xl outline-none focus:ring-2 focus:ring-blue-500"
               rows={15}
             />
           </div>
           <div
             id="char-count"
-            className="text-sm text-gray-400 mt-1 text-right"
+            className="mt-1 text-right text-sm text-gray-400"
             aria-live="polite"
           >
             {userPrompt.length}/{maxLength} tecken
           </div>
           <button
-            className="text-white mt-4 px-4 py-2 rounded bg-[#FF7518] sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-4 rounded bg-[#FF7518] px-4 py-2 text-white transition disabled:cursor-not-allowed disabled:opacity-50 sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
             onClick={handleSave}
             disabled={isSaving}
           >
@@ -97,7 +97,7 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
         </div>
       </div>
       {saveStatus && (
-        <div className="fixed bottom-4 right-4 bg-[#FF7518] text-white p-3 rounded-lg shadow-xl z-50 text-sm">
+        <div className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm text-white shadow-xl">
           {saveStatus}
         </div>
       )}

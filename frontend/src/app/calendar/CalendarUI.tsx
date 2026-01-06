@@ -84,7 +84,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   });
 
   const dateStyles =
-    "relative border-2 border-gray-700 bg-[#4A4A4A] text-white rounded-lg p-4 transform transition-all duration-300 ease-in-out hover:scale-[1.03] cursor-pointer shadow-md";
+    "relative cursor-pointer rounded-lg border-2 border-gray-700 bg-[#4A4A4A] p-4 text-white shadow-md transition-all duration-300 ease-in-out hover:scale-[1.03]";
 
   useEffect(() => {
     const loadCounts = async () => {
@@ -124,40 +124,46 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   }, [year, month, refreshKey]);
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 bg-[#2A2A2A] rounded-xl shadow-2xl text-white max-w-7xl mx-auto my-8">
-      <div className="text-center mb-6">
-        <div className="text-sm text-gray-400 mb-1 font-inter">Datum</div>
-        <div className="flex justify-center items-center gap-6">
+    <div className="mx-auto my-8 max-w-7xl rounded-xl bg-[#2A2A2A] p-4 text-white shadow-2xl sm:p-6 md:p-8">
+      <div className="mb-6 text-center">
+        <div className="font-inter mb-1 text-sm text-gray-400">Datum</div>
+        <div className="flex items-center justify-center gap-6">
           <button
             onClick={() => handleNavigate("prev")}
-            className="text-[#FF7518] text-xl font-bold p-2 rounded-full hover:bg-gray-700 transition"
+            className="flex min-h-[48px] min-w-[48px] touch-manipulation items-center justify-center rounded-full p-4 text-3xl font-bold text-[#FF7518] transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] hover:bg-gray-700 active:scale-95 active:bg-gray-600 sm:min-h-0 sm:min-w-0 sm:p-2 sm:text-xl"
+            aria-label="Föregående månad"
           >
             &lt;
           </button>
-          <div className="text-center">
-            <span className="text-2xl font-extrabold block">{year}</span>
-            <div className="text-[#FF7518] font-bold uppercase tracking-wider mt-1">
+
+          <div className="flex-1 text-center">
+            <span className="block text-3xl font-extrabold sm:text-2xl">
+              {year}
+            </span>
+            <div className="mt-1 text-base font-bold tracking-wider text-[#FF7518] uppercase sm:text-sm">
               {monthName}
             </div>
           </div>
+
           <button
             onClick={() => handleNavigate("next")}
-            className="text-[#FF7518] text-xl font-bold p-2 rounded-full hover:bg-gray-700 transition"
+            className="flex min-h-[48px] min-w-[48px] touch-manipulation items-center justify-center rounded-full p-4 text-3xl font-bold text-[#FF7518] transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] hover:bg-gray-700 active:scale-95 active:bg-gray-600 sm:min-h-0 sm:min-w-0 sm:p-2 sm:text-xl"
+            aria-label="Nästa månad"
           >
             &gt;
           </button>
         </div>
 
-        <div className="flex flex-col items-center mt-4 gap-2">
-          <div className="flex justify-center gap-1 w-full">
-            <div className="flex items-center gap-2 bg-[#4A4A4A] rounded-lg px-4 py-2 w-full max-w-md">
-              <SearchIcon className="w-5 h-5 text-gray-400" />
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <div className="flex w-full justify-center gap-1">
+            <div className="flex w-full max-w-md items-center gap-2 rounded-lg bg-[#4A4A4A] px-4 py-2">
+              <SearchIcon className="h-5 w-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Sök..."
                 maxLength={200}
                 aria-label="Sök anteckningar"
-                className="bg-transparent outline-none text-white w-full"
+                className="w-full bg-transparent text-white outline-none"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -170,7 +176,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
               {searchInput && (
                 <button
                   onClick={() => setSearchInput("")}
-                  className="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 rounded"
+                  className="rounded text-gray-400 hover:text-white focus:ring-2 focus:ring-gray-500 focus:outline-none"
                   aria-label="Rensa sökfält"
                   type="button"
                   tabIndex={0}
@@ -181,7 +187,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
             </div>
             <label
               htmlFor="prompt-toggle"
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex cursor-pointer items-center gap-2"
             >
               <input
                 type="checkbox"
@@ -191,7 +197,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 onChange={(e) => setPromptEnabled(e.target.checked)}
               />
               <AIRobotHeadIcon
-                className={`w-10 h-10 transition-colors duration-300 ${
+                className={`h-10 w-10 transition-colors duration-300 ${
                   promptEnabled ? "text-[#FF7518]" : "text-gray-400"
                 }`}
               />
@@ -199,9 +205,9 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
           </div>
 
           {/* Loading and error messages */}
-          {isSearching && <div className="text-gray-400 text-sm">Söker...</div>}
+          {isSearching && <div className="text-sm text-gray-400">Söker...</div>}
           {searchError && (
-            <div className="text-red-400 text-sm" role="alert">
+            <div className="text-sm text-red-400" role="alert">
               {searchError}
             </div>
           )}
@@ -209,17 +215,17 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
       </div>
 
       <div className="calendar mt-8">
-        <div className="hidden sm:grid grid-cols-7 text-center mb-4 font-bold text-gray-300 border-b border-gray-700 pb-2">
+        <div className="mb-4 hidden grid-cols-7 border-b border-gray-700 pb-2 text-center font-bold text-gray-300 sm:grid">
           {weekDays.map((dayName) => (
-            <div key={dayName} className="text-sm uppercase tracking-wider">
+            <div key={dayName} className="text-sm tracking-wider uppercase">
               {dayName}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-7 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-7 sm:gap-4">
           {Array.from({ length: firstDayOfMonth }, (_, i) => (
-            <div key={`empty-${i}`} className="hidden sm:block min-h-24"></div>
+            <div key={`empty-${i}`} className="hidden min-h-24 sm:block"></div>
           ))}
 
           {days.map((day) => {
@@ -259,11 +265,11 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
               >
                 <div
                   role="button"
-                  className="flex justify-between items-start mb-1"
+                  className="mb-1 flex items-start justify-between"
                 >
                   <strong className="text-lg">{day}</strong>
                   {notesCountByDay[`${year}-${month + 1}-${day}`] > 0 && (
-                    <span className="absolute -top-2 -right-2 grid min-h-6 min-w-6 place-items-center rounded-full bg-[#FF7518] py-1 px-1 text-xs font-bold text-white shadow-lg border border-white/20 z-10">
+                    <span className="absolute -top-2 -right-2 z-10 grid min-h-6 min-w-6 place-items-center rounded-full border border-white/20 bg-[#FF7518] px-1 py-1 text-xs font-bold text-white shadow-lg">
                       {notesCountByDay[`${year}-${month + 1}-${day}`]}
                     </span>
                   )}
@@ -274,11 +280,11 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   value={noteText}
                   onChange={(e) => handleNoteChange(day, e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  className="w-full h-16 sm:h-12 p-2 text-sm bg-transparent text-gray-100 rounded-xl border border-white/10 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF7518]/20"
+                  className="h-16 w-full resize-none rounded-xl border border-white/10 bg-transparent p-2 text-sm text-gray-100 focus:ring-2 focus:ring-[#FF7518]/20 focus:outline-none sm:h-12"
                 />
 
                 <button
-                  className="mt-2 w-full sm:w-auto bg-transparent text-gray-400 px-4 py-2 rounded hover:text-white hover:bg-[#FF7518] transition min-h-[44px] text-sm font-medium"
+                  className="mt-2 min-h-[44px] w-full touch-manipulation rounded bg-[#FF7518] px-4 py-2 text-sm font-medium text-white transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-[0.98] active:brightness-90 sm:w-auto sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
                   onClick={(e) => {
                     e.stopPropagation();
                     onSaveNote(year, month, day, noteText, promptEnabled);
