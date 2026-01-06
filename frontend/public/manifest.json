@@ -1,7 +1,7 @@
 {
   "name": "Dagbok cloud",
   "short_name": "Dagbok",
-  "description": "AI-Powered Notes System",
+  "description": "Time Reporting & Work Log System",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
