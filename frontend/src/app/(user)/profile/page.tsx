@@ -21,6 +21,7 @@ const ProfilePage = async () => {
         <div className={"mb-6 justify-center text-center"}>
           <div>Användare: {user.name}</div>
           <div>Email: {user.email}</div>
+          <div>Model: {user.model}</div>
         </div>
         <form action={logout}>
           <button

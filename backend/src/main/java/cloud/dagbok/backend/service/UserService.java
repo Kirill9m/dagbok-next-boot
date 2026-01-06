@@ -1,8 +1,10 @@
 package cloud.dagbok.backend.service;
 
+import static cloud.dagbok.backend.dto.note.Model.GPT_4O_MINI;
 import static cloud.dagbok.backend.utils.BCryptUtil.checkPassword;
 import static cloud.dagbok.backend.utils.BCryptUtil.hashPassword;
 
+import cloud.dagbok.backend.dto.note.Model;
 import cloud.dagbok.backend.dto.token.Token;
 import cloud.dagbok.backend.dto.user.User;
 import cloud.dagbok.backend.dto.user.UserProfile;
@@ -42,6 +44,7 @@ public class UserService {
 
       [Corrected and structured text in Swedish. For simple notes — just text. For complex notes — lists and subheaders.]
       """;
+  private static final Model DEFAULT_MODEL = GPT_4O_MINI;
 
   public UserService(
       UserRepository userRepository, TokenRepository tokenRepository, JwtUtil jwtUtil) {
@@ -64,7 +67,8 @@ public class UserService {
             user.email(),
             new java.util.ArrayList<>(),
             Role.USER,
-            DEFAULT_PROMPT));
+            DEFAULT_PROMPT,
+            DEFAULT_MODEL));
   }
 
   @Transactional
@@ -103,10 +107,10 @@ public class UserService {
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    return new UserProfile(
-        user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
+    return toUserProfile(user);
   }
 
+  @Transactional
   public UserProfile updateUserPrompt(Long userId, String newPrompt) {
     UserEntity user =
         userRepository
@@ -115,7 +119,28 @@ public class UserService {
 
     user.setPrompt(newPrompt);
     userRepository.save(user);
+    return toUserProfile(user);
+  }
+
+  @Transactional
+  public UserProfile updateUserModel(Long userId, String model) {
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+    user.setModel(Model.fromValue(model));
+    userRepository.save(user);
+    return toUserProfile(user);
+  }
+
+  private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
-        user.getId(), user.getName(), user.getEmail(), user.getRole().name(), user.getPrompt());
+        user.getId(),
+        user.getName(),
+        user.getEmail(),
+        user.getRole().name(),
+        user.getPrompt(),
+        user.getModel());
   }
 }

@@ -7,4 +7,5 @@ import java.time.LocalDateTime;
 public record NoteCreateRequest(
     @NotBlank(message = "Note text cannot be blank") String text,
     @NotNull LocalDateTime date,
-    @NotNull Boolean prompt) {}
+    @NotNull Boolean prompt,
+    @NotNull Model model) {}

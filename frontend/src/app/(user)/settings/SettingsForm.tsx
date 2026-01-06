@@ -2,6 +2,9 @@
 
 import { User } from "@/lib/props";
 import { useEffect, useState } from "react";
+import ModelSelect from "@/app/(user)/settings/ModelSelect";
+import PromptEditor from "@/app/(user)/settings/PromptEditor";
+import { SettingsTabs } from "@/app/(user)/settings/SettingsTab";
 
 interface SettingsModalProps {
   user?: User;
@@ -9,49 +12,19 @@ interface SettingsModalProps {
 
 const SettingsForm = ({ user }: SettingsModalProps) => {
   const [userPrompt, setUserPrompt] = useState(user?.prompt || "");
+  const [selectedModel, setSelectedModel] = useState(
+    user?.model || "openai/gpt-4o-mini",
+  );
   const [saveStatus, setSaveStatus] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-  const maxLength = 2000;
+  const [activeTab, setActiveTab] = useState("tab1");
 
   useEffect(() => {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [timeoutId]);
-
-  const handleSave = async () => {
-    if (isSaving) return;
-    setIsSaving(true);
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/prompt`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            newPrompt: userPrompt,
-          }),
-          credentials: "include",
-        },
-      );
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-      }
-
-      setSaveStatus("Prompt uppdaterad!");
-    } catch (error) {
-      console.error("Failed to update user prompt:", error);
-      setSaveStatus("Fel vid uppdatering av prompt.");
-    } finally {
-      setIsSaving(false);
-      if (timeoutId) clearTimeout(timeoutId);
-      const newTimeoutId = setTimeout(() => setSaveStatus(""), 3000);
-      setTimeoutId(newTimeoutId);
-    }
-  };
 
   return (
     <main className={"flex min-h-screen justify-center sm:items-center"}>
@@ -65,35 +38,30 @@ const SettingsForm = ({ user }: SettingsModalProps) => {
             <span className={"mb-6 text-xs font-semibold"}>(Avancerat)</span>
           </h2>
         </div>
-        <div className={"mb-6 justify-center text-center"}>
-          <label htmlFor="prompt-textarea" className="mb-2 block pt-5">
-            Prompt:
-          </label>
-          <div className="prose prose-invert max-w-none">
-            <textarea
-              id="prompt-textarea"
-              value={userPrompt}
-              onChange={(e) => setUserPrompt(e.target.value)}
-              maxLength={maxLength}
-              aria-describedby="char-count"
-              className="relative min-h-[100px] w-full resize-none rounded-lg bg-[#1A1A1A] p-4 text-left shadow-2xl outline-none focus:ring-2 focus:ring-blue-500"
-              rows={15}
+        <SettingsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="mb-6 justify-center text-center">
+          {activeTab === "tab1" && (
+            <PromptEditor
+              userPrompt={userPrompt}
+              setUserPrompt={setUserPrompt}
+              isSaving={isSaving}
+              setIsSaving={setIsSaving}
+              setSaveStatus={setSaveStatus}
+              timeoutId={timeoutId}
+              setTimeoutId={setTimeoutId}
             />
-          </div>
-          <div
-            id="char-count"
-            className="mt-1 text-right text-sm text-gray-400"
-            aria-live="polite"
-          >
-            {userPrompt.length}/{maxLength} tecken
-          </div>
-          <button
-            className="mt-4 rounded bg-[#FF7518] px-4 py-2 text-white transition disabled:cursor-not-allowed disabled:opacity-50 sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
-            onClick={handleSave}
-            disabled={isSaving}
-          >
-            {isSaving ? "Sparar..." : "Spara"}
-          </button>
+          )}
+          {activeTab === "tab2" && (
+            <ModelSelect
+              selectedModel={selectedModel}
+              setSelectedModel={setSelectedModel}
+              isSaving={isSaving}
+              setIsSaving={setIsSaving}
+              setSaveStatus={setSaveStatus}
+              timeoutId={timeoutId}
+              setTimeoutId={setTimeoutId}
+            />
+          )}
         </div>
       </div>
       {saveStatus && (

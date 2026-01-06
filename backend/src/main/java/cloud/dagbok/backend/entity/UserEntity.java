@@ -1,5 +1,6 @@
 package cloud.dagbok.backend.entity;
 
+import cloud.dagbok.backend.dto.note.Model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class UserEntity {
   @Column(length = 2000)
   private String prompt;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 50)
+  private Model model;
+
   public TokenEntity getToken() {
     return token;
   }
@@ -49,7 +54,8 @@ public class UserEntity {
       String email,
       List<NoteEntity> notes,
       Role role,
-      String prompt) {
+      String prompt,
+      Model model) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
@@ -57,6 +63,15 @@ public class UserEntity {
     this.notes = notes;
     this.role = role;
     this.prompt = prompt;
+    this.model = model;
+  }
+
+  public Model getModel() {
+    return model;
+  }
+
+  public void setModel(Model model) {
+    this.model = model;
   }
 
   public String getName() {

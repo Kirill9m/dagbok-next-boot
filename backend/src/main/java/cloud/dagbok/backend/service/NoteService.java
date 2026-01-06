@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +21,6 @@ public class NoteService {
   private final NoteRepository noteRepository;
   private final OpenRouterService openRouterService;
   private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
-
-  @Value("${openrouter.model}")
-  private String openRouterModel;
 
   public NoteService(
       UserRepository userRepository,
@@ -46,7 +42,7 @@ public class NoteService {
     if (request.prompt() != null && request.prompt()) {
       try {
         textToSave =
-            openRouterService.chat(openRouterModel, user.getPrompt(), request.text())
+            openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text())
                 + signature(request.date().toLocalDate().toString(), user.getName());
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
