@@ -107,13 +107,7 @@ public class UserService {
             .findByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    return new UserProfile(
-        user.getId(),
-        user.getName(),
-        user.getEmail(),
-        user.getRole().name(),
-        user.getPrompt(),
-        user.getModel());
+    return toUserProfile(user);
   }
 
   @Transactional
@@ -125,13 +119,7 @@ public class UserService {
 
     user.setPrompt(newPrompt);
     userRepository.save(user);
-    return new UserProfile(
-        user.getId(),
-        user.getName(),
-        user.getEmail(),
-        user.getRole().name(),
-        user.getPrompt(),
-        user.getModel());
+    return toUserProfile(user);
   }
 
   @Transactional
@@ -143,6 +131,10 @@ public class UserService {
 
     user.setModel(Model.fromValue(model));
     userRepository.save(user);
+    return toUserProfile(user);
+  }
+
+  private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
         user.getId(),
         user.getName(),
