@@ -275,12 +275,17 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   )}
                 </div>
 
+                {/*
+                 IMPORTANT: Font size must be at least 16px on mobile
+                 to prevent iOS from auto-zooming when the textarea is focused.
+                  Do NOT change text-base to text-sm on mobile breakpoint.
+                */}
                 <textarea
                   aria-label={`Anteckningar för ${day} ${monthName} ${year}`}
                   value={noteText}
                   onChange={(e) => handleNoteChange(day, e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  className="h-16 w-full resize-none rounded-xl border border-white/10 bg-transparent p-2 text-sm text-gray-100 focus:ring-2 focus:ring-[#FF7518]/20 focus:outline-none sm:h-12"
+                  className="h-16 w-full resize-none rounded-xl border border-white/10 bg-transparent p-3 text-base text-gray-100 focus:ring-2 focus:ring-[#FF7518]/20 focus:outline-none sm:h-12 sm:p-2 sm:text-sm"
                 />
 
                 <button
