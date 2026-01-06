@@ -31,6 +31,7 @@ const CalendarHandler = () => {
     ) => {
       if (!text.trim()) {
         setSaveStatus("Text is empty");
+        setTimeout(() => setSaveStatus(""), 3000);
         return;
       }
 
