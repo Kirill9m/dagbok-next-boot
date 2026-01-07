@@ -68,14 +68,32 @@ const CalendarHandler = () => {
           },
         );
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          const error = await res.json();
 
-        setSaveStatus("Sparat");
+          if (error.errorCode === "MONTHLY_COST_LIMIT_EXCEEDED") {
+            setSaveStatus(
+              `Gräns nådd ($${error.limit}) Byt till gratis modell`,
+            );
+            return;
+          }
+
+          throw new Error(error.message || `HTTP ${res.status}`);
+        }
+
+        const body = await res.json();
+
+        const costText =
+          body.cost && body.cost > 0
+            ? " " + Math.round(body.cost * 1000) / 1000
+            : "";
+
+        setSaveStatus("Sparat" + costText);
         setNotesData(null);
         setRefreshKey((prev) => prev + 1);
       } catch (err) {
         console.error("Failed to save note:", err);
-        setSaveStatus("Fel vid sparning");
+        setSaveStatus(err instanceof Error ? err.message : "Fel vid sparande");
       } finally {
         if (statusTimeoutRef.current) {
           clearTimeout(statusTimeoutRef.current);
