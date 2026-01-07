@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AIRobotHeadIcon, SearchIcon } from "@/app/components/icons";
+import { User } from "@/lib/props";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -16,12 +17,12 @@ interface MonthlyPlannerProps {
     day: number,
     text: string,
     prompt: boolean,
-    model: string,
   ) => void;
   refreshKey?: number;
   onSearch: (query: string) => Promise<void>;
   isSearching?: boolean;
   searchError?: string | null;
+  user?: User | undefined;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
@@ -31,6 +32,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onSearch,
   isSearching = false,
   searchError = null,
+  user,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -43,7 +45,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   >({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [model, setModel] = useState<string>("openai/gpt-4o-mini");
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -198,11 +199,24 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 checked={promptEnabled}
                 onChange={(e) => setPromptEnabled(e.target.checked)}
               />
-              <AIRobotHeadIcon
-                className={`h-10 w-10 transition-colors duration-300 ${
-                  promptEnabled ? "text-[#FF7518]" : "text-gray-400"
-                }`}
-              />
+              <div className="flex items-center gap-x-0">
+                <AIRobotHeadIcon
+                  className={`h-10 w-10 transition-colors duration-300 ${
+                    promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                  }`}
+                />
+                {user && (
+                  <div
+                    className={`drop-shadow-glow-orange text-xs font-bold tracking-wider transition-colors duration-300 ${
+                      promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                    }`}
+                  >
+                    {user?.monthlyCost &&
+                      Math.round((0.01 - user.monthlyCost) * 10000) / 10000}
+                    $
+                  </div>
+                )}
+              </div>
             </label>
           </div>
 
@@ -294,14 +308,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   className="mt-2 min-h-[44px] w-full touch-manipulation rounded bg-[#FF7518] px-4 py-2 text-sm font-medium text-white transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-[0.98] active:brightness-90 sm:w-auto sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSaveNote(
-                      year,
-                      month,
-                      day,
-                      noteText,
-                      promptEnabled,
-                      model,
-                    );
+                    onSaveNote(year, month, day, noteText, promptEnabled);
                     const noteKey = `${year}-${month + 1}-${day}`;
                     setNotes((prev) => {
                       const next = { ...prev };

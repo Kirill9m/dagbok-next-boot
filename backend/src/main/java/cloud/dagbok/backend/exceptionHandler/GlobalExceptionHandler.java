@@ -49,4 +49,16 @@ public class GlobalExceptionHandler {
         new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
+
+  @ExceptionHandler(MonthlyCostLimitExceededException.class)
+  public ResponseEntity<ErrorResponseLimit> handleMonthlyCostLimitExceeded(
+      MonthlyCostLimitExceededException e) {
+
+    ErrorResponseLimit error =
+        new ErrorResponseLimit(
+            e.getMessage(), e.getCurrentCost(), e.getLimit(), "MONTHLY_COST_LIMIT_EXCEEDED");
+
+    return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED) // 402
+        .body(error);
+  }
 }

@@ -45,4 +45,15 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
    */
   List<NoteEntity> findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
       String searchText, Long userId);
+
+  @Query(
+"""
+    SELECT COALESCE(SUM(n.costUSD), 0)
+    FROM NoteEntity n
+    WHERE n.user.id = :userId
+      AND YEAR(n.date) = :year
+      AND MONTH(n.date) = :month
+""")
+  Double getTotalCostUSDByUserIdByMonth(
+      @Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
 }

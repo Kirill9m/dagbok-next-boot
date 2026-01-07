@@ -3,6 +3,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
+import { User } from "@/lib/props";
+import { revalidateCalendarPage } from "@/app/actions/revalidate";
 
 interface Note {
   id: number;
@@ -13,7 +15,11 @@ interface NotesData {
   notes: Note[];
 }
 
-const CalendarHandler = () => {
+interface CalendarHandlerProps {
+  user?: User;
+}
+
+const CalendarHandler = ({ user }: CalendarHandlerProps) => {
   const [saveStatus, setSaveStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notesData, setNotesData] = useState<NotesData | null>(null);
@@ -38,7 +44,6 @@ const CalendarHandler = () => {
       day: number,
       text: string,
       prompt: boolean,
-      model: string,
     ) => {
       if (!text.trim()) {
         setSaveStatus("Text is empty");
@@ -64,20 +69,39 @@ const CalendarHandler = () => {
               text,
               date: isoDate,
               prompt,
-              model,
             }),
             credentials: "include",
           },
         );
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          const error = await res.json();
 
-        setSaveStatus("Sparat");
+          if (error.errorCode === "MONTHLY_COST_LIMIT_EXCEEDED") {
+            setSaveStatus(
+              `Gräns nådd (${error.limit}$) Byt till gratis modell`,
+            );
+            return;
+          }
+
+          throw new Error(error.message || `HTTP ${res.status}`);
+        }
+
+        const body = await res.json();
+
+        const costText =
+          body.cost && body.cost > 0 ? ` ($${body.cost.toFixed(6)})` : "";
+
+        setSaveStatus("Sparat" + costText);
         setNotesData(null);
         setRefreshKey((prev) => prev + 1);
+
+        if (prompt) {
+          await revalidateCalendarPage();
+        }
       } catch (err) {
         console.error("Failed to save note:", err);
-        setSaveStatus("Fel vid sparning");
+        setSaveStatus(err instanceof Error ? err.message : "Fel vid sparande");
       } finally {
         if (statusTimeoutRef.current) {
           clearTimeout(statusTimeoutRef.current);
@@ -251,6 +275,7 @@ const CalendarHandler = () => {
         onSearch={findNote}
         isSearching={isSearching}
         searchError={searchError}
+        user={user}
       />
       {isModalOpen && (
         <NotesModal
@@ -263,7 +288,7 @@ const CalendarHandler = () => {
       )}
       {saveStatus && (
         <div
-          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm text-white shadow-xl"
+          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm whitespace-pre-line text-white shadow-xl"
           role="status"
         >
           {saveStatus}

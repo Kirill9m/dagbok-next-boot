@@ -3,8 +3,10 @@ package cloud.dagbok.backend.service;
 import cloud.dagbok.backend.dto.note.*;
 import cloud.dagbok.backend.entity.NoteEntity;
 import cloud.dagbok.backend.entity.UserEntity;
+import cloud.dagbok.backend.exceptionHandler.MonthlyCostLimitExceededException;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
+import cloud.dagbok.backend.utils.PromptUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -38,12 +40,38 @@ public class NoteService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
     String textToSave;
+    Integer tokens = null;
+    Double cost = null;
 
     if (request.prompt() != null && request.prompt()) {
       try {
+        PromptUtil.ChatResult result =
+            openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text());
+
         textToSave =
-            openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text())
-                + signature(request.date().toLocalDate().toString(), user.getName());
+            result.text() + signature(request.date().toLocalDate().toString(), user.getName());
+        tokens = result.totalTokens();
+        cost = result.costUSD();
+
+        logger.info(
+            "AI generation for user {}: {} tokens, USD: {}",
+            userId,
+            result.totalTokens(),
+            result.costUSD());
+
+        if (cost != null && cost > 0) {
+          LocalDate now = LocalDate.now();
+          Double totalMonthlyCost =
+              noteRepository.getTotalCostUSDByUserIdByMonth(
+                  user.getId(), now.getYear(), now.getMonthValue());
+
+          if (totalMonthlyCost != null && totalMonthlyCost > 0.01) {
+            throw new MonthlyCostLimitExceededException(totalMonthlyCost);
+          }
+        }
+
+      } catch (MonthlyCostLimitExceededException e) {
+        throw e;
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
         textToSave =
@@ -54,14 +82,40 @@ public class NoteService {
           request.text() + signature(request.date().toLocalDate().toString(), user.getName());
     }
 
-    return saveNote(user, textToSave, request.date().toLocalDate());
+    NoteNew savedNote = saveNote(user, textToSave, request.date().toLocalDate(), tokens, cost);
+
+    if (cost != null && cost > 0) {
+      LocalDate now = LocalDate.now();
+      Double totalMonthlyCost =
+          noteRepository.getTotalCostUSDByUserIdByMonth(
+              user.getId(), now.getYear(), now.getMonthValue());
+      user.setMonthlyCost(totalMonthlyCost);
+      userRepository.save(user);
+    }
+
+    return savedNote;
   }
 
   @Transactional
-  protected NoteNew saveNote(UserEntity user, String text, LocalDate date) {
-    NoteEntity savedEntity =
-        noteRepository.save(new NoteEntity(null, user, text, date, null, null));
-    return new NoteNew(savedEntity.getId(), savedEntity.getText(), savedEntity.getDate());
+  protected NoteNew saveNote(
+      UserEntity user, String text, LocalDate date, Integer tokens, Double cost) {
+    NoteEntity note = new NoteEntity();
+    note.setUser(user);
+    note.setText(text);
+    note.setDate(date);
+    note.setTokensUsed(tokens);
+    note.setCostUSD(cost != null ? cost : 0.0);
+
+    noteRepository.save(note);
+    return convertToDTO(note);
+  }
+
+  private NoteNew convertToDTO(NoteEntity note) {
+    return new NoteNew(
+        note.getId(),
+        note.getText(),
+        note.getDate(),
+        note.getCostUSD() != null ? note.getCostUSD() : 0.0);
   }
 
   @Transactional

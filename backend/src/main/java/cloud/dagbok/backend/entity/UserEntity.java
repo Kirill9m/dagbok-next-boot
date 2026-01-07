@@ -37,6 +37,12 @@ public class UserEntity {
   @Column(nullable = false, length = 50)
   private Model model;
 
+  @Column(name = "total_costusd")
+  private Double totalCostUSD;
+
+  @Column(name = "monthly_cost")
+  private Double monthlyCost;
+
   public TokenEntity getToken() {
     return token;
   }
@@ -55,7 +61,9 @@ public class UserEntity {
       List<NoteEntity> notes,
       Role role,
       String prompt,
-      Model model) {
+      Model model,
+      Double totalCostUSD,
+      Double monthlyCost) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
@@ -64,6 +72,24 @@ public class UserEntity {
     this.role = role;
     this.prompt = prompt;
     this.model = model;
+    this.totalCostUSD = totalCostUSD;
+    this.monthlyCost = monthlyCost;
+  }
+
+  public Double getMonthlyCost() {
+    return monthlyCost;
+  }
+
+  public void setMonthlyCost(Double monthlyCost) {
+    this.monthlyCost = monthlyCost;
+  }
+
+  public Double getTotalCostUSD() {
+    return totalCostUSD;
+  }
+
+  public void setTotalCostUSD(Double totalCostUSD) {
+    this.totalCostUSD = totalCostUSD;
   }
 
   public Model getModel() {
