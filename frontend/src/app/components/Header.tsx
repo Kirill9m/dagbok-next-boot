@@ -128,16 +128,6 @@ const Header = ({ user }: HeaderProps) => {
               Logga in
             </Link>
           )}
-          <div className="flex items-center gap-1 text-gray-300">
-            {user?.monthlyCost && (
-              <>
-                <span>
-                  {Math.round((1 - 9.5 * user.monthlyCost) * 1000) / 1000}
-                </span>
-                <span>max / limit</span>
-              </>
-            )}
-          </div>
         </div>
       </header>
 

@@ -24,7 +24,9 @@ const ProfilePage = async () => {
           <div>Model: {user.model}</div>
           <div>
             Månadskostnad:{" "}
-            {user?.monthlyCost ? `${(9.5 * user.monthlyCost).toFixed(3)}` : "–"}
+            {user?.monthlyCost
+              ? `${(9.5 * user.monthlyCost).toFixed(3)}kr`
+              : "–"}
           </div>
         </div>
         <form action={logout}>

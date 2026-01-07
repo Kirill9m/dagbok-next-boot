@@ -79,7 +79,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
 
           if (error.errorCode === "MONTHLY_COST_LIMIT_EXCEEDED") {
             setSaveStatus(
-              `Gräns nådd ($${error.limit}) Byt till gratis modell`,
+              `Gräns nådd (${error.limit * 10}kr) Byt till gratis modell`,
             );
             return;
           }
@@ -91,7 +91,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
 
         const costText =
           body.cost && body.cost > 0
-            ? " " + Math.round(body.cost * 1000) / 1000
+            ? "\nKrediter: " + Math.round(body.cost * 1000) / 1000
             : "";
 
         setSaveStatus("Sparat" + costText);
@@ -290,7 +290,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
       )}
       {saveStatus && (
         <div
-          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm text-white shadow-xl"
+          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm whitespace-pre-line text-white shadow-xl"
           role="status"
         >
           {saveStatus}
