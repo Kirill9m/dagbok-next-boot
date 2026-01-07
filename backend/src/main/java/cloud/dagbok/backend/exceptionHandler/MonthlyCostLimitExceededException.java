@@ -2,10 +2,11 @@ package cloud.dagbok.backend.exceptionHandler;
 
 public class MonthlyCostLimitExceededException extends RuntimeException {
   private final Double currentCost;
-  private final Double limit = 0.1;
+  private static final Double LIMIT = 0.1;
 
   public MonthlyCostLimitExceededException(Double currentCost) {
-    super(String.format("Monthly cost limit of $0.10 exceeded. Current: $%.4f", currentCost));
+    super(
+        String.format("Monthly cost limit of $%.2f exceeded. Current: $%.4f", LIMIT, currentCost));
     this.currentCost = currentCost;
   }
 
@@ -14,6 +15,6 @@ public class MonthlyCostLimitExceededException extends RuntimeException {
   }
 
   public Double getLimit() {
-    return limit;
+    return LIMIT;
   }
 }

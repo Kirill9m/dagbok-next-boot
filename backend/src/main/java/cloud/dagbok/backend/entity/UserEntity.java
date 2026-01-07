@@ -62,7 +62,7 @@ public class UserEntity {
       Role role,
       String prompt,
       Model model,
-      double totalCostUSD,
+      Double totalCostUSD,
       Double monthlyCost) {
     this.id = id;
     this.name = name;
@@ -84,11 +84,11 @@ public class UserEntity {
     this.monthlyCost = monthlyCost;
   }
 
-  public double getTotalCostUSD() {
+  public Double getTotalCostUSD() {
     return totalCostUSD;
   }
 
-  public void setTotalCostUSD(double totalCostUSD) {
+  public void setTotalCostUSD(Double totalCostUSD) {
     this.totalCostUSD = totalCostUSD;
   }
 

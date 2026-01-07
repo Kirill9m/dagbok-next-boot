@@ -205,15 +205,17 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                     promptEnabled ? "text-[#FF7518]" : "text-gray-400"
                   }`}
                 />
-                <div
-                  className={`drop-shadow-glow-orange text-xs font-bold tracking-wider transition-colors duration-300 ${
-                    promptEnabled ? "text-[#FF7518]" : "text-gray-400"
-                  }`}
-                >
-                  {user?.monthlyCost &&
-                    Math.round((1 - 9.5 * user.monthlyCost) * 1000) / 1000}
-                  kr
-                </div>
+                {user && (
+                  <div
+                    className={`drop-shadow-glow-orange text-xs font-bold tracking-wider transition-colors duration-300 ${
+                      promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                    }`}
+                  >
+                    {user?.monthlyCost &&
+                      Math.round((0.1 - user.monthlyCost) * 9.5 * 1000) / 1000}
+                    kr
+                  </div>
+                )}
               </div>
             </label>
           </div>

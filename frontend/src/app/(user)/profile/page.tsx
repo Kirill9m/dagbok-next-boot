@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 const ProfilePage = async () => {
   const user = await getUser();
+  const COST_DISPLAY_MULTIPLIER = 9.5;
 
   if (!user) {
     redirect("/login");
@@ -24,8 +25,8 @@ const ProfilePage = async () => {
           <div>Model: {user.model}</div>
           <div>
             Månadskostnad:{" "}
-            {user?.monthlyCost
-              ? `${(9.5 * user.monthlyCost).toFixed(3)}kr`
+            {user.monthlyCost != null
+              ? `${(COST_DISPLAY_MULTIPLIER * user.monthlyCost).toFixed(3)}kr`
               : "–"}
           </div>
         </div>
