@@ -68,7 +68,9 @@ public class UserService {
             new java.util.ArrayList<>(),
             Role.USER,
             DEFAULT_PROMPT,
-            DEFAULT_MODEL));
+            DEFAULT_MODEL,
+            0.0,
+            0.0));
   }
 
   @Transactional
@@ -141,6 +143,8 @@ public class UserService {
         user.getEmail(),
         user.getRole().name(),
         user.getPrompt(),
-        user.getModel());
+        user.getModel(),
+        user.getMonthlyCost(),
+        user.getTotalCostUSD());
   }
 }

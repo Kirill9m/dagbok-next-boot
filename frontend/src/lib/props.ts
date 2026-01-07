@@ -5,6 +5,8 @@ export interface User {
   role: "ADMIN" | "USER";
   prompt: string;
   model: string;
+  monthlyCost: number;
+  totalCost: number;
 }
 
 export interface ErrorResponse {

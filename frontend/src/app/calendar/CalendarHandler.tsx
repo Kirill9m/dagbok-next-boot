@@ -38,7 +38,6 @@ const CalendarHandler = () => {
       day: number,
       text: string,
       prompt: boolean,
-      model: string,
     ) => {
       if (!text.trim()) {
         setSaveStatus("Text is empty");
@@ -64,7 +63,6 @@ const CalendarHandler = () => {
               text,
               date: isoDate,
               prompt,
-              model,
             }),
             credentials: "include",
           },

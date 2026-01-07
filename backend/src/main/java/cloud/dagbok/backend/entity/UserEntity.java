@@ -61,7 +61,9 @@ public class UserEntity {
       List<NoteEntity> notes,
       Role role,
       String prompt,
-      Model model) {
+      Model model,
+      double totalCostUSD,
+      Double monthlyCost) {
     this.id = id;
     this.name = name;
     this.password = passwordHashed;
@@ -70,6 +72,8 @@ public class UserEntity {
     this.role = role;
     this.prompt = prompt;
     this.model = model;
+    this.totalCostUSD = totalCostUSD;
+    this.monthlyCost = monthlyCost;
   }
 
   public Double getMonthlyCost() {

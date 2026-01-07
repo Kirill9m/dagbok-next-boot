@@ -16,7 +16,6 @@ interface MonthlyPlannerProps {
     day: number,
     text: string,
     prompt: boolean,
-    model: string,
   ) => void;
   refreshKey?: number;
   onSearch: (query: string) => Promise<void>;
@@ -43,7 +42,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   >({});
   const [isLoadingCounts, setIsLoadingCounts] = useState(false);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [model, setModel] = useState<string>("openai/gpt-4o-mini");
 
   const handleNavigate = (direction: "prev" | "next") => {
     setMonth((prevMonth) => {
@@ -294,14 +292,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   className="mt-2 min-h-[44px] w-full touch-manipulation rounded bg-[#FF7518] px-4 py-2 text-sm font-medium text-white transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-[0.98] active:brightness-90 sm:w-auto sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSaveNote(
-                      year,
-                      month,
-                      day,
-                      noteText,
-                      promptEnabled,
-                      model,
-                    );
+                    onSaveNote(year, month, day, noteText, promptEnabled);
                     const noteKey = `${year}-${month + 1}-${day}`;
                     setNotes((prev) => {
                       const next = { ...prev };
