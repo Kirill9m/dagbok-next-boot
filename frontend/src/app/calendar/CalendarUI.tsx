@@ -212,7 +212,8 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                     }`}
                   >
                     {user?.monthlyCost &&
-                      Math.round((0.1 - user.monthlyCost) * 1000) / 1000}
+                      Math.round((0.01 - user.monthlyCost) * 10000) / 10000}
+                    $
                   </div>
                 )}
               </div>

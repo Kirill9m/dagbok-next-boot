@@ -79,7 +79,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
 
           if (error.errorCode === "MONTHLY_COST_LIMIT_EXCEEDED") {
             setSaveStatus(
-              `Gräns nådd (${error.limit * 10}kr) Byt till gratis modell`,
+              `Gräns nådd (${error.limit}$) Byt till gratis modell`,
             );
             return;
           }

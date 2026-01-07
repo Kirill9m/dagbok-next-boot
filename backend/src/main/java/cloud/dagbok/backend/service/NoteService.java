@@ -65,7 +65,7 @@ public class NoteService {
               noteRepository.getTotalCostUSDByUserIdByMonth(
                   user.getId(), now.getYear(), now.getMonthValue());
 
-          if (totalMonthlyCost != null && totalMonthlyCost > 0.1) {
+          if (totalMonthlyCost != null && totalMonthlyCost > 0.01) {
             throw new MonthlyCostLimitExceededException(totalMonthlyCost);
           }
         }
