@@ -15,7 +15,7 @@ const CalendarPage = async () => {
     redirect("/login");
   }
 
-  return <CalendarHandler />;
+  return <CalendarHandler user={user} />;
 };
 
 export default CalendarPage;

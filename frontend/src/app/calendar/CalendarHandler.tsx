@@ -3,6 +3,8 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import CalendarUI from "@/app/calendar/CalendarUI";
 import NotesModal from "@/app/calendar/NotesModal";
+import { User } from "@/lib/props";
+import { revalidateCalendarPage } from "@/app/actions/revalidate";
 
 interface Note {
   id: number;
@@ -13,7 +15,11 @@ interface NotesData {
   notes: Note[];
 }
 
-const CalendarHandler = () => {
+interface CalendarHandlerProps {
+  user?: User;
+}
+
+const CalendarHandler = ({ user }: CalendarHandlerProps) => {
   const [saveStatus, setSaveStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notesData, setNotesData] = useState<NotesData | null>(null);
@@ -91,6 +97,10 @@ const CalendarHandler = () => {
         setSaveStatus("Sparat" + costText);
         setNotesData(null);
         setRefreshKey((prev) => prev + 1);
+
+        if (prompt) {
+          await revalidateCalendarPage();
+        }
       } catch (err) {
         console.error("Failed to save note:", err);
         setSaveStatus(err instanceof Error ? err.message : "Fel vid sparande");
@@ -267,6 +277,7 @@ const CalendarHandler = () => {
         onSearch={findNote}
         isSearching={isSearching}
         searchError={searchError}
+        user={user}
       />
       {isModalOpen && (
         <NotesModal

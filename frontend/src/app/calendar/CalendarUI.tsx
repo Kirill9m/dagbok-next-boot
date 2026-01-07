@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AIRobotHeadIcon, SearchIcon } from "@/app/components/icons";
+import { User } from "@/lib/props";
 
 interface MonthlyPlannerProps {
   onNavigateToDagbok: (
@@ -21,6 +22,7 @@ interface MonthlyPlannerProps {
   onSearch: (query: string) => Promise<void>;
   isSearching?: boolean;
   searchError?: string | null;
+  user?: User | undefined;
 }
 
 const CalendarUI: React.FC<MonthlyPlannerProps> = ({
@@ -30,6 +32,7 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   onSearch,
   isSearching = false,
   searchError = null,
+  user,
 }) => {
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
@@ -196,11 +199,21 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                 checked={promptEnabled}
                 onChange={(e) => setPromptEnabled(e.target.checked)}
               />
-              <AIRobotHeadIcon
-                className={`h-10 w-10 transition-colors duration-300 ${
-                  promptEnabled ? "text-[#FF7518]" : "text-gray-400"
-                }`}
-              />
+              <div className="flex items-center gap-x-0">
+                <AIRobotHeadIcon
+                  className={`h-10 w-10 transition-colors duration-300 ${
+                    promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                  }`}
+                />
+                <div
+                  className={`drop-shadow-glow-orange text-xs font-bold tracking-wider transition-colors duration-300 ${
+                    promptEnabled ? "text-[#FF7518]" : "text-gray-400"
+                  }`}
+                >
+                  {user?.monthlyCost &&
+                    Math.round((1 - 9.5 * user.monthlyCost) * 1000) / 1000}
+                </div>
+              </div>
             </label>
           </div>
 
