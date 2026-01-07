@@ -79,7 +79,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
 
           if (error.errorCode === "MONTHLY_COST_LIMIT_EXCEEDED") {
             setSaveStatus(
-              `Gräns nådd (${error.limit * 9.5}kr) Byt till gratis modell`,
+              `Gräns nådd (${error.limit * 10}kr) Byt till gratis modell`,
             );
             return;
           }
@@ -90,9 +90,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
         const body = await res.json();
 
         const costText =
-          body.cost && body.cost > 0
-            ? "\nKrediter: " + Math.round(body.cost * 1000) / 1000
-            : "";
+          body.cost && body.cost > 0 ? ` ($${body.cost.toFixed(6)})` : "";
 
         setSaveStatus("Sparat" + costText);
         setNotesData(null);

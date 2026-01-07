@@ -23,7 +23,6 @@ public class NoteService {
   private final NoteRepository noteRepository;
   private final OpenRouterService openRouterService;
   private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
-  private static final double SEK_MULTIPLIER = 9.5;
 
   public NoteService(
       UserRepository userRepository,
@@ -105,7 +104,7 @@ public class NoteService {
     note.setText(text);
     note.setDate(date);
     note.setTokensUsed(tokens);
-    note.setCostUSD(cost != null ? cost * SEK_MULTIPLIER : 0.0);
+    note.setCostUSD(cost != null ? cost : 0.0);
 
     noteRepository.save(note);
     return convertToDTO(note);
