@@ -56,6 +56,9 @@ export default function PromptEditor({
         Anpassa systemprompt. Ändringar här påverkar hur dina anteckningar
         bearbetas och formateras.
       </p>
+      <a className="text-[#FF7518] hover:underline" href="/info/prompts">
+        Examples
+      </a>
       <div className="prose prose-invert max-w-none">
         <textarea
           id="prompt-textarea"
