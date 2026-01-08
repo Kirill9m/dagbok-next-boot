@@ -46,16 +46,15 @@ public class UserService {
 
   @Transactional
   public void registerUser(User user) {
-    if (userRepository.existsByEmail(user.email())) {
-      throw new ConflictException(user.email() + " is already registered");
+    if (userRepository.existsByUsername(user.username())) {
+      throw new ConflictException(user.username() + " is already registered");
     }
 
     userRepository.save(
         new UserEntity(
             null,
-            user.name(),
             hashPassword(user.password()),
-            user.email(),
+            user.username(),
             new java.util.ArrayList<>(),
             Role.USER,
             DEFAULT_PROMPT,
@@ -65,17 +64,17 @@ public class UserService {
   }
 
   @Transactional
-  public Token loginUser(String email, String password) {
+  public Token loginUser(String username, String password) {
     UserEntity user =
         userRepository
-            .findByEmail(email)
+            .findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("Invalid credentials"));
 
     if (!checkPassword(password, user.getPassword())) {
       throw new EntityNotFoundException("Invalid credentials");
     }
 
-    String accessToken = jwtUtil.generateToken(email, 1000 * 60 * 60 * 24 * 7L);
+    String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 60 * 24 * 7L);
 
     TokenEntity tokenEntity =
         tokenRepository
@@ -94,10 +93,10 @@ public class UserService {
   }
 
   @Transactional(readOnly = true)
-  public UserProfile getUserProfile(String email) {
+  public UserProfile getUserProfile(String username) {
     UserEntity user =
         userRepository
-            .findByEmail(email)
+            .findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
     return toUserProfile(user);
@@ -130,8 +129,7 @@ public class UserService {
   private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
         user.getId(),
-        user.getName(),
-        user.getEmail(),
+        user.getUsername(),
         user.getRole().name(),
         user.getPrompt(),
         user.getModel(),

@@ -88,7 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    UserEntity user = userRepository.findByEmail(email).orElse(null);
+    UserEntity user = userRepository.findByUsername(email).orElse(null);
 
     if (user == null) {
       log.warn("User not found for email: {} on path: {}", email, path);
@@ -98,7 +98,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     log.debug("Authenticated user: {} for path: {}", email, path);
 
-    Principal principal = new Principal(user.getId(), user.getEmail());
+    Principal principal = new Principal(user.getId(), user.getUsername());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
             principal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));

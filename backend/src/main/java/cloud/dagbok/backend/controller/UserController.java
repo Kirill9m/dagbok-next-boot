@@ -39,7 +39,7 @@ public class UserController {
   @PostMapping("/login")
   public ResponseEntity<Void> login(@Valid @RequestBody UserCheck user) {
     log.info("User login attempt");
-    Token tokens = userService.loginUser(user.email(), user.password());
+    Token tokens = userService.loginUser(user.username(), user.password());
 
     ResponseCookie cookie = createCookie("accessToken", tokens.token(), 60 * 60 * 24 * 7);
     log.info("User logged in successfully");
@@ -53,7 +53,7 @@ public class UserController {
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
     log.info("Fetching user info");
 
-    UserProfile profile = userService.getUserProfile(apiPrincipal.email());
+    UserProfile profile = userService.getUserProfile(apiPrincipal.username());
     return ResponseEntity.ok(profile);
   }
 
