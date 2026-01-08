@@ -65,7 +65,7 @@ const AboutPage = () => {
               target="_blank"
               rel="noreferrer"
             >
-              Live iframe viewer
+              Live iframe
             </a>
           </li>
           <li>
@@ -121,6 +121,17 @@ const AboutPage = () => {
               rel="noreferrer"
             >
               Quality Assurance
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-white">Prompts:</span>{" "}
+            <a
+              className="text-blue-400 hover:underline"
+              href="/info/prompts"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Examples
             </a>
           </li>
         </ul>
