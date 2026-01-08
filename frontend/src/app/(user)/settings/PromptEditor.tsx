@@ -57,7 +57,7 @@ export default function PromptEditor({
         bearbetas och formateras.
       </p>
       <a className="text-[#FF7518] hover:underline" href="/info/prompts">
-        Examples
+        Exempel
       </a>
       <div className="prose prose-invert max-w-none">
         <textarea
