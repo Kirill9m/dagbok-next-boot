@@ -2,13 +2,23 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import React from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 
-const AboutPage = () => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    alert("Copied to clipboard!");
+const InfoPage = () => {
+  const [saveStatus, setSaveStatus] = useState("");
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setSaveStatus("Copied to clipboard!");
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      setSaveStatus("Failed to copy to clipboard. Please try again.");
+    } finally {
+      setTimeout(() => {
+        setSaveStatus("");
+      }, 2000);
+    }
   };
 
   return (
@@ -32,11 +42,19 @@ const AboutPage = () => {
           </ReactMarkdown>
         </section>
       ))}
+      {saveStatus && (
+        <div
+          className="fixed right-4 bottom-4 z-50 rounded-lg bg-[#FF7518] p-3 text-sm whitespace-pre-line text-white shadow-xl"
+          role="status"
+        >
+          {saveStatus}
+        </div>
+      )}
     </div>
   );
 };
 
-export default AboutPage;
+export default InfoPage;
 
 const prompts = [
   {
