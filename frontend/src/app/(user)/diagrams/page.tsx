@@ -3,7 +3,7 @@ import Link from "next/link";
 const DiagramsPage = () => {
   return (
     <div>
-      <Link href="/about">Tillbaka</Link>
+      <Link href="/info">Tillbaka</Link>
       <iframe
         id="diagram-main"
         title="Diagrams iframe"

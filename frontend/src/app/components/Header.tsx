@@ -15,7 +15,7 @@ import {
 
 const navLinks = [
   { name: "Dagbok cloud", href: "/" },
-  { name: "Om oss", href: "/about" },
+  { name: "Info", href: "/info" },
 ];
 
 const calendarLink = {
