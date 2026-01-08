@@ -270,13 +270,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   setChosenDay(day);
                   onNavigateToDagbok(year, month, day, noteText);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    setChosenDay(day);
-                    onNavigateToDagbok(year, month, day, noteText);
-                  }
-                }}
                 role="button"
               >
                 <div
@@ -303,7 +296,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
                   onClick={(e) => e.stopPropagation()}
                   className="h-16 w-full resize-none rounded-xl border border-white/10 bg-transparent p-3 text-base text-gray-100 focus:ring-2 focus:ring-[#FF7518]/20 focus:outline-none sm:h-12 sm:p-2 sm:text-sm"
                 />
-
                 <button
                   className="mt-2 min-h-[44px] w-full touch-manipulation rounded bg-[#FF7518] px-4 py-2 text-sm font-medium text-white transition-all duration-100 select-none [-webkit-tap-highlight-color:transparent] active:scale-[0.98] active:brightness-90 sm:w-auto sm:bg-transparent sm:text-gray-400 sm:hover:bg-[#FF7518] sm:hover:text-white"
                   onClick={(e) => {
