@@ -11,7 +11,11 @@ import org.hibernate.proxy.HibernateProxy;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "user",
+      cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
   List<NoteEntity> notes = new ArrayList<>();
 
   @Id
@@ -44,10 +48,14 @@ public class UserEntity {
   private Model model;
 
   @Column(name = "total_costusd")
-  private Double totalCostUSD;
+  private Double totalCostUSD = 0.0;
+
+  ;
 
   @Column(name = "monthly_cost")
-  private Double monthlyCost;
+  private Double monthlyCost = 0.0;
+
+  ;
 
   public TokenEntity getToken() {
     return token;
@@ -59,27 +67,13 @@ public class UserEntity {
 
   public UserEntity() {}
 
-  public UserEntity(
-      Long id,
-      String passwordHashed,
-      String username,
-      LocalDateTime createdAt,
-      List<NoteEntity> notes,
-      Role role,
-      String prompt,
-      Model model,
-      Double totalCostUSD,
-      Double monthlyCost) {
-    this.id = id;
+  public UserEntity(String passwordHashed, String username, Role role, String prompt, Model model) {
     this.password = passwordHashed;
     this.username = username;
     this.createdAt = LocalDateTime.now();
-    this.notes = notes;
     this.role = role;
     this.prompt = prompt;
     this.model = model;
-    this.totalCostUSD = totalCostUSD;
-    this.monthlyCost = monthlyCost;
   }
 
   public Double getMonthlyCost() {

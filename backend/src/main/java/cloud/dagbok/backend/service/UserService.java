@@ -17,7 +17,6 @@ import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -56,16 +55,11 @@ public class UserService {
 
     userRepository.save(
         new UserEntity(
-            null,
             hashPassword(user.password()),
             user.username(),
-            null,
-            new ArrayList<>(),
             Role.USER,
             DEFAULT_PROMPT,
-            DEFAULT_MODEL,
-            0.0,
-            0.0));
+            DEFAULT_MODEL));
   }
 
   @Transactional
@@ -79,7 +73,7 @@ public class UserService {
       throw new EntityNotFoundException("Invalid credentials");
     }
 
-    String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 60 * 24 * 7L);
+    String accessToken = jwtUtil.generateToken(user.getUsername(), 1000 * 60 * 60 * 24 * 7L);
 
     TokenEntity tokenEntity =
         tokenRepository
@@ -105,16 +99,7 @@ public class UserService {
     UserEntity user =
         userRepository.save(
             new UserEntity(
-                null,
-                hashPassword(randomPassword),
-                username,
-                null,
-                new ArrayList<>(),
-                Role.DEMO,
-                DEFAULT_PROMPT,
-                DEFAULT_MODEL,
-                0.0,
-                0.0));
+                hashPassword(randomPassword), username, Role.DEMO, DEFAULT_PROMPT, DEFAULT_MODEL));
 
     String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 5L);
 
