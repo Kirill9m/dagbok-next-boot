@@ -39,10 +39,27 @@ public class UserController {
   @PostMapping("/login")
   public ResponseEntity<Void> login(@Valid @RequestBody UserCheck user) {
     log.info("User login attempt");
-    Token tokens = userService.loginUser(user.email(), user.password());
+    Token tokens = userService.loginUser(user.username(), user.password());
 
     ResponseCookie cookie = createCookie("accessToken", tokens.token(), 60 * 60 * 24 * 7);
     log.info("User logged in successfully");
+
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+  }
+
+  /**
+   * Creates a demo user account with a 5-minute session.
+   * Note: This endpoint should be protected with rate limiting to prevent abuse.
+   * Consider implementing IP-based rate limiting or CAPTCHA protection.
+   */
+  @PostMapping("/demo")
+  public ResponseEntity<Void> demo() {
+    log.info("Demo user login attempt");
+    Token token = userService.demoLogin();
+
+    ResponseCookie cookie = createCookie("accessToken", token.token(), 60 * 5);
+
+    log.info("Demo user session created successfully");
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
@@ -53,7 +70,7 @@ public class UserController {
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");
     log.info("Fetching user info");
 
-    UserProfile profile = userService.getUserProfile(apiPrincipal.email());
+    UserProfile profile = userService.getUserProfile(apiPrincipal.username());
     return ResponseEntity.ok(profile);
   }
 
@@ -89,5 +106,15 @@ public class UserController {
     UserProfile updatedProfile =
         userService.updateUserModel(apiPrincipal.userId(), request.model());
     return ResponseEntity.ok(updatedProfile);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<Void> logout(
+      @CookieValue(name = "accessToken", required = false) String token) {
+    if (token != null && !token.isEmpty()) {
+      userService.invalidateToken(token);
+    }
+    ResponseCookie cookie = createCookie("accessToken", "", 0);
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
 }

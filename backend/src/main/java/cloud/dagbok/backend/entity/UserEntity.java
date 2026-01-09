@@ -2,26 +2,33 @@ package cloud.dagbok.backend.entity;
 
 import cloud.dagbok.backend.dto.note.Model;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
 @Table(name = "users")
 public class UserEntity {
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "user",
+      cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
   List<NoteEntity> notes = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
   private String password;
 
-  @Column(nullable = false, unique = true)
-  private String email;
+  @Column(nullable = false, unique = true, length = 50)
+  private String username;
+
+  @CreationTimestamp private LocalDateTime createdAt;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private TokenEntity token;
@@ -37,11 +44,11 @@ public class UserEntity {
   @Column(nullable = false, length = 50)
   private Model model;
 
-  @Column(name = "total_costusd")
-  private Double totalCostUSD;
+  @Column(name = "total_costusd", nullable = false)
+  private Double totalCostUSD = 0.0;
 
-  @Column(name = "monthly_cost")
-  private Double monthlyCost;
+  @Column(name = "monthly_cost", nullable = false)
+  private Double monthlyCost = 0.0;
 
   public TokenEntity getToken() {
     return token;
@@ -53,27 +60,12 @@ public class UserEntity {
 
   public UserEntity() {}
 
-  public UserEntity(
-      Long id,
-      String name,
-      String passwordHashed,
-      String email,
-      List<NoteEntity> notes,
-      Role role,
-      String prompt,
-      Model model,
-      Double totalCostUSD,
-      Double monthlyCost) {
-    this.id = id;
-    this.name = name;
+  public UserEntity(String passwordHashed, String username, Role role, String prompt, Model model) {
     this.password = passwordHashed;
-    this.email = email;
-    this.notes = notes;
+    this.username = username;
     this.role = role;
     this.prompt = prompt;
     this.model = model;
-    this.totalCostUSD = totalCostUSD;
-    this.monthlyCost = monthlyCost;
   }
 
   public Double getMonthlyCost() {
@@ -100,24 +92,16 @@ public class UserEntity {
     this.model = model;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public String getPassword() {
     return password;
   }
 
-  public String getEmail() {
-    return email;
+  public String getUsername() {
+    return username;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public List<NoteEntity> getNotes() {
@@ -146,6 +130,10 @@ public class UserEntity {
 
   public void setPrompt(String prompt) {
     this.prompt = prompt;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
   @Override

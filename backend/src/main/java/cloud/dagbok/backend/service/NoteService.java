@@ -49,7 +49,7 @@ public class NoteService {
             openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text());
 
         textToSave =
-            result.text() + signature(request.date().toLocalDate().toString(), user.getName());
+            result.text() + signature(request.date().toLocalDate().toString(), user.getUsername());
         tokens = result.totalTokens();
         cost = result.costUSD();
 
@@ -75,11 +75,11 @@ public class NoteService {
       } catch (Exception e) {
         logger.error("AI generation failed for user {}, falling back to original text", userId, e);
         textToSave =
-            request.text() + signature(request.date().toLocalDate().toString(), user.getName());
+            request.text() + signature(request.date().toLocalDate().toString(), user.getUsername());
       }
     } else {
       textToSave =
-          request.text() + signature(request.date().toLocalDate().toString(), user.getName());
+          request.text() + signature(request.date().toLocalDate().toString(), user.getUsername());
     }
 
     NoteNew savedNote = saveNote(user, textToSave, request.date().toLocalDate(), tokens, cost);
@@ -183,7 +183,7 @@ public class NoteService {
         updatedEntity.getDeletedAt());
   }
 
-  private String signature(String date, String name) {
+  private String signature(String date, String username) {
     return """
 
     ***
@@ -194,7 +194,7 @@ public class NoteService {
 
     Generated with ❤️ by dagbok.cloud
     """
-        .formatted(date, name);
+        .formatted(date, username);
   }
 
   @Transactional(readOnly = true)

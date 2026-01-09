@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String path = request.getRequestURI();
     return path.equals("/user/login")
         || path.equals("/user/register")
+        || path.equals("/user/demo")
+        || path.equals("/user/logout")
         || path.equals("/actuator/health")
         || path.equals("/api/health")
         || path.equals("/api/status")
@@ -46,7 +49,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
       throws ServletException, IOException {
 
     String path = request.getRequestURI();
@@ -69,9 +74,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    String email;
+    String username;
     try {
-      email = jwtUtil.getUsernameFromToken(token);
+      username = jwtUtil.getUsernameFromToken(token);
     } catch (io.jsonwebtoken.ExpiredJwtException e) {
       log.warn("Expired JWT token for path: {}", path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
@@ -82,23 +87,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    if (email == null) {
+    if (username == null) {
       log.warn("Token does not contain user info for path: {}", path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not contain user info");
       return;
     }
 
-    UserEntity user = userRepository.findByEmail(email).orElse(null);
+    UserEntity user = userRepository.findByUsername(username).orElse(null);
 
     if (user == null) {
-      log.warn("User not found for email: {} on path: {}", email, path);
+      log.warn("User not found for username: {} on path: {}", username, path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found for provided token");
       return;
     }
 
-    log.debug("Authenticated user: {} for path: {}", email, path);
+    log.debug("Authenticated user: {} for path: {}", username, path);
 
-    Principal principal = new Principal(user.getId(), user.getEmail());
+    Principal principal = new Principal(user.getId(), user.getUsername());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
             principal, null, AuthorityUtils.createAuthorityList("ROLE_API_USER"));

@@ -16,7 +16,7 @@ interface NotesData {
 }
 
 interface CalendarHandlerProps {
-  user?: User;
+  user: User;
 }
 
 const CalendarHandler = ({ user }: CalendarHandlerProps) => {

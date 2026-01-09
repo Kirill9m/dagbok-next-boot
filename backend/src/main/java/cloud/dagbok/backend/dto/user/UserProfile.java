@@ -4,8 +4,7 @@ import cloud.dagbok.backend.dto.note.Model;
 
 public record UserProfile(
     Long id,
-    String name,
-    String email,
+    String username,
     String role,
     String prompt,
     Model model,

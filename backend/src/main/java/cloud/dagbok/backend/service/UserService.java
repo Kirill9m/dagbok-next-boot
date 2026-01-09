@@ -16,6 +16,10 @@ import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,36 +50,31 @@ public class UserService {
 
   @Transactional
   public void registerUser(User user) {
-    if (userRepository.existsByEmail(user.email())) {
-      throw new ConflictException(user.email() + " is already registered");
+    if (userRepository.existsByUsername(user.username())) {
+      throw new ConflictException(user.username() + " is already registered");
     }
 
     userRepository.save(
         new UserEntity(
-            null,
-            user.name(),
             hashPassword(user.password()),
-            user.email(),
-            new java.util.ArrayList<>(),
+            user.username(),
             Role.USER,
             DEFAULT_PROMPT,
-            DEFAULT_MODEL,
-            0.0,
-            0.0));
+            DEFAULT_MODEL));
   }
 
   @Transactional
-  public Token loginUser(String email, String password) {
+  public Token loginUser(String username, String password) {
     UserEntity user =
         userRepository
-            .findByEmail(email)
+            .findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("Invalid credentials"));
 
     if (!checkPassword(password, user.getPassword())) {
       throw new EntityNotFoundException("Invalid credentials");
     }
 
-    String accessToken = jwtUtil.generateToken(email, 1000 * 60 * 60 * 24 * 7L);
+    String accessToken = jwtUtil.generateToken(user.getUsername(), 1000 * 60 * 60 * 24 * 7L);
 
     TokenEntity tokenEntity =
         tokenRepository
@@ -93,11 +92,29 @@ public class UserService {
     return new Token(accessToken);
   }
 
+  @Transactional
+  public Token demoLogin() {
+    String username = "demo_" + UUID.randomUUID().toString().substring(0, 8);
+
+    UserEntity user =
+        userRepository.save(
+            new UserEntity(null, username, Role.DEMO, DEFAULT_PROMPT, DEFAULT_MODEL));
+
+    String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 5L);
+
+    TokenEntity tokenEntity = new TokenEntity();
+    tokenEntity.setUser(user);
+    tokenEntity.setToken(accessToken);
+    tokenRepository.save(tokenEntity);
+
+    return new Token(accessToken);
+  }
+
   @Transactional(readOnly = true)
-  public UserProfile getUserProfile(String email) {
+  public UserProfile getUserProfile(String username) {
     UserEntity user =
         userRepository
-            .findByEmail(email)
+            .findByUsername(username)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
     return toUserProfile(user);
@@ -130,12 +147,23 @@ public class UserService {
   private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
         user.getId(),
-        user.getName(),
-        user.getEmail(),
+        user.getUsername(),
         user.getRole().name(),
         user.getPrompt(),
         user.getModel(),
         user.getMonthlyCost(),
         user.getTotalCostUSD());
+  }
+
+  public void invalidateToken(String token) {
+    tokenRepository.findByToken(token).ifPresent(tokenRepository::delete);
+  }
+
+  @Scheduled(cron = "0 */10 * * * *")
+  public void cleanupExpiredDemoUsers() {
+    LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
+    List<UserEntity> expiredDemoUsers =
+        userRepository.findByRoleAndCreatedAtBefore(Role.DEMO, fiveMinutesAgo);
+    userRepository.deleteAll(expiredDemoUsers);
   }
 }

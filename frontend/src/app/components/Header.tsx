@@ -12,6 +12,7 @@ import {
   HomeIcon,
   LoginIcon,
 } from "@/app/components/icons";
+import SessionTimer from "@/app/components/SessionTimer";
 
 const navLinks = [
   { name: "Dagbok cloud", href: "/" },
@@ -115,20 +116,22 @@ const Header = ({ user }: HeaderProps) => {
             })}
           </nav>
         </div>
-        <div className="flex items-center gap-4">
-          {user ? (
-            <span className="truncate text-sm text-gray-300">
-              Hej, {user.name}
-            </span>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-lg bg-[#FF7518] px-4 py-2 text-sm transition-colors hover:bg-[#ff8833]"
-            >
-              Logga in
-            </Link>
-          )}
-        </div>
+        {user?.role === "DEMO" ? null : (
+          <div className="flex items-center gap-4">
+            {user ? (
+              <span className="truncate text-sm text-gray-300">
+                Hej, {user.username}
+              </span>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-lg bg-[#FF7518] px-4 py-2 text-sm transition-colors hover:bg-[#ff8833]"
+              >
+                Logga in
+              </Link>
+            )}
+          </div>
+        )}
       </header>
 
       {/* Mobile Bottom Navigation */}
