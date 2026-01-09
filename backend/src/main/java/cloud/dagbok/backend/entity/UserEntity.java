@@ -66,7 +66,6 @@ public class UserEntity {
   public UserEntity(String passwordHashed, String username, Role role, String prompt, Model model) {
     this.password = passwordHashed;
     this.username = username;
-    this.createdAt = LocalDateTime.now();
     this.role = role;
     this.prompt = prompt;
     this.model = model;
