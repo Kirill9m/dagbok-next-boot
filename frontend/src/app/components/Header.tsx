@@ -118,11 +118,9 @@ const Header = ({ user }: HeaderProps) => {
         </div>
         <div className="flex items-center gap-4">
           {user ? (
-            user.role === "DEMO" ? (
-              <SessionTimer user={user} className="flex" text="Demo:" />
-            ) : (
-              <span className="text-sm text-gray-400">Hej</span>
-            )
+            <span className="truncate text-sm text-gray-300">
+              Hej, {user.username}
+            </span>
           ) : (
             <Link
               href="/login"
