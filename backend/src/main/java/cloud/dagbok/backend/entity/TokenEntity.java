@@ -1,14 +1,14 @@
 package cloud.dagbok.backend.entity;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tokens")
 public class TokenEntity {
   @Id
-  @Column(nullable = false)
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @OneToOne
   @JoinColumn(name = "user_id", nullable = false)
@@ -19,17 +19,17 @@ public class TokenEntity {
 
   public TokenEntity() {}
 
-  public TokenEntity(Long id, UserEntity user, String token) {
+  public TokenEntity(UUID id, UserEntity user, String token) {
     this.id = id;
     this.user = user;
     this.token = token;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

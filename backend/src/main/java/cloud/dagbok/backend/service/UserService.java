@@ -146,7 +146,6 @@ public class UserService {
 
   private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
-        user.getId(),
         user.getUsername(),
         user.getRole().name(),
         user.getPrompt(),
