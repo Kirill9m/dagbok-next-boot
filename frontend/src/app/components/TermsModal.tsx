@@ -24,7 +24,7 @@ const TermsModal: FC<TermsModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[#2A2A2A]"
+      className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[#2A2A2A]/50"
       onClick={onClose}
     >
       <div

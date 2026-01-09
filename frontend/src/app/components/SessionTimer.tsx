@@ -13,6 +13,12 @@ interface SessionTimerProps {
 const DEMO_SESSION_KEY = "demoSessionStart";
 const DEMO_SESSION_DURATION = 5 * 60 * 1000;
 
+/**
+ * SessionTimer component for demo user sessions.
+ * Note: This timer relies on client-side localStorage and can be manipulated by users.
+ * The actual session expiration is enforced server-side by JWT token expiration (5 minutes).
+ * This component provides user-friendly visual feedback but does not control access.
+ */
 export default function SessionTimer({
   user,
   text,
@@ -66,7 +72,7 @@ export default function SessionTimer({
 
   return (
     <div
-      className={`items-center gap-2 text-sm transition-colors ${
+      className={`flex items-center gap-2 text-sm transition-colors ${
         isWarning ? "text-red-500/70" : "text-gray-400"
       } ${className || ""}`}
     >

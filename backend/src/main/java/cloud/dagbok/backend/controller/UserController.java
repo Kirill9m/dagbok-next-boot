@@ -47,6 +47,11 @@ public class UserController {
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
 
+  /**
+   * Creates a demo user account with a 5-minute session.
+   * Note: This endpoint should be protected with rate limiting to prevent abuse.
+   * Consider implementing IP-based rate limiting or CAPTCHA protection.
+   */
   @PostMapping("/demo")
   public ResponseEntity<Void> demo() {
     log.info("Demo user login attempt");
@@ -104,7 +109,11 @@ public class UserController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<Void> logout() {
+  public ResponseEntity<Void> logout(
+      @CookieValue(name = "accessToken", required = false) String token) {
+    if (token != null && !token.isEmpty()) {
+      userService.invalidateToken(token);
+    }
     ResponseCookie cookie = createCookie("accessToken", "", 0);
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }

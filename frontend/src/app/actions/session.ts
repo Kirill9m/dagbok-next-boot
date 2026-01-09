@@ -38,7 +38,11 @@ export async function requireAuth(): Promise<User> {
   const user = await getUser();
 
   if (!user) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+    const apiBase =
+      process.env.INTERNAL_API_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      "http://localhost:8081";
+    await fetch(`${apiBase}/user/logout`, {
       method: "POST",
     }).catch(() => {});
 

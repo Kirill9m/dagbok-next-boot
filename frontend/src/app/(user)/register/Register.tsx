@@ -84,6 +84,10 @@ const Register = () => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full rounded-xl border border-white/20 bg-transparent p-3 text-gray-100 transition-all duration-300 focus:border-transparent focus:ring-2 focus:ring-[#FF7518]/30 focus:outline-none"
               required
+              pattern="^[A-Za-z0-9_-]{3,50}$"
+              minLength={3}
+              maxLength={50}
+              title="3–50 tecken: endast bokstäver, siffror, understreck (_) och bindestreck (-)."
             />
           </div>
 
