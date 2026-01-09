@@ -7,8 +7,11 @@ import { User } from "@/lib/props";
 interface SessionTimerProps {
   user: User | null;
   text?: string;
-  className: string;
+  className?: string;
 }
+
+const DEMO_SESSION_KEY = "demoSessionStart";
+const DEMO_SESSION_DURATION = 5 * 60 * 1000;
 
 export default function SessionTimer({
   user,
@@ -19,29 +22,26 @@ export default function SessionTimer({
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      localStorage.removeItem("demoSessionStart");
+    if (!user || user.role !== "DEMO") {
+      localStorage.removeItem(DEMO_SESSION_KEY);
       return;
     }
 
-    if (user?.role !== "DEMO") {
-      localStorage.removeItem("demoSessionStart");
-      return;
-    }
-
-    const startTimeStr = localStorage.getItem("demoSessionStart");
-    const startTime = startTimeStr ? parseInt(startTimeStr) : Date.now();
+    const startTimeStr = localStorage.getItem(DEMO_SESSION_KEY);
+    const parsedTime = startTimeStr ? parseInt(startTimeStr, 10) : null;
+    const startTime =
+      parsedTime && !isNaN(parsedTime) ? parsedTime : Date.now();
 
     if (!startTimeStr) {
-      localStorage.setItem("demoSessionStart", startTime.toString());
+      localStorage.setItem(DEMO_SESSION_KEY, startTime.toString());
     }
 
     const updateTimer = () => {
       const elapsed = Date.now() - startTime;
-      const remaining = 5 * 60 * 1000 + 2 * 1000 - elapsed;
+      const remaining = DEMO_SESSION_DURATION - elapsed;
 
       if (remaining <= 0) {
-        localStorage.removeItem("demoSessionStart");
+        localStorage.removeItem(DEMO_SESSION_KEY);
         router.push("/");
         router.refresh();
         setTimeLeft(0);

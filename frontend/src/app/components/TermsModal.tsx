@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 
 interface TermsModalProps {
   isOpen: boolean;
@@ -6,12 +6,37 @@ interface TermsModalProps {
 }
 
 const TermsModal: FC<TermsModalProps> = ({ isOpen, onClose }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[#2A2A2A]">
-      <div className="max-h-[80vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-[#2A2A2A] p-6 shadow-lg">
-        <h1 className="mb-6 text-3xl font-bold">Användarvillkor</h1>
+    <div
+      className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[#2A2A2A]"
+      onClick={onClose}
+    >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="max-h-[80vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-[#2A2A2A] p-6 shadow-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h1 id="modal-title" className="mb-6 text-3xl font-bold">
+          Användarvillkor
+        </h1>
 
         <section className="mb-4">
           <h2 className="mb-2 text-xl font-semibold">

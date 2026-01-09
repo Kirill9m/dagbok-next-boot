@@ -2,6 +2,7 @@ package cloud.dagbok.backend.entity;
 
 import cloud.dagbok.backend.dto.note.Model;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +22,12 @@ public class UserEntity {
 
   @Column(nullable = false, unique = true)
   private String username;
+
+  @Column(
+      name = "created_at",
+      nullable = false,
+      columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+  private LocalDateTime createdAt;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private TokenEntity token;
@@ -56,6 +63,7 @@ public class UserEntity {
       Long id,
       String passwordHashed,
       String username,
+      LocalDateTime createdAt,
       List<NoteEntity> notes,
       Role role,
       String prompt,
@@ -65,6 +73,7 @@ public class UserEntity {
     this.id = id;
     this.password = passwordHashed;
     this.username = username;
+    this.createdAt = LocalDateTime.now();
     this.notes = notes;
     this.role = role;
     this.prompt = prompt;
@@ -135,6 +144,14 @@ public class UserEntity {
 
   public void setPrompt(String prompt) {
     this.prompt = prompt;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
   }
 
   @Override

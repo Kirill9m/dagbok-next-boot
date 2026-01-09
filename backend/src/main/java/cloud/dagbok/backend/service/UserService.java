@@ -16,8 +16,11 @@ import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.UUID;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +60,7 @@ public class UserService {
             null,
             hashPassword(user.password()),
             user.username(),
+            null,
             new ArrayList<>(),
             Role.USER,
             DEFAULT_PROMPT,
@@ -97,13 +101,15 @@ public class UserService {
   @Transactional
   public Token demoLogin() {
     String username = "demo_" + UUID.randomUUID().toString().substring(0, 8);
+    String randomPassword = UUID.randomUUID().toString();
 
     UserEntity user =
         userRepository.save(
             new UserEntity(
                 null,
-                hashPassword("demo"),
+                hashPassword(randomPassword),
                 username,
+                null,
                 new ArrayList<>(),
                 Role.DEMO,
                 DEFAULT_PROMPT,
@@ -164,5 +170,11 @@ public class UserService {
         user.getModel(),
         user.getMonthlyCost(),
         user.getTotalCostUSD());
+  }
+
+  @Scheduled(cron = "0 * * * * *")
+  public void cleanupExpiredDemoUsers() {
+    userRepository.deleteByRoleAndCreatedAtBefore(
+        Role.DEMO, Instant.now().minus(Duration.ofMinutes(5)));
   }
 }

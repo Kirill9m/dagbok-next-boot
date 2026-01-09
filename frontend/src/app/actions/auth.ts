@@ -8,10 +8,12 @@ export async function logout() {
   const accessToken = cookieStore.get("accessToken");
 
   if (accessToken?.value) {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/logout`, {
       method: "POST",
       credentials: "include",
-    }).catch(() => {});
+    }).catch((error) => {
+      console.error("Logout API call failed:", error);
+    });
   }
 
   cookieStore.delete("accessToken");

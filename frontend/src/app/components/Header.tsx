@@ -118,7 +118,11 @@ const Header = ({ user }: HeaderProps) => {
         </div>
         <div className="flex items-center gap-4">
           {user ? (
-            <SessionTimer user={user} className={"flex"} text={"Demo:"} />
+            user.role === "DEMO" ? (
+              <SessionTimer user={user} className="flex" text="Demo:" />
+            ) : (
+              <span className="text-sm text-gray-400">Hej</span>
+            )
           ) : (
             <Link
               href="/login"

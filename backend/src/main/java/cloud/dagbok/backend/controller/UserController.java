@@ -3,8 +3,6 @@ package cloud.dagbok.backend.controller;
 import cloud.dagbok.backend.dto.token.Token;
 import cloud.dagbok.backend.dto.user.*;
 import cloud.dagbok.backend.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.Objects;
@@ -107,15 +105,10 @@ public class UserController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<?> logout(HttpServletResponse response) {
-    Cookie cookie = new Cookie("accessToken", null);
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge(0);
-    cookie.setSecure(cookieSecure);
-
-    response.addCookie(cookie);
-
-    return ResponseEntity.ok().body(Map.of("success", true, "message", "Logged out successfully"));
+  public ResponseEntity<?> logout() {
+    ResponseCookie cookie = createCookie("accessToken", "", 0);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body(Map.of("success", true, "message", "Logged out successfully"));
   }
 }

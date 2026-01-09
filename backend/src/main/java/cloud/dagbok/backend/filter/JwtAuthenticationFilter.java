@@ -74,9 +74,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    String email;
+    String username;
     try {
-      email = jwtUtil.getUsernameFromToken(token);
+      username = jwtUtil.getUsernameFromToken(token);
     } catch (io.jsonwebtoken.ExpiredJwtException e) {
       log.warn("Expired JWT token for path: {}", path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
@@ -87,21 +87,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    if (email == null) {
+    if (username == null) {
       log.warn("Token does not contain user info for path: {}", path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not contain user info");
       return;
     }
 
-    UserEntity user = userRepository.findByUsername(email).orElse(null);
+    UserEntity user = userRepository.findByUsername(username).orElse(null);
 
     if (user == null) {
-      log.warn("User not found for email: {} on path: {}", email, path);
+      log.warn("User not found for email: {} on path: {}", username, path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found for provided token");
       return;
     }
 
-    log.debug("Authenticated user: {} for path: {}", email, path);
+    log.debug("Authenticated user: {} for path: {}", username, path);
 
     Principal principal = new Principal(user.getId(), user.getUsername());
     UsernamePasswordAuthenticationToken authentication =

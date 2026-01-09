@@ -63,7 +63,6 @@ const Register = () => {
       setMessage(e instanceof Error ? e.message : "Ett fel uppstod");
     } finally {
       setLoading(false);
-      setMessage("Registrering lyckades! Du kan nu logga in.");
     }
   };
 
@@ -73,7 +72,7 @@ const Register = () => {
         <h1 className="mb-6 text-center text-2xl font-semibold">Register</h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <label htmlFor="email" className="mb-2 block text-sm">
+          <label htmlFor="username" className="mb-2 block text-sm">
             Användarnamn
           </label>
           <div>

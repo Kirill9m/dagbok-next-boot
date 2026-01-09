@@ -183,7 +183,7 @@ public class NoteService {
         updatedEntity.getDeletedAt());
   }
 
-  private String signature(String date, String name) {
+  private String signature(String date, String username) {
     return """
 
     ***
@@ -194,7 +194,7 @@ public class NoteService {
 
     Generated with ❤️ by dagbok.cloud
     """
-        .formatted(date, name);
+        .formatted(date, username);
   }
 
   @Transactional(readOnly = true)

@@ -14,36 +14,30 @@ export default function HomePage({ user }: HomePageProps) {
   const [loading, setLoading] = useState(false);
 
   const demoLogin = async (e: React.FormEvent) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
-    setTimeout(() => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/demo`, {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/demo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Login failed");
-          router.push("/calendar");
-          router.refresh();
-        })
-        .catch(() => {
-          alert(
-            "Något gick fel vid skapandet av demokontot. Försök igen senare.",
-          );
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 10000);
+      });
+      if (!res.ok) throw new Error("Login failed");
+      router.push("/calendar");
+      router.refresh();
+    } catch {
+      alert("Något gick fel vid skapandet av demokontot. Försök igen senare.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
       <h1 className="mb-2 text-3xl font-bold text-white">Dagbok Cloud</h1>
 
-      <p className="mb-5 mb-8 max-w-xl text-gray-300">
+      <p className="mb-8 max-w-xl text-gray-300">
         Work in progress — a time reporting system currently under development.
       </p>
 

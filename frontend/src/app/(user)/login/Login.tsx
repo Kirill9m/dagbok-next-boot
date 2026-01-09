@@ -41,13 +41,13 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="mb-2 block text-sm">
+            <label htmlFor="username" className="mb-2 block text-sm">
               Användarnamn
             </label>
             <input
               id="username"
               type="text"
-              placeholder="du@example.com"
+              placeholder="användarnamn"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full rounded-xl border border-white/20 bg-transparent p-3 text-gray-100 transition-all duration-300 focus:border-transparent focus:ring-2 focus:ring-[#FF7518]/30 focus:outline-none"
