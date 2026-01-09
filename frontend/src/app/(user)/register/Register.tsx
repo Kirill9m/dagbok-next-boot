@@ -124,7 +124,11 @@ const Register = () => {
             Jag har läst och accepterar{" "}
             <button
               type="button"
-              onClick={() => setShowTerms(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowTerms(true);
+              }}
               className="text-[#FF7518] underline"
             >
               användarvillkoren

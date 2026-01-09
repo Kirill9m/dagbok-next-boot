@@ -10,6 +10,7 @@ const TermsModal: FC<TermsModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (!isOpen) return;
+    dialogRef.current?.focus();
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -31,6 +32,7 @@ const TermsModal: FC<TermsModalProps> = ({ isOpen, onClose }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        tabIndex={-1}
         className="max-h-[80vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-[#2A2A2A] p-6 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >

@@ -96,7 +96,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     UserEntity user = userRepository.findByUsername(username).orElse(null);
 
     if (user == null) {
-      log.warn("User not found for email: {} on path: {}", username, path);
+      log.warn("User not found for username: {} on path: {}", username, path);
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found for provided token");
       return;
     }

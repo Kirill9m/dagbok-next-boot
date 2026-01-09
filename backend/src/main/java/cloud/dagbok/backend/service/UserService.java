@@ -16,8 +16,7 @@ import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
-import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -172,9 +171,10 @@ public class UserService {
         user.getTotalCostUSD());
   }
 
-  @Scheduled(cron = "0 * * * * *")
+  @Scheduled(cron = "0 0 * * * *")
   public void cleanupExpiredDemoUsers() {
-    userRepository.deleteByRoleAndCreatedAtBefore(
-        Role.DEMO, Instant.now().minus(Duration.ofMinutes(5)));
+    LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
+
+    userRepository.deleteByRoleAndCreatedAtBefore(Role.DEMO, fiveMinutesAgo);
   }
 }

@@ -4,7 +4,6 @@ import cloud.dagbok.backend.dto.token.Token;
 import cloud.dagbok.backend.dto.user.*;
 import cloud.dagbok.backend.service.UserService;
 import jakarta.validation.Valid;
-import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ public class UserController {
 
     ResponseCookie cookie = createCookie("accessToken", token.token(), 60 * 5);
 
-    log.info("Demo user created: {}", token.token().substring(0, 20) + "...");
+    log.info("Demo user session created successfully");
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
@@ -105,10 +104,8 @@ public class UserController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<?> logout() {
+  public ResponseEntity<Void> logout() {
     ResponseCookie cookie = createCookie("accessToken", "", 0);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .body(Map.of("success", true, "message", "Logged out successfully"));
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
 }
