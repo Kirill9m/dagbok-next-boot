@@ -25,7 +25,7 @@ public class UserEntity {
 
   private String password;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false, unique = true, length = 50)
   private String username;
 
   @CreationTimestamp private LocalDateTime createdAt;
@@ -44,10 +44,10 @@ public class UserEntity {
   @Column(nullable = false, length = 50)
   private Model model;
 
-  @Column(name = "total_costusd")
+  @Column(name = "total_costusd", nullable = false)
   private Double totalCostUSD = 0.0;
 
-  @Column(name = "monthly_cost")
+  @Column(name = "monthly_cost", nullable = false)
   private Double monthlyCost = 0.0;
 
   public TokenEntity getToken() {
