@@ -50,12 +50,8 @@ public class UserEntity {
   @Column(name = "total_costusd")
   private Double totalCostUSD = 0.0;
 
-  ;
-
   @Column(name = "monthly_cost")
   private Double monthlyCost = 0.0;
-
-  ;
 
   public TokenEntity getToken() {
     return token;
