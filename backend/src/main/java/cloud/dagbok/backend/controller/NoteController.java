@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,7 +51,7 @@ public class NoteController {
   }
 
   @DeleteMapping("/notes/{noteId}")
-  public ResponseEntity<Note> deleteNote(@PathVariable Long noteId, Authentication authentication) {
+  public ResponseEntity<Note> deleteNote(@PathVariable UUID noteId, Authentication authentication) {
 
     Principal apiPrincipal = (Principal) authentication.getPrincipal();
     Objects.requireNonNull(apiPrincipal, "Principal cannot be null");

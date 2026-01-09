@@ -1,3 +1,5 @@
 package cloud.dagbok.backend.dto.note;
 
-public record NoteItem(Long id, String text) {}
+import java.util.UUID;
+
+public record NoteItem(UUID id, String text) {}
