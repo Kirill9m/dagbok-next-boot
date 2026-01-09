@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Om oss - Dagbok Cloud",
+  title: "Info - Dagbok Cloud",
   description:
     "AI-Powered Notes System for professional work logs and personal thoughts",
 };

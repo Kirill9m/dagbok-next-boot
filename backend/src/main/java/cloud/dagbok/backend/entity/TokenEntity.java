@@ -11,7 +11,7 @@ public class TokenEntity {
   private UUID id;
 
   @OneToOne
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false, unique = true)
   private UserEntity user;
 
   @Column(nullable = false, unique = true)
@@ -19,8 +19,7 @@ public class TokenEntity {
 
   public TokenEntity() {}
 
-  public TokenEntity(UUID id, UserEntity user, String token) {
-    this.id = id;
+  public TokenEntity(UserEntity user, String token) {
     this.user = user;
     this.token = token;
   }
