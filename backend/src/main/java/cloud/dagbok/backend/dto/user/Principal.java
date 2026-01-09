@@ -1,3 +1,5 @@
 package cloud.dagbok.backend.dto.user;
 
-public record Principal(Long userId, String username) {}
+import java.util.UUID;
+
+public record Principal(UUID userId, String username) {}

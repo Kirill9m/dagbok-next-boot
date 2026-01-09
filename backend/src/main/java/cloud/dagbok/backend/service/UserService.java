@@ -121,7 +121,7 @@ public class UserService {
   }
 
   @Transactional
-  public UserProfile updateUserPrompt(Long userId, String newPrompt) {
+  public UserProfile updateUserPrompt(UUID userId, String newPrompt) {
     UserEntity user =
         userRepository
             .findById(userId)
@@ -133,7 +133,7 @@ public class UserService {
   }
 
   @Transactional
-  public UserProfile updateUserModel(Long userId, String model) {
+  public UserProfile updateUserModel(UUID userId, String model) {
     UserEntity user =
         userRepository
             .findById(userId)
@@ -146,7 +146,6 @@ public class UserService {
 
   private UserProfile toUserProfile(UserEntity user) {
     return new UserProfile(
-        user.getId(),
         user.getUsername(),
         user.getRole().name(),
         user.getPrompt(),

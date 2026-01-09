@@ -3,14 +3,15 @@ package cloud.dagbok.backend.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "notes")
 public class NoteEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
@@ -40,7 +41,7 @@ public class NoteEntity {
   public NoteEntity() {}
 
   public NoteEntity(
-      Long id,
+      UUID id,
       UserEntity user,
       String text,
       LocalDate date,
@@ -78,11 +79,11 @@ public class NoteEntity {
     return text;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 

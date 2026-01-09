@@ -5,14 +5,15 @@ import cloud.dagbok.backend.entity.NoteEntity;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
-  Optional<NoteEntity> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
+public interface NoteRepository extends JpaRepository<NoteEntity, UUID> {
+  Optional<NoteEntity> findByIdAndUserIdAndDeletedAtIsNull(UUID id, UUID userId);
 
-  List<NoteEntity> findByDateAndUserIdAndDeletedAtIsNull(LocalDate date, Long userId);
+  List<NoteEntity> findByDateAndUserIdAndDeletedAtIsNull(LocalDate date, UUID userId);
 
   @Query(
 """
@@ -26,7 +27,7 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     ORDER BY n.date ASC
 """)
   List<NotesCountByDate> countNotesByDate(
-      @Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+      @Param("userId") UUID userId, @Param("year") int year, @Param("month") int month);
 
   /**
    * Finds notes containing the specified text for a given user.
@@ -44,7 +45,7 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
    * @return list of notes containing the search text
    */
   List<NoteEntity> findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
-      String searchText, Long userId);
+      String searchText, UUID userId);
 
   @Query(
 """
@@ -55,5 +56,5 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
       AND MONTH(n.date) = :month
 """)
   Double getTotalCostUSDByUserIdByMonth(
-      @Param("userId") Long userId, @Param("year") int year, @Param("month") int month);
+      @Param("userId") UUID userId, @Param("year") int year, @Param("month") int month);
 }

@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class NoteService {
     this.openRouterService = openRouterService;
   }
 
-  public NoteNew createNewUserNote(NoteCreateRequest request, Long userId) {
+  public NoteNew createNewUserNote(NoteCreateRequest request, UUID userId) {
     UserEntity user =
         userRepository
             .findById(userId)
@@ -119,7 +120,7 @@ public class NoteService {
   }
 
   @Transactional
-  public Note deleteNote(Long noteId, Long userId) {
+  public Note deleteNote(UUID noteId, UUID userId) {
     NoteEntity noteToDelete =
         noteRepository
             .findByIdAndUserIdAndDeletedAtIsNull(noteId, userId)
@@ -140,7 +141,7 @@ public class NoteService {
   }
 
   @Transactional(readOnly = true)
-  public NoteResponse getNoteByDate(Long userId, LocalDateTime dateTime) {
+  public NoteResponse getNoteByDate(UUID userId, LocalDateTime dateTime) {
     LocalDate date = dateTime.toLocalDate();
 
     List<NoteEntity> entities = noteRepository.findByDateAndUserIdAndDeletedAtIsNull(date, userId);
@@ -152,7 +153,7 @@ public class NoteService {
   }
 
   @Transactional(readOnly = true)
-  public NoteItemWithDate getNotesByMonth(Long userId, int year, int month) {
+  public NoteItemWithDate getNotesByMonth(UUID userId, int year, int month) {
     if (month < 1 || month > 12) {
       throw new IllegalArgumentException("Month must be between 1 and 12, got: " + month);
     }
@@ -164,7 +165,7 @@ public class NoteService {
   }
 
   @Transactional
-  public Note updateUserNote(Long id, @NotBlank String text, Long userId) {
+  public Note updateUserNote(UUID id, @NotBlank String text, UUID userId) {
     NoteEntity noteEntity =
         noteRepository
             .findByIdAndUserIdAndDeletedAtIsNull(id, userId)
@@ -198,7 +199,7 @@ public class NoteService {
   }
 
   @Transactional(readOnly = true)
-  public NoteResponse findNotesByText(Long userId, String searchText) {
+  public NoteResponse findNotesByText(UUID userId, String searchText) {
     List<NoteEntity> entities =
         noteRepository.findByTextContainingIgnoreCaseAndUserIdAndDeletedAtIsNull(
             searchText, userId);
