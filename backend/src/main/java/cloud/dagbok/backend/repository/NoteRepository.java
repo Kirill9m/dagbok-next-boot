@@ -49,7 +49,7 @@ public interface NoteRepository extends JpaRepository<NoteEntity, UUID> {
 
   @Query(
 """
-    SELECT COALESCE(SUM(n.costUSD), 0)
+    SELECT COALESCE(SUM(n.costUSD), 0.0)
     FROM NoteEntity n
     WHERE n.user.id = :userId
       AND YEAR(n.date) = :year
