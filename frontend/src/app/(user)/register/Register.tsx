@@ -84,7 +84,6 @@ const Register = () => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full rounded-xl border border-white/20 bg-transparent p-3 text-gray-100 transition-all duration-300 focus:border-transparent focus:ring-2 focus:ring-[#FF7518]/30 focus:outline-none"
               required
-              pattern="^[A-Za-z0-9_-]{3,50}$"
               minLength={3}
               maxLength={50}
               title="3–50 tecken: endast bokstäver, siffror, understreck (_) och bindestreck (-)."
@@ -147,12 +146,13 @@ const Register = () => {
           >
             {loading ? "Registrerar..." : "Registrera"}
           </button>
-          <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
         </form>
 
         {message && (
           <p className="mt-4 text-center text-sm text-gray-300">{message}</p>
         )}
+
+        <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
 
         <div className="mt-6 text-center text-sm">
           <a

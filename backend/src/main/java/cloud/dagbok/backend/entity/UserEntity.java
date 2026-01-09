@@ -136,10 +136,6 @@ public class UserEntity {
     return createdAt;
   }
 
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
   @Override
   public final boolean equals(Object o) {
     if (this == o) return true;

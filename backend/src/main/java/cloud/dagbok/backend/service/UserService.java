@@ -95,12 +95,10 @@ public class UserService {
   @Transactional
   public Token demoLogin() {
     String username = "demo_" + UUID.randomUUID().toString().substring(0, 8);
-    String randomPassword = UUID.randomUUID().toString();
 
     UserEntity user =
         userRepository.save(
-            new UserEntity(
-                hashPassword(randomPassword), username, Role.DEMO, DEFAULT_PROMPT, DEFAULT_MODEL));
+            new UserEntity(null, username, Role.DEMO, DEFAULT_PROMPT, DEFAULT_MODEL));
 
     String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 5L);
 

@@ -47,6 +47,11 @@ export default async function RootLayout({
     >
       <body className="min-h-screen overflow-x-hidden bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] pb-20 md:pb-0">
         <Header user={user} />
+        <SessionTimer
+          user={user}
+          text="Session expires in:"
+          className="fixed top-4 right-4"
+        />
         {children}
       </body>
     </html>

@@ -117,7 +117,7 @@ const Header = ({ user }: HeaderProps) => {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          {user ? (
+          {user && user.role === "DEMO" ? (
             <span className="truncate text-sm text-gray-300">
               Hej, {user.username}
             </span>
