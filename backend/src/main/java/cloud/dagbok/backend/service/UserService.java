@@ -16,6 +16,8 @@ import cloud.dagbok.backend.repository.TokenRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +57,7 @@ public class UserService {
             null,
             hashPassword(user.password()),
             user.username(),
-            new java.util.ArrayList<>(),
+            new ArrayList<>(),
             Role.USER,
             DEFAULT_PROMPT,
             DEFAULT_MODEL,
@@ -86,6 +88,33 @@ public class UserService {
                   return newToken;
                 });
 
+    tokenEntity.setToken(accessToken);
+    tokenRepository.save(tokenEntity);
+
+    return new Token(accessToken);
+  }
+
+  @Transactional
+  public Token demoLogin() {
+    String username = "demo_" + UUID.randomUUID().toString().substring(0, 8);
+
+    UserEntity user =
+        userRepository.save(
+            new UserEntity(
+                null,
+                hashPassword("demo"),
+                username,
+                new ArrayList<>(),
+                Role.DEMO,
+                DEFAULT_PROMPT,
+                DEFAULT_MODEL,
+                0.0,
+                0.0));
+
+    String accessToken = jwtUtil.generateToken(username, 1000 * 60 * 5L);
+
+    TokenEntity tokenEntity = new TokenEntity();
+    tokenEntity.setUser(user);
     tokenEntity.setToken(accessToken);
     tokenRepository.save(tokenEntity);
 

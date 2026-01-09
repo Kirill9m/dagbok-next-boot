@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { User } from "@/lib/props";
 
 const getUser = async (): Promise<User | null> => {
@@ -10,11 +11,7 @@ const getUser = async (): Promise<User | null> => {
       return null;
     }
 
-    const apiBase =
-      process.env.INTERNAL_API_URL ||
-      process.env.NEXT_PUBLIC_API_URL ||
-      "http://localhost:8081";
-    const res = await fetch(`${apiBase}/user/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
       method: "GET",
       headers: {
         Cookie: `accessToken=${accessToken.value}`,
@@ -32,5 +29,19 @@ const getUser = async (): Promise<User | null> => {
     return null;
   }
 };
+
+export async function requireAuth(): Promise<User> {
+  const user = await getUser();
+
+  if (!user) {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+      method: "POST",
+    }).catch(() => {});
+
+    redirect("/");
+  }
+
+  return user;
+}
 
 export default getUser;

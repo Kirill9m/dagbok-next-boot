@@ -1,8 +1,7 @@
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  role: "ADMIN" | "USER";
+  username: string;
+  role: "ADMIN" | "USER" | "DEMO";
   prompt: string;
   model: string;
   monthlyCost: number;

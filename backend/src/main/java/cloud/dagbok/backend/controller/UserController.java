@@ -3,7 +3,10 @@ package cloud.dagbok.backend.controller;
 import cloud.dagbok.backend.dto.token.Token;
 import cloud.dagbok.backend.dto.user.*;
 import cloud.dagbok.backend.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,18 @@ public class UserController {
 
     ResponseCookie cookie = createCookie("accessToken", tokens.token(), 60 * 60 * 24 * 7);
     log.info("User logged in successfully");
+
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+  }
+
+  @PostMapping("/demo")
+  public ResponseEntity<Void> demo() {
+    log.info("Demo user login attempt");
+    Token token = userService.demoLogin();
+
+    ResponseCookie cookie = createCookie("accessToken", token.token(), 60 * 5);
+
+    log.info("Demo user created: {}", token.token().substring(0, 20) + "...");
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
@@ -89,5 +104,18 @@ public class UserController {
     UserProfile updatedProfile =
         userService.updateUserModel(apiPrincipal.userId(), request.model());
     return ResponseEntity.ok(updatedProfile);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<?> logout(HttpServletResponse response) {
+    Cookie cookie = new Cookie("accessToken", null);
+    cookie.setPath("/");
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(0);
+    cookie.setSecure(cookieSecure);
+
+    response.addCookie(cookie);
+
+    return ResponseEntity.ok().body(Map.of("success", true, "message", "Logged out successfully"));
   }
 }

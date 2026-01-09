@@ -39,6 +39,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 auth.requestMatchers(
                         "/user/login",
                         "/user/register",
+                        "/user/demo",
+                        "/user/logout",
                         "/actuator/health",
                         "/api/health",
                         "/api/status",

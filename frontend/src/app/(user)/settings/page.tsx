@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import getUser from "@/app/actions/session";
-import { redirect } from "next/navigation";
+import { requireAuth } from "@/app/actions/session";
 import SettingsForm from "@/app/(user)/settings/SettingsForm";
 
 export const metadata: Metadata = {
@@ -8,11 +7,7 @@ export const metadata: Metadata = {
 };
 
 const settingsPage = async () => {
-  const user = await getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
+  const user = await requireAuth();
 
   return <SettingsForm user={user} />;
 };

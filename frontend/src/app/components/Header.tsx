@@ -118,7 +118,7 @@ const Header = ({ user }: HeaderProps) => {
         <div className="flex items-center gap-4">
           {user ? (
             <span className="truncate text-sm text-gray-300">
-              Hej, {user.name}
+              Hej, {user.username}
             </span>
           ) : (
             <Link
