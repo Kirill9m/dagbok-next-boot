@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
@@ -27,11 +28,7 @@ public class UserEntity {
   @Column(nullable = false, unique = true)
   private String username;
 
-  @Column(
-      name = "created_at",
-      nullable = false,
-      columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-  private LocalDateTime createdAt;
+  @CreationTimestamp private LocalDateTime createdAt;
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private TokenEntity token;
