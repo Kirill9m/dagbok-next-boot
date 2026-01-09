@@ -157,7 +157,11 @@ public class UserService {
         user.getTotalCostUSD());
   }
 
-  @Scheduled(cron = "0 */10 * * * *")
+  public void invalidateToken(String token) {
+    tokenRepository.findByToken(token).ifPresent(tokenRepository::delete);
+  }
+
+  @Scheduled(cron = "0 * * * * *")
   public void cleanupExpiredDemoUsers() {
     LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
     List<UserEntity> expiredDemoUsers =

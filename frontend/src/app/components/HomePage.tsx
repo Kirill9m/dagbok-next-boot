@@ -23,11 +23,42 @@ export default function HomePage({ user }: HomePageProps) {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Login failed");
+
+      if (!res.ok) {
+        let errorMessage =
+          "Serverfel vid skapandet av demokontot. Försök igen senare.";
+
+        try {
+          const data = await res.json();
+          if (
+            data &&
+            typeof data.message === "string" &&
+            data.message.trim() !== ""
+          ) {
+            errorMessage = data.message;
+          }
+        } catch {
+          // Ignore JSON parsing errors and fall back to the default message.
+        }
+
+        throw new Error(errorMessage);
+      }
+
       router.push("/calendar");
       router.refresh();
-    } catch {
-      alert("Något gick fel vid skapandet av demokontot. Försök igen senare.");
+    } catch (error) {
+      let message =
+        "Något gick fel vid skapandet av demokontot. Försök igen senare.";
+
+      if (error instanceof TypeError) {
+        // Likely a network or CORS error from fetch.
+        message =
+          "Nätverksfel vid skapandet av demokontot. Kontrollera din anslutning och försök igen.";
+      } else if (error instanceof Error && error.message) {
+        message = error.message;
+      }
+
+      alert(message);
     } finally {
       setLoading(false);
     }

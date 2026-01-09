@@ -25,6 +25,11 @@ public class UserEntity {
 
   private String password;
 
+  /**
+   * Username field - replaces the previous 'email' field.
+   * Note: When migrating existing databases, ensure data is properly migrated from 'email' to 'username'.
+   * Migration should handle the removal of 'email' and 'name' columns.
+   */
   @Column(nullable = false, unique = true, length = 50)
   private String username;
 
