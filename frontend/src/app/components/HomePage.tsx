@@ -52,9 +52,31 @@ export default function HomePage({ user }: HomePageProps) {
           <button
             onClick={demoLogin}
             disabled={loading}
-            className="mb-10 w-full rounded-xl bg-[#FF7518]/70 p-3 font-medium text-white transition-all duration-300 hover:bg-[#ff8833] disabled:opacity-60"
+            className="mb-10 flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF7518]/70 p-3 font-medium text-white transition-all duration-300 hover:bg-[#ff8833] disabled:opacity-60"
           >
             {loading ? "Skapar testkonto" : "Begär testkonto"}
+            {loading && (
+              <svg
+                className="h-5 w-5 animate-spin text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+            )}
           </button>
         ) : null}
         <AppPreview />

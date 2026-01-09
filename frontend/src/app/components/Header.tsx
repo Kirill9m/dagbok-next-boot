@@ -12,6 +12,7 @@ import {
   HomeIcon,
   LoginIcon,
 } from "@/app/components/icons";
+import SessionTimer from "@/app/components/SessionTimer";
 
 const navLinks = [
   { name: "Dagbok cloud", href: "/" },
@@ -117,9 +118,7 @@ const Header = ({ user }: HeaderProps) => {
         </div>
         <div className="flex items-center gap-4">
           {user ? (
-            <span className="truncate text-sm text-gray-300">
-              Hej, {user.username}
-            </span>
+            <SessionTimer user={user} className={"flex"} text={"Demo:"} />
           ) : (
             <Link
               href="/login"

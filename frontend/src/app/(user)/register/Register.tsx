@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import TermsModal from "@/app/components/TermsModal";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -9,7 +10,9 @@ const Register = () => {
   const [passwordRepeat, setPasswordRepeat] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [agree, setAgree] = useState(false);
   const router = useRouter();
+  const [showTerms, setShowTerms] = useState(false);
 
   const validatePassword = (pwd: string): string | null => {
     if (pwd.length < 8) return "Lösenordet måste vara minst 8 tecken";
@@ -25,6 +28,12 @@ const Register = () => {
     setMessage("");
     if (password !== passwordRepeat) {
       setMessage("Lösenord stämmer inte");
+      setLoading(false);
+      return;
+    }
+
+    if (!agree) {
+      setMessage("Du måste godkänna villkoren för att registrera dig.");
       setLoading(false);
       return;
     }
@@ -54,6 +63,7 @@ const Register = () => {
       setMessage(e instanceof Error ? e.message : "Ett fel uppstod");
     } finally {
       setLoading(false);
+      setMessage("Registrering lyckades! Du kan nu logga in.");
     }
   };
 
@@ -106,6 +116,22 @@ const Register = () => {
               required
             />
           </div>
+          <label className="mb-4 block">
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />{" "}
+            Jag har läst och accepterar{" "}
+            <button
+              type="button"
+              onClick={() => setShowTerms(true)}
+              className="text-[#FF7518] underline"
+            >
+              användarvillkoren
+            </button>
+            .
+          </label>
 
           <button
             type="submit"
@@ -114,6 +140,7 @@ const Register = () => {
           >
             {loading ? "Registrerar..." : "Registrera"}
           </button>
+          <TermsModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
         </form>
 
         {message && (

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { requireAuth } from "@/app/actions/session";
 import { logout } from "@/app/actions/auth";
+import LogoutButton from "@/app/components/LogoutButton";
 
 export const metadata: Metadata = {
   title: "Användarprofil | Dagbok",
@@ -24,12 +25,7 @@ const ProfilePage = async () => {
           </div>
         </div>
         <form action={logout}>
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-[#FF7518] px-4 py-2 font-medium text-white transition-all duration-300 hover:bg-[#ff8833]"
-          >
-            Logga ut
-          </button>
+          <LogoutButton />
         </form>
       </div>
     </main>

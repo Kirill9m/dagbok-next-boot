@@ -11,7 +11,11 @@ const getUser = async (): Promise<User | null> => {
       return null;
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+    const apiBase =
+      process.env.INTERNAL_API_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      "http://localhost:8081";
+    const res = await fetch(`${apiBase}/user/me`, {
       method: "GET",
       headers: {
         Cookie: `accessToken=${accessToken.value}`,
