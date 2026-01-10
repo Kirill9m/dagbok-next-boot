@@ -35,7 +35,13 @@ export default function PromptEditor({
       );
 
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
+        const error = await res.json();
+
+        if (error.error === "Too many requests") {
+          const msg = `För många förfrågningar. Försök igen om ${error.retryAfter} sekunder`;
+          setSaveStatus(msg);
+          return;
+        }
       }
 
       setSaveStatus("Prompt uppdaterad!");

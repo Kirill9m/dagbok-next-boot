@@ -84,7 +84,11 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
             return;
           }
 
-          throw new Error(error.message || `HTTP ${res.status}`);
+          if (error.error === "Too many requests") {
+            const msg = `För många förfrågningar. Försök igen om ${error.retryAfter} sekunder`;
+            setSaveStatus(msg);
+            return;
+          }
         }
 
         const body = await res.json();
@@ -130,6 +134,17 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
           credentials: "include",
         },
       );
+
+      if (!res.ok) {
+        const error = await res.json();
+
+        if (error.error === "Too many requests") {
+          const msg = `För många förfrågningar. Försök igen om ${error.retryAfter} sekunder`;
+          setSaveStatus(msg);
+          return;
+        }
+      }
+
       if (res.ok) {
         const data = await res.json();
         setNotesData(data);
