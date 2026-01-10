@@ -1,6 +1,10 @@
 # Dagbok Time Reporting System
 
-**A Full-Stack Project for Small Business Time Reporting (Next.js & Spring Boot)**
+**Dagbok — a smart calendar
+
+A full-stack project with a focus on simple design, flexibility, and the integration of artificial intelligence into everyday tasks.
+
+Next.js & Spring Boot)**
 
 🚀 Project Deployment
 
