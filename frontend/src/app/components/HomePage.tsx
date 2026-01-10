@@ -17,20 +17,26 @@ export default function HomePage({ user }: HomePageProps) {
   const [countdown, setCountdown] = useState<number>(0);
 
   useEffect(() => {
-    const saved = localStorage.getItem("demoRateLimitUnlock");
-    if (saved) {
-      const unlockTime = parseInt(saved);
-      const remaining = Math.max(
-        0,
-        Math.ceil((unlockTime - Date.now()) / 1000),
-      );
-      if (remaining > 0) {
-        setCountdown(remaining);
-        setRetryAfter(remaining);
-      } else {
-        localStorage.removeItem("demoRateLimitUnlock");
+    try {
+      const saved = localStorage.getItem("demoRateLimitUnlock");
+      if (saved) {
+        const unlockTime = parseInt(saved, 10);
+        if (isNaN(unlockTime)) {
+          localStorage.removeItem("demoRateLimitUnlock");
+          return;
+        }
+        const remaining = Math.max(
+          0,
+          Math.ceil((unlockTime - Date.now()) / 1000),
+        );
+        if (remaining > 0) {
+          setCountdown(remaining);
+          setRetryAfter(remaining);
+        } else {
+          localStorage.removeItem("demoRateLimitUnlock");
+        }
       }
-    }
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -64,6 +70,7 @@ export default function HomePage({ user }: HomePageProps) {
       if (res.status === 429) {
         const retryAfterValue = parseInt(
           res.headers.get("Retry-After") || "60",
+          10,
         );
         const unlockTime = Date.now() + retryAfterValue * 1000;
         localStorage.setItem("demoRateLimitUnlock", unlockTime.toString());
@@ -121,7 +128,14 @@ export default function HomePage({ user }: HomePageProps) {
                 <p className="mb-2 text-sm text-white">
                   För många förfrågningar. Vänta {countdown} sekunder.
                 </p>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-gray-700">
+                <div
+                  className="h-2 w-full overflow-hidden rounded-full bg-gray-700"
+                  role="progressbar"
+                  aria-valuenow={retryAfter - countdown}
+                  aria-valuemin={0}
+                  aria-valuemax={retryAfter}
+                  aria-label={`Vänta ${countdown} sekunder`}
+                >
                   <div
                     className="h-full bg-[#FF7518] transition-all duration-1000 ease-linear"
                     style={{

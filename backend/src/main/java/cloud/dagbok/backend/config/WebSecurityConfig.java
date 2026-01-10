@@ -39,9 +39,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(AbstractHttpConfigurer::disable);
+    http.addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
     if (rateLimitFilter != null) {
-      http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+      http.addFilterAfter(rateLimitFilter, JwtAuthenticationFilter.class);
     }
 
     http.addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
