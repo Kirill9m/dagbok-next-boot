@@ -1,6 +1,4 @@
-# Dagbok Time Reporting System
-
-**Dagbok — a smart calendar**
+# Dagbok — a smart calendar
 
 **A full-stack project with a focus on simple design, flexibility, and the integration of artificial intelligence into everyday tasks.**
 
