@@ -4,6 +4,7 @@ import cloud.dagbok.backend.filter.JwtAuthenticationFilter;
 import cloud.dagbok.backend.filter.RateLimitFilter;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
   @Value("${cors.allowed-origins}")
   private String allowedOrigins;
 
-  public WebSecurityConfig(JwtAuthenticationFilter apiKeyFilter, RateLimitFilter rateLimitFilter) {
+  public WebSecurityConfig(
+      JwtAuthenticationFilter apiKeyFilter,
+      @Autowired(required = false) RateLimitFilter rateLimitFilter) {
     this.apiKeyFilter = apiKeyFilter;
     this.rateLimitFilter = rateLimitFilter;
   }
@@ -35,9 +38,13 @@ public class WebSecurityConfig implements WebMvcConfigurer {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(AbstractHttpConfigurer::disable)
-        .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
+        .csrf(AbstractHttpConfigurer::disable);
+
+    if (rateLimitFilter != null) {
+      http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    http.addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(
