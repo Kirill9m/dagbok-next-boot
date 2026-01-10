@@ -87,6 +87,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
     if (path.startsWith("/user/demo")) {
       return cache.get(key + ":demo", k -> createDemoBucket());
     }
+    if (path.startsWith("/user/me")) {
+      return cache.get(key + ":me", k -> createCheckMeBucket());
+    }
     return cache.get(key + ":default", k -> createDefaultBucket());
   }
 
@@ -116,6 +119,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
             .capacity(demoCapacity)
             .refillIntervally(demoCapacity, Duration.ofMinutes(demoRefillDuration))
             .build();
+
+    return Bucket.builder().addLimit(limit).build();
+  }
+
+  private Bucket createCheckMeBucket() {
+    Bandwidth limit =
+        Bandwidth.builder().capacity(200).refillIntervally(200, Duration.ofMinutes(1)).build();
 
     return Bucket.builder().addLimit(limit).build();
   }
