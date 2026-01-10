@@ -42,7 +42,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
     if (bucket.tryConsume(1)) {
       filterChain.doFilter(request, response);
     } else {
+      long waitForRefill =
+          bucket.estimateAbilityToConsume(1).getNanosToWaitForRefill() / 1_000_000_000;
       response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+      response.setHeader("Retry-After", String.valueOf(Math.max(1, waitForRefill)));
       response.setContentType("application/json");
       response.getWriter().write("{\"error\": \"Too many requests. Please try again later.\"}");
     }
