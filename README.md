@@ -1,10 +1,10 @@
 # Dagbok Time Reporting System
 
-**Dagbok — a smart calendar
+**Dagbok — a smart calendar**
 
-A full-stack project with a focus on simple design, flexibility, and the integration of artificial intelligence into everyday tasks.
+**A full-stack project with a focus on simple design, flexibility, and the integration of artificial intelligence into everyday tasks.**
 
-Next.js & Spring Boot)**
+**Next.js & Spring Boot)**
 
 🚀 Project Deployment
 
