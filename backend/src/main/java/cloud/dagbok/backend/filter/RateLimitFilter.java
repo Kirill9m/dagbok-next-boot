@@ -1,5 +1,7 @@
 package cloud.dagbok.backend.filter;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.FilterChain;
@@ -8,8 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
-  private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+  private final Cache<String, Bucket> cache =
+      Caffeine.newBuilder().maximumSize(10_000).expireAfterAccess(Duration.ofHours(1)).build();
 
   @Value("${rate.limit.default.capacity:100}")
   private int defaultCapacity;
 
-  @Value("${rate.limit.default.duration:1}")
+  @Value("${rate.limit.default.refill.tokens:1}")
   private int defaultDuration;
 
   @Override
@@ -48,17 +49,17 @@ public class RateLimitFilter extends OncePerRequestFilter {
   }
 
   private Bucket resolveBucket(String key, String path) {
-    if (path.startsWith("/user/login") || path.startsWith("/user/register")) {
-      return cache.computeIfAbsent(key + ":auth", k -> createAuthBucket());
+    if (path.equals("/user/login") || path.equals("/user/register")) {
+      return cache.get(key + ":auth", k -> createAuthBucket());
     }
-    return cache.computeIfAbsent(key + ":default", k -> createDefaultBucket());
+    return cache.get(key + ":default", k -> createDefaultBucket());
   }
 
   private Bucket createDefaultBucket() {
     Bandwidth limit =
         Bandwidth.builder()
             .capacity(defaultCapacity)
-            .refillIntervally(defaultDuration, Duration.ofMinutes(1))
+            .refillIntervally(defaultCapacity, Duration.ofMinutes(defaultDuration))
             .build();
 
     return Bucket.builder().addLimit(limit).build();
@@ -66,7 +67,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
   private Bucket createAuthBucket() {
     Bandwidth limit =
-        Bandwidth.builder().capacity(1).refillIntervally(5, Duration.ofMinutes(1)).build();
+        Bandwidth.builder().capacity(1).refillIntervally(1, Duration.ofMinutes(5)).build();
 
     return Bucket.builder().addLimit(limit).build();
   }

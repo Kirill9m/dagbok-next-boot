@@ -75,8 +75,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
     configuration.setAllowedMethods(
         Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-    configuration.setAllowedHeaders(
-        Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
 
