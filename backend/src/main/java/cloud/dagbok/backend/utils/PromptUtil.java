@@ -91,6 +91,9 @@ public final class PromptUtil {
     root.put("model", model);
     root.set("messages", messages);
     root.put("temperature", 0.7);
+    root.put("max_tokens", 1800);
+    root.put("presence_penalty", 0.3);
+    root.put("frequency_penalty", 0.2);
 
     return MAPPER.writeValueAsString(root);
   }
