@@ -16,38 +16,31 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-let deferredPrompt: BeforeInstallPromptEvent | null = null;
-
 const AppInstallInfo = () => {
   const [userChoice, setUserChoice] = useState<UserChoiceProps>({
     platform: "",
   });
   const [canInstall, setCanInstall] = useState(false);
-
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   useEffect(() => {
     const handler = (e: Event) => {
       const installEvent = e as BeforeInstallPromptEvent;
-
       e.preventDefault();
-      deferredPrompt = installEvent;
+      setDeferredPrompt(installEvent);
       setCanInstall(true);
     };
-
     window.addEventListener("beforeinstallprompt", handler);
-
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
-
   const handleInstall = async () => {
     if (!deferredPrompt) return;
-
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-
     if (outcome === "accepted") {
-      deferredPrompt = null;
+      setDeferredPrompt(null);
       setCanInstall(false);
     }
   };
@@ -58,16 +51,21 @@ const AppInstallInfo = () => {
         Installera appen på din telefon för snabbare åtkomst
       </h4>
 
-      {/* Кнопки выбора платформы */}
       <div className="mb-3 flex gap-2">
         <AppleIconOrange
           onClick={() => setUserChoice({ platform: "ios" })}
           className="h-8 w-8 cursor-pointer"
+          aria-label="Välj iOS installation"
+          role="button"
+          tabIndex={0}
         />
 
         <AndroidIcon
           onClick={() => setUserChoice({ platform: "android" })}
           className="h-8 w-6 text-white"
+          aria-label="Välj Android installation"
+          role="button"
+          tabIndex={0}
         />
       </div>
 
@@ -76,8 +74,8 @@ const AppInstallInfo = () => {
           <p className="mb-2 text-sm">För att installera på din iPhone/iPad:</p>
           <ol className="ml-4 space-y-1 text-sm">
             <li>Tryck på Dela-knappen ⎙</li>
-            <li>Välj "Lägg till på hemskärmen"</li>
-            <li>Tryck på "Lägg till"</li>
+            <li>Välj &quot;Lägg till på hemskärmen&quot;</li>
+            <li>Tryck på &quot;Lägg till&quot;</li>
           </ol>
         </>
       )}

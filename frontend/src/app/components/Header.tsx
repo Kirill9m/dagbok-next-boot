@@ -12,7 +12,6 @@ import {
   HomeIcon,
   LoginIcon,
 } from "@/app/components/icons";
-import SessionTimer from "@/app/components/SessionTimer";
 
 const navLinks = [
   { name: "Dagbok cloud", href: "/" },
