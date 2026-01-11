@@ -43,7 +43,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   const [notesCountByDay, setNotesCountByDay] = useState<
     Record<string, number>
   >({});
-  const [setIsLoadingCounts] = useState(false);
   const [searchInput, setSearchInput] = useState<string>("");
 
   const handleNavigate = (direction: "prev" | "next") => {
