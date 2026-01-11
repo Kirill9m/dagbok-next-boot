@@ -90,7 +90,10 @@ public final class PromptUtil {
 
     root.put("model", model);
     root.set("messages", messages);
-    root.put("temperature", 0.7);
+    root.put("temperature", 0.7); // Controls randomness vs. determinism of the output
+    root.put("max_tokens", 1600); // Upper limit on the number of tokens in the response
+    root.put("presence_penalty", 0.3); // Penalizes repeated topics across the conversation
+    root.put("frequency_penalty", 0.2); // Penalizes repeated tokens within this response
 
     return MAPPER.writeValueAsString(root);
   }
