@@ -48,6 +48,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
   @Value("${rate.limit.user.refill.duration}")
   private int userRefillDuration;
 
+  @Value("${rate.limit.notes.capacity:50}")
+  private int notesCapacity;
+
+  @Value("${rate.limit.notes.refill.duration:1}")
+  private int notesRefillDuration;
+
   @Override
   protected void doFilterInternal(
       @NonNull HttpServletRequest request,
@@ -90,6 +96,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
     if (path.startsWith("/user/me")) {
       return cache.get(key + ":me", k -> createCheckMeBucket());
     }
+    if (path.startsWith("/api/notes")) {
+      return cache.get(key + ":notes", k -> createNotesBucket());
+    }
     return cache.get(key + ":default", k -> createDefaultBucket());
   }
 
@@ -126,6 +135,16 @@ public class RateLimitFilter extends OncePerRequestFilter {
   private Bucket createCheckMeBucket() {
     Bandwidth limit =
         Bandwidth.builder().capacity(200).refillIntervally(200, Duration.ofMinutes(1)).build();
+
+    return Bucket.builder().addLimit(limit).build();
+  }
+
+  private Bucket createNotesBucket() {
+    Bandwidth limit =
+        Bandwidth.builder()
+            .capacity(notesCapacity)
+            .refillIntervally(notesCapacity, Duration.ofMinutes(notesRefillDuration))
+            .build();
 
     return Bucket.builder().addLimit(limit).build();
   }

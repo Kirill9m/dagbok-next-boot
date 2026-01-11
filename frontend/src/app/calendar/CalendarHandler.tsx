@@ -197,6 +197,7 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
     setIsModalOpen(false);
     setNotesData(null);
     setSearchError(null);
+    setRefreshKey((prev) => prev + 1);
   }, []);
 
   const handleDelete = async (noteId: number) => {
@@ -217,7 +218,6 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
             notes: prevData.notes.filter((note) => note.id !== noteId),
           };
         });
-        setRefreshKey((prev) => prev + 1);
       } else {
         console.error(`Failed to delete note: HTTP ${response.status}`);
         setSaveStatus("Fel vid radering");
@@ -266,7 +266,6 @@ const CalendarHandler = ({ user }: CalendarHandlerProps) => {
             ),
           };
         });
-        setRefreshKey((prev) => prev + 1);
       } else {
         console.error(`Failed to update note: HTTP ${response.status}`);
         setSaveStatus("Fel vid uppdatering");
