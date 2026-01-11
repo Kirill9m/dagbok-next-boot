@@ -2,7 +2,7 @@
 
 **A full-stack project with a focus on simple design, flexibility, and the integration of artificial intelligence into everyday tasks.**
 
-**Next.js & Spring Boot)**
+**Next.js & Spring Boot**
 
 🚀 Project Deployment
 
