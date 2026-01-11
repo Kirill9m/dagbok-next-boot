@@ -49,10 +49,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
   private int userRefillDuration;
 
   @Value("${rate.limit.notes.capacity:50}")
-  private int notesCapacity = 50;
+  private int notesCapacity;
 
   @Value("${rate.limit.notes.refill.duration:1}")
-  private int notesRefillDuration = 1;
+  private int notesRefillDuration;
 
   @Override
   protected void doFilterInternal(
