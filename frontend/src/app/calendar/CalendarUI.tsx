@@ -43,7 +43,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
   const [notesCountByDay, setNotesCountByDay] = useState<
     Record<string, number>
   >({});
-  const [isLoadingCounts, setIsLoadingCounts] = useState(false);
   const [searchInput, setSearchInput] = useState<string>("");
 
   const handleNavigate = (direction: "prev" | "next") => {
@@ -118,8 +117,6 @@ const CalendarUI: React.FC<MonthlyPlannerProps> = ({
       } catch (err) {
         console.error("Failed to load counts:", err);
         setNotesCountByDay({});
-      } finally {
-        setIsLoadingCounts(false);
       }
     };
 

@@ -4,6 +4,7 @@ import AppPreview from "@/app/components/AppPreview";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { User } from "@/lib/props";
+import AppInstallInfo from "@/app/components/AppInstallInfo";
 
 interface HomePageProps {
   user?: User | null;
@@ -114,12 +115,12 @@ export default function HomePage({ user }: HomePageProps) {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <h1 className="mb-2 text-3xl font-bold text-white">Dagbok Cloud</h1>
-
+      <h1 className="mt-2 mb-2 text-3xl font-bold text-white">Dagbok Cloud</h1>
       <p className="mb-8 max-w-xl text-gray-300">
-        Work in progress — a time reporting system currently under development.
+        Work in progress — a full-stack project with a focus on simple design,
+        flexibility, and the integration of artificial intelligence into
+        everyday tasks.
       </p>
-
       <div className="w-full max-w-4xl">
         {!user ? (
           <>
@@ -182,6 +183,7 @@ export default function HomePage({ user }: HomePageProps) {
           </>
         ) : null}
         <AppPreview />
+        <AppInstallInfo />
       </div>
 
       {saveStatus && (
