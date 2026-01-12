@@ -45,9 +45,7 @@ public class UserController {
     ResponseCookie cookie = createCookie("accessToken", tokens.token(), 60 * 60 * 24 * 7);
     log.info("User logged in successfully");
 
-    return ResponseEntity.status(HttpStatus.OK)
-        .header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .build();
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
   }
 
   /**

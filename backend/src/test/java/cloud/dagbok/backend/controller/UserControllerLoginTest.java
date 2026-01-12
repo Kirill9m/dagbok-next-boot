@@ -58,7 +58,7 @@ class UserControllerLoginTest {
         .contentType(MediaType.APPLICATION_JSON)
         .body(
             """
-            {"username": "wrong", "password":  "wrong"}
+            {"username": "wrong", "password": "wrong"}
             """)
         .exchange()
         .expectStatus()
