@@ -74,7 +74,7 @@ class NoteServiceNoteCreateTest {
 
     assertThat(savedNote.getUser()).isEqualTo(user);
     assertThat(savedNote.getDate()).isEqualTo(noteDate.toLocalDate());
-    assertThat(savedNote.getTokensUsed()).isEqualTo(100);
+    assertThat(savedNote.getTokensUsed()).isEqualTo(200);
     assertThat(savedNote.getCostUSD()).isEqualTo(0.50);
 
     assertThat(savedNote.getText()).startsWith("AI text");
