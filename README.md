@@ -23,7 +23,6 @@ Protection and reliability
 ![dev.png](public/dev.png)
 
 
-### Useful Links:
+## Useful Links:
 
-**Testing Spring REST APIs with RestTestClient(Springboot 4.0)**
-- https://www.danvega.dev/blog/spring-framework-7-rest-test-client
+- [Testing Spring REST APIs with RestTestClient (Springboot 4.0)](https://www.danvega.dev/blog/spring-framework-7-rest-test-client)
