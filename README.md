@@ -21,3 +21,8 @@ Protection and reliability
 🌐 Live URL: https://dagbok.cloud/
 
 ![dev.png](public/dev.png)
+
+
+## Useful Links:
+
+- [Testing Spring REST APIs with RestTestClient (Springboot 4.0)](https://www.danvega.dev/blog/spring-framework-7-rest-test-client)
