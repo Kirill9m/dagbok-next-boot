@@ -1,4 +1,4 @@
-package cloud.dagbok.backend.utils;
+package cloud.dagbok.backend.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Map;
 
-public final class PromptUtil {
+public final class PromptService {
 
   private static final URI OPENROUTER_URI =
       URI.create("https://openrouter.ai/api/v1/chat/completions");
@@ -25,7 +25,7 @@ public final class PromptUtil {
           "openai/gpt-4o-mini", new ModelPricing(0.00015, 0.0006),
           "xiaomi/mimo-v2-flash:free", new ModelPricing(0.0, 0.0));
 
-  private PromptUtil() {}
+  private PromptService() {}
 
   public static ChatResult chat(String apiKey, String model, String prompt, String message) {
     try {

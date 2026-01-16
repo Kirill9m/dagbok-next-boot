@@ -1,7 +1,6 @@
 package cloud.dagbok.backend.service;
 
-import cloud.dagbok.backend.utils.PromptUtil;
-import cloud.dagbok.backend.utils.PromptUtil.ChatResult;
+import cloud.dagbok.backend.service.PromptService.ChatResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +11,6 @@ public class OpenRouterService {
   private String apiKey;
 
   public ChatResult chat(String model, String prompt, String message) {
-    return PromptUtil.chat(apiKey, model, prompt, message);
+    return PromptService.chat(apiKey, model, prompt, message);
   }
 }

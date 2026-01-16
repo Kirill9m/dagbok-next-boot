@@ -13,7 +13,7 @@ import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
 import cloud.dagbok.backend.service.NoteService;
 import cloud.dagbok.backend.service.OpenRouterService;
-import cloud.dagbok.backend.utils.PromptUtil;
+import cloud.dagbok.backend.service.PromptService;
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -52,8 +52,8 @@ class NoteServiceNoteCreateTest {
     LocalDateTime noteDate = LocalDateTime.of(2025, 1, 1, 10, 0);
     NoteCreateRequest request = new NoteCreateRequest("original text", noteDate, true);
 
-    PromptUtil.ChatResult chatResult =
-        new PromptUtil.ChatResult("AI text", 200, 100, 100, 0.50); // cost = 0.50$
+    PromptService.ChatResult chatResult =
+        new PromptService.ChatResult("AI text", 200, 100, 100, 0.50); // cost = 0.50$
 
     when(openRouterService.chat(
             eq(user.getModel().getValue()), eq(user.getPrompt()), eq(request.text())))
@@ -134,8 +134,8 @@ class NoteServiceNoteCreateTest {
     LocalDateTime noteDate = LocalDateTime.now();
     NoteCreateRequest request = new NoteCreateRequest("text", noteDate, true);
 
-    PromptUtil.ChatResult chatResult =
-        new PromptUtil.ChatResult("AI text", 200, 100, 100, 1.0); // cost > 0
+    PromptService.ChatResult chatResult =
+        new PromptService.ChatResult("AI text", 200, 100, 100, 1.0); // cost > 0
 
     when(openRouterService.chat(any(), any(), any())).thenReturn(chatResult);
 
