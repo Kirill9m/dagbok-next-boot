@@ -6,7 +6,6 @@ import cloud.dagbok.backend.entity.UserEntity;
 import cloud.dagbok.backend.exceptionHandler.MonthlyCostLimitExceededException;
 import cloud.dagbok.backend.repository.NoteRepository;
 import cloud.dagbok.backend.repository.UserRepository;
-import cloud.dagbok.backend.utils.PromptUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -46,7 +45,7 @@ public class NoteService {
 
     if (request.prompt() != null && request.prompt()) {
       try {
-        PromptUtil.ChatResult result =
+        PromptService.ChatResult result =
             openRouterService.chat(user.getModel().getValue(), user.getPrompt(), request.text());
 
         textToSave =
