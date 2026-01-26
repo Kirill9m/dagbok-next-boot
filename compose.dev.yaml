@@ -1,7 +1,7 @@
 services:
   mysql-dev:
     image: mysql:9.5
-    container_name: dagbok-dev-mysql
+    container_name: dagbok-dev2-mysql
     environment:
       MYSQL_ROOT_PASSWORD: devroot123
       MYSQL_DATABASE: dagbok_dev
